@@ -1,0 +1,12 @@
+{
+  "name": "@penny/test-service",
+  "version": "1.0.0",
+  "description": "This is a test",
+  "scripts": {
+    "start": "ts-node app.ts",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/option-symbol-parser": "1.0.0"
+  }
+}
