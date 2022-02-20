@@ -1,0 +1,8 @@
+{
+  "name": "@penny/option-symbol-parser",
+  "version": "1.0.0",
+  "description": "Package that extracts data from option symbols",
+  "scripts": {
+    "test": "jest --coverage"
+  }
+}
