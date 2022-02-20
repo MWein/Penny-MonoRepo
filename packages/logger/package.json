@@ -1,0 +1,11 @@
+{
+  "name": "@penny/logger",
+  "version": "1.0.0",
+  "description": "Package that reads and writes to the log table",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/db-models": "1.0.0"
+  }
+}
