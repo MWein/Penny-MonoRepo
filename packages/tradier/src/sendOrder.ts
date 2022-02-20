@@ -120,8 +120,16 @@ export const buyToCloseMarket = async (symbol: string, option_symbol: string, qu
   }
 }
 
-// Figure out what type is
-export const multilegOptionOrder = async (underlying: string, type, legs) => {
+
+type MultilegOptionType = 'market' | 'debit' | 'credit' | 'even'
+type OptionOrderSide = 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
+type MultilegOptionLeg = {
+  symbol: string,
+  side: OptionOrderSide,
+  quantity: number,
+}
+
+export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[]) => {
   const url = `accounts/${process.env.ACCOUNTNUM}/orders`
 
   const mainBody = {
