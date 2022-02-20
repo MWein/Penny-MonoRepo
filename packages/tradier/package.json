@@ -1,0 +1,11 @@
+{
+  "name": "@penny/tradier",
+  "version": "1.0.0",
+  "description": "Package for comms with Tradier",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/sleep": "1.0.0"
+  }
+}
