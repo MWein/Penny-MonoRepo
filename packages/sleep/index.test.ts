@@ -1,4 +1,4 @@
-import sleep from './index'
+import { sleep } from './index'
 
 describe('sleep', () => {
   it('Resolves promise', () => {
