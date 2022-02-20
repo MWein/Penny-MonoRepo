@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
+    "lib": [ "es2017" ],
+    "target": "es5"
+  },
+  "exclude": [
+    "*.test.ts",
+    "*.test.js"
+  ],
+  "module": "commonjs",
+  "esModuleInterop": true
+}
