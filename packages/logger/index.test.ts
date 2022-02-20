@@ -16,6 +16,7 @@ describe('_logWithObject', () => {
 
   beforeEach(() => {
     saveFunc = jest.fn()
+    // @ts-ignore
     logModel.mockReturnValue({
       save: saveFunc,
     })
@@ -27,6 +28,7 @@ describe('_logWithObject', () => {
   })
 
   it('On failure, console logs', async () => {
+    // @ts-ignore
     logModel.mockImplementation(() => {
       throw new Error('Oh no!!!!!!')
     })
@@ -64,6 +66,7 @@ describe('_logWithMessage', () => {
 
   beforeEach(() => {
     saveFunc = jest.fn()
+    // @ts-ignore
     logModel.mockReturnValue({
       save: saveFunc,
     })
@@ -75,6 +78,7 @@ describe('_logWithMessage', () => {
   })
 
   it('On failure, console logs', async () => {
+    // @ts-ignore
     logModel.mockImplementation(() => {
       throw new Error('Oh no!!!!!!')
     })
@@ -98,6 +102,7 @@ describe('log', () => {
 
   beforeEach(() => {
     saveFunc = jest.fn()
+    // @ts-ignore
     logModel.mockReturnValue({
       save: saveFunc,
     })
