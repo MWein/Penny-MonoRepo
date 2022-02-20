@@ -1,2 +1,5 @@
 export * from './getPositions'
 export * from './getOrders'
+export * from './market'
+export * from './getPrices'
+export * from './getExpirations'
