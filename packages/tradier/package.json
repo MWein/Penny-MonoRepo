@@ -6,6 +6,8 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@penny/sleep": "1.0.0"
+    "@penny/sleep": "1.0.0",
+    "@penny/option-symbol-parser": "1.0.0",
+    "@penny/test-helpers": "1.0.0"
   }
 }
