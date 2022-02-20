@@ -1,0 +1,11 @@
+{
+  "name": "@penny/settings",
+  "version": "1.0.0",
+  "description": "Package that deals with settings",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/db-models": "1.0.0"
+  }
+}
