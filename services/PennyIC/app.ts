@@ -44,10 +44,10 @@ const sellOptions = async () => {
   }
 }
 
-import { sellIronCondor } from './core/sellIronCondor'
+import { sellIronCondorBigThree } from './core/sellIronCondor'
 
 const launchCrons = async () => {
-  sellIronCondor('SPY', 0.1, 1)
+  sellIronCondorBigThree()
 
   return
   log('Starting Crons')

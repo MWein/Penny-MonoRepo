@@ -138,7 +138,7 @@ export const multilegOptionOrder = async (underlying: string, type: MultilegOpti
     symbol: underlying,
     type,
     duration: 'day',
-    price: 0.10,
+    price: 0.02,
   }
 
   const bodyWithLegs = legs.reduce((acc, leg, index) => {
