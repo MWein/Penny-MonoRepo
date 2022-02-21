@@ -7,7 +7,7 @@ import * as cors from 'cors'
 import { pennyStatusController } from './controllers/pennyStatus'
 import { getLogsController } from './controllers/getLogs'
 //import { getGainLossController, getGainLossGraphController } from './controllers/gainLoss'
-//import { getSettingsController, setSettingsController } from './controllers/settings'
+import { getSettingsController, setSettingsController } from './controllers/settings'
 //import { getWatchlistController } from './controllers/watchlist'
 //import { getIncomeTargetsController, createIncomeTargetController } from './controllers/incomeTargets'
 
@@ -37,8 +37,8 @@ app.get('/logs', getLogsController)
 
 
 // Settings
-//app.get('/settings', getSettingsController)
-//app.put('/settings', setSettingsController)
+app.get('/settings', getSettingsController)
+app.put('/settings', setSettingsController)
 
 
 // Income target endpoints
