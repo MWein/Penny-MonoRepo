@@ -10,6 +10,41 @@ import {
 } from './sendOrder'
 
 
+const correctUrlAndBodyTest = async (func: Function, funcArgs: Array<any>, expectBody) => {
+  process.env.ACCOUNTNUM = 'thisisanaccountnumber'
+    // @ts-ignore
+    network.post.mockReturnValue({ status: 'ok' })
+    await func(...funcArgs)
+    // @ts-ignore
+    expect(network.post.mock.calls[0][0]).toEqual('accounts/thisisanaccountnumber/orders')
+    // @ts-ignore
+    expect(network.post.mock.calls[0][1]).toEqual(expectBody)
+    // @ts-ignore
+    expect(network.post.mock.calls[0][2]).toEqual(false)
+}
+
+
+const testForFailure = async (func: Function, funcArgs: Array<any>, failureMessage: string) => {
+  // @ts-ignore
+  network.post.mockImplementation(() => {
+    throw new Error('Ope')
+  })
+  const result = await func(...funcArgs)
+  expect(result).toEqual({ status: 'not ok' })
+  expect(logUtil.log).toHaveBeenCalledTimes(1)
+  expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: failureMessage })
+}
+
+const testForHappyPathReturn = async (func: Function, funcArgs: Array<any>, successMessage: string) => {
+  // @ts-ignore
+  network.post.mockReturnValue({ status: 'ok', orderId: 'something' })
+  const result = await func(...funcArgs)
+  expect(result).toEqual({ status: 'ok', orderId: 'something' })
+  expect(logUtil.log).toHaveBeenCalledTimes(1)
+  expect(logUtil.log).toHaveBeenCalledWith(successMessage)
+}
+
+
 describe('buy', () => {
   beforeEach(() => {
     // @ts-ignore
@@ -19,14 +54,7 @@ describe('buy', () => {
   })
 
   it('Calls with the correct url and body; skips throttle', async () => {
-    process.env.ACCOUNTNUM = 'thisisanaccountnumber'
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok' })
-    await buy('AAPL', 2)
-    // @ts-ignore
-    expect(network.post.mock.calls[0][0]).toEqual('accounts/thisisanaccountnumber/orders')
-    // @ts-ignore
-    expect(network.post.mock.calls[0][1]).toEqual({
+    await correctUrlAndBodyTest(buy, [ 'AAPL', 2 ], {
       account_id: 'thisisanaccountnumber',
       class: 'equity',
       symbol: 'AAPL',
@@ -35,28 +63,14 @@ describe('buy', () => {
       type: 'market',
       duration: 'day',
     })
-    // @ts-ignore
-    expect(network.post.mock.calls[0][2]).toEqual(false)
   })
 
   it('Returns failed status object if network call throws', async () => {
-    // @ts-ignore
-    network.post.mockImplementation(() => {
-      throw new Error('Ope')
-    })
-    const result = await buy('AAPL', 1)
-    expect(result).toEqual({ status: 'not ok' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: 'Buy 1 AAPL Failed' })
+    await testForFailure(buy, [ 'AAPL', 1 ], 'Buy 1 AAPL Failed')
   })
 
   it('On success, returns whatever the endpoint returned', async () => {
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok', orderId: 'something' })
-    const result = await buy('AAPL', 1)
-    expect(result).toEqual({ status: 'ok', orderId: 'something' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith('Buy 1 AAPL')
+    await testForHappyPathReturn(buy, [ 'AAPL', 1 ], 'Buy 1 AAPL')
   })
 })
 
@@ -70,14 +84,7 @@ describe('sellToOpen', () => {
   })
 
   it('Calls with the correct url and body; skips throttle', async () => {
-    process.env.ACCOUNTNUM = 'thisisanaccountnumber'
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok' })
-    await sellToOpen('AAPL', 'AAAAAAPL', 2)
-    // @ts-ignore
-    expect(network.post.mock.calls[0][0]).toEqual('accounts/thisisanaccountnumber/orders')
-    // @ts-ignore
-    expect(network.post.mock.calls[0][1]).toEqual({
+    await correctUrlAndBodyTest(sellToOpen, [ 'AAPL', 'AAAAAAPL', 2 ], {
       account_id: 'thisisanaccountnumber',
       class: 'option',
       symbol: 'AAPL',
@@ -87,28 +94,14 @@ describe('sellToOpen', () => {
       type: 'market',
       duration: 'day',
     })
-    // @ts-ignore
-    expect(network.post.mock.calls[0][2]).toEqual(false)
   })
 
   it('Returns failed status object if network call throws', async () => {
-    // @ts-ignore
-    network.post.mockImplementation(() => {
-      throw new Error('Ope')
-    })
-    const result = await sellToOpen('AAPL', 'AAAAAPL', 1)
-    expect(result).toEqual({ status: 'not ok' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: 'Sell-to-open 1 AAAAAPL Failed' })
+    await testForFailure(sellToOpen, [ 'AAPL', 'AAAAAPL', 1 ], 'Sell-to-open 1 AAAAAPL Failed')
   })
 
   it('On success, returns whatever the endpoint returned', async () => {
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok', orderId: 'something' })
-    const result = await sellToOpen('AAPL', 'AAAAAPL', 1)
-    expect(result).toEqual({ status: 'ok', orderId: 'something' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith('Sell-to-open 1 AAAAAPL')
+    await testForHappyPathReturn(sellToOpen, [ 'AAPL', 'AAAAAPL', 1 ], 'Sell-to-open 1 AAAAAPL')
   })
 })
 
@@ -122,14 +115,7 @@ describe('buyToClose', () => {
   })
 
   it('Calls with the correct url and body; skips throttle', async () => {
-    process.env.ACCOUNTNUM = 'thisisanaccountnumber'
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok' })
-    await buyToClose('AAPL', 'AAAAAAPL', 2, 0.18)
-    // @ts-ignore
-    expect(network.post.mock.calls[0][0]).toEqual('accounts/thisisanaccountnumber/orders')
-    // @ts-ignore
-    expect(network.post.mock.calls[0][1]).toEqual({
+    await correctUrlAndBodyTest(buyToClose, [ 'AAPL', 'AAAAAAPL', 2, 0.18 ], {
       account_id: 'thisisanaccountnumber',
       class: 'option',
       symbol: 'AAPL',
@@ -140,28 +126,14 @@ describe('buyToClose', () => {
       price: 0.18,
       duration: 'gtc',
     })
-    // @ts-ignore
-    expect(network.post.mock.calls[0][2]).toEqual(false)
   })
 
   it('Returns failed status object if network call throws', async () => {
-    // @ts-ignore
-    network.post.mockImplementation(() => {
-      throw new Error('Ope')
-    })
-    const result = await buyToClose('AAPL', 'AAAAAPL', 1, 0.11)
-    expect(result).toEqual({ status: 'not ok' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: 'Buy-to-close 1 AAAAAPL Failed' })
+    await testForFailure(buyToClose, [ 'AAPL', 'AAAAAPL', 1, 0.11 ], 'Buy-to-close 1 AAAAAPL Failed')
   })
 
   it('On success, returns whatever the endpoint returned', async () => {
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok', orderId: 'something' })
-    const result = await buyToClose('AAPL', 'AAAAAPL', 1, 0.10)
-    expect(result).toEqual({ status: 'ok', orderId: 'something' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith('Buy-to-close 1 AAAAAPL')
+    await testForHappyPathReturn(buyToClose, [ 'AAPL', 'AAAAAPL', 1, 0.10 ], 'Buy-to-close 1 AAAAAPL')
   })
 })
 
@@ -175,14 +147,7 @@ describe('sellToClose', () => {
   })
 
   it('Calls with the correct url and body; skips throttle', async () => {
-    process.env.ACCOUNTNUM = 'thisisanaccountnumber'
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok' })
-    await sellToClose('AAPL', 'AAAAAAPL', 2)
-    // @ts-ignore
-    expect(network.post.mock.calls[0][0]).toEqual('accounts/thisisanaccountnumber/orders')
-    // @ts-ignore
-    expect(network.post.mock.calls[0][1]).toEqual({
+    await correctUrlAndBodyTest(sellToClose, [ 'AAPL', 'AAAAAAPL', 2 ], {
       account_id: 'thisisanaccountnumber',
       class: 'option',
       symbol: 'AAPL',
@@ -192,28 +157,14 @@ describe('sellToClose', () => {
       type: 'market',
       duration: 'gtc',
     })
-    // @ts-ignore
-    expect(network.post.mock.calls[0][2]).toEqual(false)
   })
 
   it('Returns failed status object if network call throws', async () => {
-    // @ts-ignore
-    network.post.mockImplementation(() => {
-      throw new Error('Ope')
-    })
-    const result = await sellToClose('AAPL', 'AAAAAPL', 1)
-    expect(result).toEqual({ status: 'not ok' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: 'Sell-to-close 1 AAAAAPL Failed' })
+    await testForFailure(sellToClose, [ 'AAPL', 'AAAAAPL', 1 ], 'Sell-to-close 1 AAAAAPL Failed')
   })
 
   it('On success, returns whatever the endpoint returned', async () => {
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok', orderId: 'something' })
-    const result = await sellToClose('AAPL', 'AAAAAPL', 1)
-    expect(result).toEqual({ status: 'ok', orderId: 'something' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith('Sell-to-close 1 AAAAAPL')
+    await testForHappyPathReturn(sellToClose, [ 'AAPL', 'AAAAAPL', 1 ], 'Sell-to-close 1 AAAAAPL')
   })
 })
 
@@ -227,14 +178,7 @@ describe('buyToCloseMarket', () => {
   })
 
   it('Calls with the correct url and body; skips throttle', async () => {
-    process.env.ACCOUNTNUM = 'thisisanaccountnumber'
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok' })
-    await buyToCloseMarket('AAPL', 'AAAAAAPL', 2)
-    // @ts-ignore
-    expect(network.post.mock.calls[0][0]).toEqual('accounts/thisisanaccountnumber/orders')
-    // @ts-ignore
-    expect(network.post.mock.calls[0][1]).toEqual({
+    await correctUrlAndBodyTest(buyToCloseMarket, [ 'AAPL', 'AAAAAAPL', 2 ], {
       account_id: 'thisisanaccountnumber',
       class: 'option',
       symbol: 'AAPL',
@@ -244,28 +188,14 @@ describe('buyToCloseMarket', () => {
       type: 'market',
       duration: 'gtc',
     })
-    // @ts-ignore
-    expect(network.post.mock.calls[0][2]).toEqual(false)
   })
 
   it('Returns failed status object if network call throws', async () => {
-    // @ts-ignore
-    network.post.mockImplementation(() => {
-      throw new Error('Ope')
-    })
-    const result = await buyToCloseMarket('AAPL', 'AAAAAPL', 1)
-    expect(result).toEqual({ status: 'not ok' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: 'Buy-to-close Market Price 1 AAAAAPL Failed' })
+    await testForFailure(buyToCloseMarket, [ 'AAPL', 'AAAAAPL', 1 ], 'Buy-to-close Market Price 1 AAAAAPL Failed')
   })
 
   it('On success, returns whatever the endpoint returned', async () => {
-    // @ts-ignore
-    network.post.mockReturnValue({ status: 'ok', orderId: 'something' })
-    const result = await buyToCloseMarket('AAPL', 'AAAAAPL', 1)
-    expect(result).toEqual({ status: 'ok', orderId: 'something' })
-    expect(logUtil.log).toHaveBeenCalledTimes(1)
-    expect(logUtil.log).toHaveBeenCalledWith('Buy-to-close Market Price 1 AAAAAPL')
+    await testForHappyPathReturn(buyToCloseMarket, [ 'AAPL', 'AAAAAPL', 1 ], 'Buy-to-close Market Price 1 AAAAAPL')
   })
 })
 
