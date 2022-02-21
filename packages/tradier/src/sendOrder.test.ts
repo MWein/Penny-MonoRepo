@@ -44,6 +44,12 @@ const testForHappyPathReturn = async (func: Function, funcArgs: Array<any>, succ
 }
 
 
+const randomStock = () => {
+  const stonks = [ 'AAPL', 'TSLA', 'SFIX', 'AMC', 'BBY' ]
+  return stonks[Math.floor(Math.random() * stonks.length)]
+}
+
+
 const runTests = async (func: Function, funcArgs: Array<any>, successMessage: string, failureMessage: string, expectBody: object) => {
   // @ts-ignore
   network.post = jest.fn()
@@ -58,12 +64,21 @@ const runTests = async (func: Function, funcArgs: Array<any>, successMessage: st
 
 
 describe('sendOrder common functions', () => {
+  let symbol
+  let optionSymbol
+  let quantity
+
+  beforeEach(() => {
+    symbol = randomStock()
+    optionSymbol = symbol + '1234P3214'
+    quantity = Math.floor(Math.random() * 100) + 1
+  })
+
   it('buy', async () => {
-    const quantity = Math.floor(Math.random() * 100) + 1
-    await runTests(buy, [ 'AAPL', quantity ], `Buy ${quantity} AAPL`, `Buy ${quantity} AAPL Failed`, {
+    await runTests(buy, [ symbol, quantity ], `Buy ${quantity} ${symbol}`, `Buy ${quantity} ${symbol} Failed`, {
       account_id: 'thisisanaccountnumber',
       class: 'equity',
-      symbol: 'AAPL',
+      symbol,
       side: 'buy',
       quantity,
       type: 'market',
@@ -72,12 +87,11 @@ describe('sendOrder common functions', () => {
   })
 
   it('sellToOpen', async () => {
-    const quantity = Math.floor(Math.random() * 100) + 1
-    await runTests(sellToOpen, [ 'AAPL', 'AAAAAAPL', quantity ], `Sell-to-open ${quantity} AAAAAAPL`, `Sell-to-open ${quantity} AAAAAAPL Failed`, {
+    await runTests(sellToOpen, [ symbol, optionSymbol, quantity ], `Sell-to-open ${quantity} ${optionSymbol}`, `Sell-to-open ${quantity} ${optionSymbol} Failed`, {
       account_id: 'thisisanaccountnumber',
       class: 'option',
-      symbol: 'AAPL',
-      option_symbol: 'AAAAAAPL',
+      symbol,
+      option_symbol: optionSymbol,
       side: 'sell_to_open',
       quantity,
       type: 'market',
@@ -86,12 +100,11 @@ describe('sendOrder common functions', () => {
   })
 
   it('buyToClose', async () => {
-    const quantity = Math.floor(Math.random() * 100) + 1
-    await runTests(buyToClose, [ 'AAPL', 'AAAAAAPL', quantity, 0.18 ], `Buy-to-close ${quantity} AAAAAAPL`, `Buy-to-close ${quantity} AAAAAAPL Failed`, {
+    await runTests(buyToClose, [ symbol, optionSymbol, quantity, 0.18 ], `Buy-to-close ${quantity} ${optionSymbol}`, `Buy-to-close ${quantity} ${optionSymbol} Failed`, {
       account_id: 'thisisanaccountnumber',
       class: 'option',
-      symbol: 'AAPL',
-      option_symbol: 'AAAAAAPL',
+      symbol,
+      option_symbol: optionSymbol,
       side: 'buy_to_close',
       quantity,
       type: 'limit',
@@ -101,12 +114,11 @@ describe('sendOrder common functions', () => {
   })
 
   it('sellToClose', async () => {
-    const quantity = Math.floor(Math.random() * 100) + 1
-    await runTests(sellToClose, [ 'AAPL', 'AAAAAAPL', quantity ], `Sell-to-close ${quantity} AAAAAAPL`, `Sell-to-close ${quantity} AAAAAAPL Failed`, {
+    await runTests(sellToClose, [ symbol, optionSymbol, quantity ], `Sell-to-close ${quantity} ${optionSymbol}`, `Sell-to-close ${quantity} ${optionSymbol} Failed`, {
       account_id: 'thisisanaccountnumber',
       class: 'option',
-      symbol: 'AAPL',
-      option_symbol: 'AAAAAAPL',
+      symbol,
+      option_symbol: optionSymbol,
       side: 'sell_to_close',
       quantity,
       type: 'market',
@@ -115,12 +127,11 @@ describe('sendOrder common functions', () => {
   })
 
   it('buyToCloseMarket', async () => {
-    const quantity = Math.floor(Math.random() * 100) + 1
-    await runTests(buyToCloseMarket, [ 'AAPL', 'AAAAAAPL', quantity ], `Buy-to-close Market Price ${quantity} AAAAAAPL`, `Buy-to-close Market Price ${quantity} AAAAAAPL Failed`, {
+    await runTests(buyToCloseMarket, [ symbol, optionSymbol, quantity ], `Buy-to-close Market Price ${quantity} ${optionSymbol}`, `Buy-to-close Market Price ${quantity} ${optionSymbol} Failed`, {
       account_id: 'thisisanaccountnumber',
       class: 'option',
-      symbol: 'AAPL',
-      option_symbol: 'AAAAAAPL',
+      symbol,
+      option_symbol: optionSymbol,
       side: 'buy_to_close',
       quantity,
       type: 'market',
