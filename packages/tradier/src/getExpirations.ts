@@ -25,7 +25,7 @@ export const _nextStrikeDates = (maxWeeksOut: number = 4): string[] => {
 }
 
 
-export const nextStrikeExpirations = async (symbol: string, limit: number = 2): Promise<string[]> => {
+export const getExpirations = async (symbol: string, limit: number = 2): Promise<string[]> => {
   try {
     if (limit === 0) {
       return []

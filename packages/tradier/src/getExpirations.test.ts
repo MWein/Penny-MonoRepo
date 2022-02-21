@@ -3,7 +3,7 @@ import * as logUtil from '@penny/logger'
 
 import {
   _nextStrikeDates,
-  nextStrikeExpirations,
+  getExpirations,
 } from './getExpirations'
 
 
@@ -86,7 +86,7 @@ describe('_nextStrikeDates', () => {
 
 
 
-describe('nextStrikeExpirations', () => {
+describe('getExpirations', () => {
   beforeEach(() => {
     // @ts-ignore
     network.get = jest.fn()
@@ -104,7 +104,7 @@ describe('nextStrikeExpirations', () => {
     network.get.mockImplementation(() => {
       throw new Error('Damn')
     })
-    const result = await nextStrikeExpirations('AAPL')
+    const result = await getExpirations('AAPL')
     expect(result).toEqual([
       '2021-10-15',
       '2021-10-22',
@@ -120,7 +120,7 @@ describe('nextStrikeExpirations', () => {
     network.get.mockImplementation(() => {
       throw new Error('Damn')
     })
-    const result = await nextStrikeExpirations('AAPL', 5)
+    const result = await getExpirations('AAPL', 5)
     expect(result).toEqual([
       '2021-10-15',
       '2021-10-22',
@@ -135,7 +135,7 @@ describe('nextStrikeExpirations', () => {
   })
 
   it('Does not make any calls and returns empty array if limit is 0', async () => {
-    const result = await nextStrikeExpirations('AAPL', 0)
+    const result = await getExpirations('AAPL', 0)
     expect(result).toEqual([])
     expect(network.get).not.toHaveBeenCalled()
   })
@@ -150,7 +150,7 @@ describe('nextStrikeExpirations', () => {
         ]
       }
     })
-    await nextStrikeExpirations('AAPL', 1)
+    await getExpirations('AAPL', 1)
     expect(network.get).toHaveBeenCalledWith('/markets/options/expirations?symbol=AAPL')
   })
 
@@ -165,13 +165,13 @@ describe('nextStrikeExpirations', () => {
       }
     })
 
-    const spyResult = await nextStrikeExpirations('SPY', 50)
+    const spyResult = await getExpirations('SPY', 50)
     expect(spyResult).toEqual([ '2021-01-01' ])
 
-    const iwmResult = await nextStrikeExpirations('IWM', 50)
+    const iwmResult = await getExpirations('IWM', 50)
     expect(iwmResult).toEqual([ '2021-01-01' ])
 
-    const qqqResult = await nextStrikeExpirations('QQQ', 50)
+    const qqqResult = await getExpirations('QQQ', 50)
     expect(qqqResult).toEqual([ '2021-01-01' ])
   })
 
@@ -187,13 +187,13 @@ describe('nextStrikeExpirations', () => {
       }
     })
 
-    const spyResult = await nextStrikeExpirations('SPY', 50)
+    const spyResult = await getExpirations('SPY', 50)
     expect(spyResult).toEqual([ '2021-01-01' ])
 
-    const iwmResult = await nextStrikeExpirations('IWM', 50)
+    const iwmResult = await getExpirations('IWM', 50)
     expect(iwmResult).toEqual([ '2021-01-01' ])
 
-    const qqqResult = await nextStrikeExpirations('QQQ', 50)
+    const qqqResult = await getExpirations('QQQ', 50)
     expect(qqqResult).toEqual([ '2021-01-01' ])
   })
 
@@ -209,7 +209,7 @@ describe('nextStrikeExpirations', () => {
         ]
       }
     })
-    const result = await nextStrikeExpirations('AAPL')
+    const result = await getExpirations('AAPL')
     expect(result).toEqual([
       '2021-01-01',
       '2022-01-01',
@@ -229,7 +229,7 @@ describe('nextStrikeExpirations', () => {
         ]
       }
     })
-    const result = await nextStrikeExpirations('AAPL')
+    const result = await getExpirations('AAPL')
     expect(result).toEqual([
       '2021-01-01',
       '2022-01-01',
@@ -250,7 +250,7 @@ describe('nextStrikeExpirations', () => {
         ]
       }
     })
-    const result = await nextStrikeExpirations('AAPL', 5)
+    const result = await getExpirations('AAPL', 5)
     expect(result).toEqual([
       '2021-01-01',
       '2022-01-01',
