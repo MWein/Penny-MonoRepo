@@ -12,7 +12,7 @@ type TradierChainLink = {
   }
 }
 
-type OptionChainLink = {
+export type OptionChainLink = {
   symbol: string,
   underlying: string,
   type: 'put' | 'call'

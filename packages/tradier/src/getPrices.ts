@@ -1,6 +1,6 @@
 import * as network from './network'
 
-type TradierPrice = {
+export type TradierPrice = {
   symbol: string,
   price: number,
 }

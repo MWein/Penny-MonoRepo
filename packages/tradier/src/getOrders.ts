@@ -1,13 +1,13 @@
 import * as network from './network'
 import { isOption, getType } from '@penny/option-symbol-parser'
 
-type OrderType = 'market' | 'limit' | 'stop' | 'stop_limit' | 'debit' | 'credit' | 'even'
-type OrderSide = 'buy' | 'buy_to_cover' | 'sell' | 'sell_short' | 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
-type OrderStatus = 'open' | 'partially_filled' | 'filled' | 'expired' | 'canceled' | 'pending' | 'rejected' | 'error'
-type OrderDuration = 'day' | 'pre' | 'post' | 'gtc'
-type OrderClass = 'equity' | 'option' | 'combo' | 'multileg'
+export type OrderType = 'market' | 'limit' | 'stop' | 'stop_limit' | 'debit' | 'credit' | 'even'
+export type OrderSide = 'buy' | 'buy_to_cover' | 'sell' | 'sell_short' | 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
+export type OrderStatus = 'open' | 'partially_filled' | 'filled' | 'expired' | 'canceled' | 'pending' | 'rejected' | 'error'
+export type OrderDuration = 'day' | 'pre' | 'post' | 'gtc'
+export type OrderClass = 'equity' | 'option' | 'combo' | 'multileg'
 
-type Order = {
+export type Order = {
   id: number,
   symbol: string,
   option_symbol?: string,

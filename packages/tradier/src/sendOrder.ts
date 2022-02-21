@@ -121,9 +121,9 @@ export const buyToCloseMarket = async (symbol: string, option_symbol: string, qu
 }
 
 
-type MultilegOptionType = 'market' | 'debit' | 'credit' | 'even'
-type OptionOrderSide = 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
-type MultilegOptionLeg = {
+export type MultilegOptionType = 'market' | 'debit' | 'credit' | 'even'
+export type OptionOrderSide = 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
+export type MultilegOptionLeg = {
   symbol: string,
   side: OptionOrderSide,
   quantity: number,

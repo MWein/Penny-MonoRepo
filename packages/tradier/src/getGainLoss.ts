@@ -1,7 +1,7 @@
 import * as network from './network'
 
 
-type GainLossDetails = {
+export type GainLossDetails = {
   symbol: string,
   quantity: number,
   gain_loss: number,

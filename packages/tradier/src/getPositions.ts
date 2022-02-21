@@ -2,7 +2,7 @@ import { isOption, getType } from '@penny/option-symbol-parser'
 import * as network from './network'
 
 
-type Position = {
+export type Position = {
   id: number,
   symbol: string
   quantity: number,

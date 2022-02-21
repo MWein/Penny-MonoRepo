@@ -44,8 +44,12 @@ const sellOptions = async () => {
   }
 }
 
+import { sellIronCondor } from './core/sellIronCondor'
 
 const launchCrons = async () => {
+  sellIronCondor('SPY', 0.1, 1)
+
+  return
   log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
