@@ -7,7 +7,7 @@ Penny is a trading bot that will sell weekly [covered calls](https://www.investo
 
 ## New monorepo and tech stack!!!
 
-Penny is now being converted into a monorepo and will be rewritten in TypeScript. Penny and Penny-Data had a ton of code that was not easily shared. I found myself copying and pasting a bunch of code. As the apps grew it became more difficult to keep them updated and in general was not good practice. I've also decided to convert the project to TypeScript.
+Penny is now being converted into a monorepo and will be rewritten in TypeScript. Penny and Penny-Data had a ton of code that was not easily shared. I found myself copying and pasting a bunch of code. As the apps grew it became more difficult to keep them updated and in general was not good practice. I've also decided to convert the project to TypeScript. The legacy Penny, Penny-Data, and PennyUI projects will eventually be merged into this one.
 
 ## Legal Stuff
 
