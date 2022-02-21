@@ -1,0 +1,16 @@
+{
+  "name": "@penny/penny-data",
+  "version": "1.0.0",
+  "description": "The API that serves data to the UI",
+  "scripts": {
+    "start": "ts-node server.ts",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/option-symbol-parser": "1.0.0",
+    "@penny/db-models": "1.0.0",
+    "@penny/settings": "1.0.0",
+    "@penny/logger": "1.0.0",
+    "@penny/tradier": "1.0.0"
+  }
+}
