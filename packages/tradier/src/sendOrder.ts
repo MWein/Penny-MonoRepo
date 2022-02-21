@@ -72,7 +72,7 @@ export const sellToClose = async (symbol: string, option_symbol: string, quantit
     side: 'sell_to_close',
     quantity,
     type: 'market',
-    duration: 'day',
+    duration: 'gtc',
   }
 
   try {
