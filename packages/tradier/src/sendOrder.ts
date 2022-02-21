@@ -2,27 +2,22 @@ import * as network from './network'
 import * as logUtil from '@penny/logger'
 
 
-export const buy = async (symbol: string, quantity: number) => {
+export const _sendOrder = async (body: object, successLog: string, failureLog: string) => {
   const url = `accounts/${process.env.ACCOUNTNUM}/orders`
 
-  const body = {
+  const bodyWithAccountId = {
     account_id: process.env.ACCOUNTNUM,
-    class: 'equity',
-    symbol,
-    side: 'buy',
-    quantity,
-    type: 'market',
-    duration: 'day',
+    ...body,
   }
 
   try {
-    const result = await network.post(url, body, false)
-    logUtil.log(`Buy ${quantity} ${symbol}`)
+    const result = await network.post(url, bodyWithAccountId, false)
+    logUtil.log(successLog)
     return result
   } catch (e) {
     logUtil.log({
       type: 'error',
-      message: `Buy ${quantity} ${symbol} Failed`,
+      message: failureLog,
     })
     return {
       status: 'not ok'
@@ -31,11 +26,22 @@ export const buy = async (symbol: string, quantity: number) => {
 }
 
 
-export const sellToOpen = async (symbol: string, option_symbol: string, quantity: number) => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders`
-
+export const buy = async (symbol: string, quantity: number) => {
   const body = {
-    account_id: process.env.ACCOUNTNUM,
+    class: 'equity',
+    symbol,
+    side: 'buy',
+    quantity,
+    type: 'market',
+    duration: 'day',
+  }
+  const result = await _sendOrder(body, `Buy ${quantity} ${symbol}`, `Buy ${quantity} ${symbol} Failed`)
+  return result
+}
+
+
+export const sellToOpen = async (symbol: string, option_symbol: string, quantity: number) => {
+  const body = {
     class: 'option',
     symbol,
     option_symbol,
@@ -45,27 +51,13 @@ export const sellToOpen = async (symbol: string, option_symbol: string, quantity
     duration: 'day',
   }
 
-  try {
-    const result = await network.post(url, body, false)
-    logUtil.log(`Sell-to-open ${quantity} ${option_symbol}`)
-    return result
-  } catch (e) {
-    logUtil.log({
-      type: 'error',
-      message: `Sell-to-open ${quantity} ${option_symbol} Failed`,
-    })
-    return {
-      status: 'not ok'
-    }
-  }
+  const result = await _sendOrder(body, `Sell-to-open ${quantity} ${option_symbol}`, `Sell-to-open ${quantity} ${option_symbol} Failed`)
+  return result
 }
 
 
 export const sellToClose = async (symbol: string, option_symbol: string, quantity: number) => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders`
-
   const body = {
-    account_id: process.env.ACCOUNTNUM,
     class: 'option',
     symbol,
     option_symbol,
@@ -75,27 +67,13 @@ export const sellToClose = async (symbol: string, option_symbol: string, quantit
     duration: 'gtc',
   }
 
-  try {
-    const result = await network.post(url, body, false)
-    logUtil.log(`Sell-to-close ${quantity} ${option_symbol}`)
-    return result
-  } catch (e) {
-    logUtil.log({
-      type: 'error',
-      message: `Sell-to-close ${quantity} ${option_symbol} Failed`,
-    })
-    return {
-      status: 'not ok'
-    }
-  }
+  const result = await _sendOrder(body, `Sell-to-close ${quantity} ${option_symbol}`, `Sell-to-close ${quantity} ${option_symbol} Failed`)
+  return result
 }
 
 
 export const buyToClose = async (symbol: string, option_symbol: string, quantity: number, buyToCloseAmount: number) => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders`
-
   const body = {
-    account_id: process.env.ACCOUNTNUM,
     class: 'option',
     symbol,
     option_symbol,
@@ -106,27 +84,13 @@ export const buyToClose = async (symbol: string, option_symbol: string, quantity
     duration: 'gtc',
   }
 
-  try {
-    const result = await network.post(url, body, false)
-    logUtil.log(`Buy-to-close ${quantity} ${option_symbol}`)
-    return result
-  } catch (e) {
-    logUtil.log({
-      type: 'error',
-      message: `Buy-to-close ${quantity} ${option_symbol} Failed`,
-    })
-    return {
-      status: 'not ok'
-    }
-  }
+  const result = await _sendOrder(body, `Buy-to-close ${quantity} ${option_symbol}`, `Buy-to-close ${quantity} ${option_symbol} Failed`)
+  return result
 }
 
 
 export const buyToCloseMarket = async (symbol: string, option_symbol: string, quantity: number) => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders`
-
   const body = {
-    account_id: process.env.ACCOUNTNUM,
     class: 'option',
     symbol,
     option_symbol,
@@ -136,19 +100,8 @@ export const buyToCloseMarket = async (symbol: string, option_symbol: string, qu
     duration: 'gtc',
   }
 
-  try {
-    const result = await network.post(url, body, false)
-    logUtil.log(`Buy-to-close Market Price ${quantity} ${option_symbol}`)
-    return result
-  } catch (e) {
-    logUtil.log({
-      type: 'error',
-      message: `Buy-to-close Market Price ${quantity} ${option_symbol} Failed`,
-    })
-    return {
-      status: 'not ok'
-    }
-  }
+  const result = await _sendOrder(body, `Buy-to-close Market Price ${quantity} ${option_symbol}`, `Buy-to-close Market Price ${quantity} ${option_symbol} Failed`)
+  return result
 }
 
 
@@ -161,10 +114,7 @@ export type MultilegOptionLeg = {
 }
 
 export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[]) => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders`
-
   const mainBody = {
-    account_id: process.env.ACCOUNTNUM,
     class: 'multileg',
     symbol: underlying,
     type,
@@ -185,19 +135,8 @@ export const multilegOptionOrder = async (underlying: string, type: MultilegOpti
     }
   }, mainBody)
 
-  try {
-    const result = await network.post(url, bodyWithLegs, false)
-    logUtil.log(`Multileg Order ${underlying}`)
-    return result
-  } catch (e) {
-    logUtil.log({
-      type: 'error',
-      message: `Multileg Order ${underlying} Failed`,
-    })
-    return {
-      status: 'not ok'
-    }
-  }
+  const result = await _sendOrder(bodyWithLegs, `Multileg Order ${underlying}`, `Multileg Order ${underlying} Failed`)
+  return result
 }
 
 
