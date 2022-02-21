@@ -4,6 +4,10 @@ const mongoose = require('mongoose')
 
 import { log } from '@penny/logger'
 
+import {
+  sellIronCondorBigThree,
+  sellIronCondors
+} from './core/sellIronCondor'
 //const { sellCoveredCalls } = require('./core/coveredCall')
 //const { createGTCOrders } = require('./core/gtcOrders')
 //const { log, clearOldLogs } = require('./utils/log')
@@ -29,6 +33,9 @@ import { log } from '@penny/logger'
 const sellOptions = async () => {
   try {
 
+    await sellIronCondorBigThree()
+    await sellIronCondors()
+
     //await sellSpreads()
 
     // Commented out because this is not compatible with stuff (for now)
@@ -44,12 +51,8 @@ const sellOptions = async () => {
   }
 }
 
-import { sellIronCondorBigThree } from './core/sellIronCondor'
 
 const launchCrons = async () => {
-  sellIronCondorBigThree()
-
-  return
   log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
