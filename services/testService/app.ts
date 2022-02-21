@@ -2,13 +2,13 @@ require('dotenv').config({ path: '../../.env' })
 
 import { incomeTargetModel, logModel } from '@penny/db-models'
 import * as mongoose from 'mongoose'
-
+import { getSettings } from '@penny/settings'
+import { getLogs } from '@penny/logger'
+import { getOptionChain } from '@penny/tradier'
 
 const checkDB = async () => {
-  const incomeModels = await incomeTargetModel.find()
-  const logModels = await logModel.find()
-  console.log(incomeModels)
-  console.log(logModels)
+  const positions = await getOptionChain('AAPL', '2022-02-25')
+  console.log(positions)
 }
 
 
