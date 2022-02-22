@@ -82,7 +82,7 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
     }
     const expiration = expiratons[0]
     const chain = await tradier.getOptionChain(symbol, expiration)
-  
+
     await sellSpread(chain, symbol, 'put', shortDelta, targetStrikeWidth)
     await sellSpread(chain, symbol, 'call', shortDelta, targetStrikeWidth)
   } catch (e) {

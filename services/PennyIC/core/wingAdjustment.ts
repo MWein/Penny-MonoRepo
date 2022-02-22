@@ -5,12 +5,62 @@ import * as sellIronCondor from './sellIronCondor'
 import { MultilegOptionLeg } from '@penny/tradier'
 
 
+
+type SpreadWithDistance = {
+  dist: number,
+  short: string,
+  long: string
+}
+
+
+
 // Returns the distance between the short strike and the current price
 const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap: object) => {
   const price = priceMap[getUnderlying(spread.short)]
   const shortStrike = getStrike(spread.short)
   return getType(spread.short) === 'call' ? shortStrike - price : price - shortStrike
 }
+
+
+
+export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) => {
+  await Promise.all(spreadsToClose.map(async spread => {
+    const underlying = getUnderlying(spread.short)
+    const legs: MultilegOptionLeg[] = [
+      {
+        symbol: spread.short,
+        side: 'buy_to_close',
+        quantity: 1
+      },
+      {
+        symbol: spread.long,
+        side: 'sell_to_close',
+        quantity: 1
+      },
+    ]
+    await tradier.multilegOptionOrder(underlying, 'market', legs)
+  }))
+}
+
+
+
+export const openNewWings = async (closedSpreads: SpreadWithDistance[]) => {
+  const newWingsToOpen = closedSpreads.map(spread => ({
+    type: getType(spread.short),
+    symbol: getUnderlying(spread.short),
+    expiration: getExpiration(spread.short)
+  }))
+
+  for (let x = 0; x < newWingsToOpen.length; x++) {
+    const { symbol, type, expiration } = newWingsToOpen[x]
+    
+    // TODO Get settings for this symbol
+
+    const chain = await tradier.getOptionChain(symbol, expiration)
+    await sellIronCondor.sellSpread(chain, symbol, type, 0.10, 1)
+  }
+}
+
 
 
 export const wingAdjustment = async () => {
@@ -34,43 +84,6 @@ export const wingAdjustment = async () => {
   // TODO Get settings for all tickers for minimum distance
   // For now, it will just be zero and applied to all of them
   const spreadsToClose = spreadsWithDist.filter(spread => spread.dist <= 0)
-
-  // Sending close orders and opening new ones should be done in different loops
-  // So the closes are sent ASAP. Opening the new positions will take awhile
-
-  // Send close orders
-  await Promise.all(spreadsToClose.map(async spread => {
-    const underlying = getUnderlying(spread.short)
-    const legs: MultilegOptionLeg[] = [
-      {
-        symbol: spread.short,
-        side: 'buy_to_close',
-        quantity: 1
-      },
-      {
-        symbol: spread.long,
-        side: 'sell_to_close',
-        quantity: 1
-      },
-    ]
-    await tradier.multilegOptionOrder(underlying, 'market', legs)
-  }))
-
-
-  const newWingsToOpen = spreadsToClose.map(spread => ({
-    type: getType(spread.short),
-    symbol: getUnderlying(spread.short),
-    expiration: getExpiration(spread.short)
-  }))
-
-  // Open new positions
-  // This one can't be a promise.all due to it's use of endpoints other than order sending endpoints
-  for (let x = 0; x < newWingsToOpen.length; x++) {
-    const { symbol, type, expiration } = newWingsToOpen[x]
-    
-    // TODO Get settings for this symbol
-
-    const chain = await tradier.getOptionChain(symbol, expiration)
-    await sellIronCondor.sellSpread(chain, symbol, type, 0.10, 1)
-  }
+  await closeBadWings(spreadsToClose)
+  await openNewWings(spreadsToClose)
 }
