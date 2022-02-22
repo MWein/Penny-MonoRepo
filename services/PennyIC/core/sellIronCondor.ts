@@ -122,7 +122,7 @@ export const sellIronCondors = async () => {
   }
 
   // TODO get stocks from DB
-  const symbols = [ 'AAPL', 'TSLA', 'AAL' ]
+  const symbols = [ 'AAPL', 'TSLA', 'AAL', 'XYZ' ]
 
   // TODO Filter for enabled
     // Map out just symbols
@@ -130,9 +130,10 @@ export const sellIronCondors = async () => {
 
   //  Filter out ones where positions already exist
   const positions = await tradier.getPositions()
-  const optionPositions = positions.filter(pos => isOption(pos.symbol))
-  const openSymbols = uniq(optionPositions.map(pos => getUnderlying(pos.symbol)))
+  const openSymbols = uniq(positions.reduce((acc, pos) =>
+    isOption(pos.symbol) ? [ ...acc, getUnderlying(pos.symbol) ] : acc, []))
   const symbolsWithoutPositions = symbols.filter(symbol => !openSymbols.includes(symbol))
+
 
   for (let x = 0; x < symbolsWithoutPositions.length; x++) {
     console.log(symbolsWithoutPositions[x])
