@@ -23,8 +23,8 @@ export type OptionChainLink = {
 }
 
 
-export const formatChain = (chain: TradierChainLink[]) : OptionChainLink[] => {
-  return chain.map(option => ({
+export const formatChain = (chain: TradierChainLink[]) : OptionChainLink[] => chain.filter(option => option.greeks)
+  .map(option => ({
     symbol: option.symbol,
     underlying: option.root_symbol,
     type: option.option_type,
@@ -33,7 +33,6 @@ export const formatChain = (chain: TradierChainLink[]) : OptionChainLink[] => {
     expiration: option.expiration_date,
     delta: Math.abs(option.greeks.delta)
   }))
-}
 
 
 export const getOptionChain = async (symbol: string, expiration: string) : Promise<OptionChainLink[]> => {
