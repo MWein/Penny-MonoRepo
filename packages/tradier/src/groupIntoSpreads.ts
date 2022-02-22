@@ -74,7 +74,13 @@ const groupIntoSpreads = (longOptSymbols: string[], shortOptSymbols: string[], t
 }
 
 
-export const groupOptionsIntoSpreads = (positions: Position[]) : SpreadGroupResult => {
+type CombinedSpreadGroupResult = {
+  call: SpreadGroupResult,
+  put: SpreadGroupResult,
+}
+
+
+export const groupOptionsIntoSpreads = (positions: Position[]) : CombinedSpreadGroupResult => {
   const options = positions.filter(pos => isOption(pos.symbol))
 
   const shortPuts = getSymbolsOfType(options, 'put', 'short')
@@ -86,13 +92,8 @@ export const groupOptionsIntoSpreads = (positions: Position[]) : SpreadGroupResu
   const putSpreadResults = groupIntoSpreads(longPuts, shortPuts, 'put')
   const callSpreadResults = groupIntoSpreads(longCalls, shortCalls, 'call')
 
-  const allSpreads = [ ...putSpreadResults.spreads, ...callSpreadResults.spreads ]
-  const allLongOptsLeft = [ ...putSpreadResults.longOptsLeft, ...callSpreadResults.longOptsLeft ]
-  const allLonelyShorts = [ ...putSpreadResults.lonelyShorts, ...callSpreadResults.lonelyShorts ]
-
   return {
-    spreads: allSpreads,
-    longOptsLeft: allLongOptsLeft,
-    lonelyShorts: allLonelyShorts,
+    call: callSpreadResults,
+    put: putSpreadResults,
   }
 }
