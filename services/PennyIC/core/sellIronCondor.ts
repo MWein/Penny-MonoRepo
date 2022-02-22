@@ -126,7 +126,16 @@ export const sellIronCondors = async () => {
   }
 
   // TODO get stocks from DB
-  const symbols = [ 'AAPL', 'TSLA', 'AAL', 'XYZ' ]
+  const symbols = [
+    'DIA', 'AAPL', 'TSLA', 'MSFT', 'BAC', 'WFC', 'FB', 'PTON', 'AMC', 'F',
+    'SNDL', 'AMZN', 'DIS', 'NIO', 'LCID', 'NFLX', 'PFE', 'NVDA', 'AAL', 'SNAP', 'PLUG', 'HOOD',
+    'GPRO', 'BABA', 'CCL', 'ACB', 'NOK', 'DAL', 'UAL', 'PLTR', 'GME', 'SBUX', 'AMD',
+    'COIN', 'TLRY', 'TWTR', 'RIVN', 'T', 'KO', 'CGC', 'GOOG', 'MRNA', 'SPCE', 'BB', 'PYPL', 'UBER',
+    'GM', 'ZNGA', 'NCLH', 'WKHS', 'SQ', 'DKNG', 'ABNB', 'BA', 'WMT',
+    'JNJ', 'CHPT', 'LUV', 'MRO', 'ARKK', 'RIOT', 'XOM', 'SOFI', 'WISH', 'SONY',
+    'PENN', 'COST', 'ZM', 'JPM',
+    'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA'
+  ]
 
   // TODO Filter for enabled
     // Map out just symbols
@@ -138,6 +147,7 @@ export const sellIronCondors = async () => {
     isOption(pos.symbol) ? [ ...acc, getUnderlying(pos.symbol) ] : acc, []))
   const symbolsWithoutPositions = symbols.filter(symbol => !openSymbols.includes(symbol))
 
+  // TODO Filter out ones where orders already exist
 
   for (let x = 0; x < symbolsWithoutPositions.length; x++) {
     console.log(symbolsWithoutPositions[x])
