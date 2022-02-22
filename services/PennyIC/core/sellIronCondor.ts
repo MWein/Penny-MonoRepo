@@ -58,9 +58,6 @@ export const sellSpread = async (chain: OptionChainLink[], symbol: string, type:
     }
   ]
 
-
-  console.log(shortLink.premium - longLink.premium)
-
   // SELL SELL SELL
   await tradier.multilegOptionOrder(symbol, 'credit', legs)
 }
@@ -76,10 +73,7 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
   const expiration = expiratons[0]
   const chain = await tradier.getOptionChain(symbol, expiration)
 
-  // Sell put side
   await sellSpread(chain, symbol, 'put', shortDelta, targetStrikeWidth)
-
-  // Sell call side
   await sellSpread(chain, symbol, 'call', shortDelta, targetStrikeWidth)
 }
 
