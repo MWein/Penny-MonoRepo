@@ -27,10 +27,22 @@ export const wingAdjustment = async () => {
   const spreadsWithDist = allSpreads
     .map(spread => ({ ...spread, dist: getDistanceFromPrice(spread, priceMap) }))
 
-
   // TODO Get settings for all tickers for minimum distance
+  // For now, it will just be zero and applied to all of them
+  const spreadsToClose = spreadsWithDist.filter(spread => spread.dist <= 0)
+
+  // Sending close orders and opening new ones should be done in different loops
+  // So the closes are sent ASAP. Opening the new positions will take awhile
+
+  // Send close orders
+  for (let x = 0; x < spreadsToClose.length; x++) {
 
 
-  console.log(spreadsWithDist)
+  }
+
+  // Open new positions
+  for (let x = 0; x < spreadsToClose.length; x++) {
+
+  }
 
 }
