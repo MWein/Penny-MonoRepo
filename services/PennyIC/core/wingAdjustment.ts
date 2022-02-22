@@ -5,16 +5,9 @@ import { uniq } from 'lodash'
 
 // Returns the distance between the short strike and the current price
 const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap: object) => {
-  const underlying = getUnderlying(spread.short)
-  const type = getType(spread.short)
-  const price = priceMap[underlying]
+  const price = priceMap[getUnderlying(spread.short)]
   const shortStrike = getStrike(spread.short)
-
-  console.log(type)
-  console.log('Price', price)
-  console.log('Strike', shortStrike)
-
-  return type === 'call' ? shortStrike - price : price - shortStrike
+  return getType(spread.short) === 'call' ? shortStrike - price : price - shortStrike
 }
 
 
@@ -33,6 +26,9 @@ export const wingAdjustment = async () => {
 
   const spreadsWithDist = allSpreads
     .map(spread => ({ ...spread, dist: getDistanceFromPrice(spread, priceMap) }))
+
+
+  // TODO Get settings for all tickers for minimum distance
 
 
   console.log(spreadsWithDist)
