@@ -21,8 +21,12 @@ const _selectLinkClosestToTarget = (chain: ChainLinkWithDeltaDist[]): ChainLinkW
 
 
 
-export const sellSpread = async (chain: OptionChainLink[], symbol: string, type: 'call' | 'put', shortDelta: number, targetStrikeWidth: number): Promise<void> => {
+export const sellSpread = async (chain: OptionChainLink[], symbol: string, type: 'call' | 'put' | 'neither', shortDelta: number, targetStrikeWidth: number): Promise<void> => {
   try {
+    if (type === 'neither') {
+      return
+    }
+
     const typeChain = chain.filter(x => x.type === type)
     const typeChainWithDist = _insertDistanceToTargetDelta(typeChain, shortDelta)
     const shortLink = _selectLinkClosestToTarget(typeChainWithDist)

@@ -1,7 +1,7 @@
 import * as tradier from '@penny/tradier'
-import { getUnderlying, getStrike, getType } from '@penny/option-symbol-parser'
+import { getUnderlying, getStrike, getType, getExpiration } from '@penny/option-symbol-parser'
 import { uniq } from 'lodash'
-
+import * as sellIronCondor from './sellIronCondor'
 import { MultilegOptionLeg } from '@penny/tradier'
 
 
@@ -53,22 +53,24 @@ export const wingAdjustment = async () => {
         quantity: 1
       },
     ]
-    //await tradier.multilegOptionOrder(underlying, 'market', legs)
+    await tradier.multilegOptionOrder(underlying, 'market', legs)
   }))
 
 
   const newWingsToOpen = spreadsToClose.map(spread => ({
     type: getType(spread.short),
-    symbol: getUnderlying(spread.short)
+    symbol: getUnderlying(spread.short),
+    expiration: getExpiration(spread.short)
   }))
 
-  console.log(newWingsToOpen)
-
   // Open new positions
-  // for (let x = 0; x < spreadsToClose.length; x++) {
-  //   const spreadToClose = spreadsToClose[x]
+  // This one can't be a promise.all due to it's use of endpoints other than order sending endpoints
+  for (let x = 0; x < newWingsToOpen.length; x++) {
+    const { symbol, type, expiration } = newWingsToOpen[x]
+    
+    // TODO Get settings for this symbol
 
-
-  // }
-
+    const chain = await tradier.getOptionChain(symbol, expiration)
+    await sellIronCondor.sellSpread(chain, symbol, type, 0.10, 1)
+  }
 }
