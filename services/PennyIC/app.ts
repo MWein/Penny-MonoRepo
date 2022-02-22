@@ -8,6 +8,10 @@ import {
   sellIronCondorBigThree,
   sellIronCondors
 } from './core/sellIronCondor'
+
+import {
+  wingAdjustment
+} from './core/wingAdjustment'
 //const { sellCoveredCalls } = require('./core/coveredCall')
 //const { createGTCOrders } = require('./core/gtcOrders')
 //const { log, clearOldLogs } = require('./utils/log')
@@ -35,6 +39,7 @@ const sellOptions = async () => {
 
     await sellIronCondorBigThree()
     await sellIronCondors()
+    await wingAdjustment()
 
     //await sellSpreads()
 
