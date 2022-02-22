@@ -18,8 +18,12 @@ const getSymbolsOfType = (options: Position[], type: 'call' | 'put', longOrShort
 }
 
 
+type Spread = {
+  short: string,
+  long: string,
+}
 type SpreadGroupResult = {
-  spreads: string[][],
+  spreads: Spread[],
   longOptsLeft: string[],
   lonelyShorts: string[]
 }
@@ -47,7 +51,14 @@ const groupIntoSpreads = (longOptSymbols: string[], shortOptSymbols: string[], t
     }
 
     const longOpt = longsWithCompatibleStrike[0]
-    const newSpreads = [ ...acc.spreads, [ shortOpt, longOpt ] ]
+
+    const newSpreads = [
+      ...acc.spreads,
+      {
+        long: longOpt,
+        short: shortOpt,
+      }
+    ]
 
     // Splice isn't working right for some reason
     // Modified filter, only removes first occurence of longOpt in case there are multiple
