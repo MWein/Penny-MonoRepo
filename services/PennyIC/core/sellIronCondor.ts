@@ -1,5 +1,5 @@
 import * as tradier from '@penny/tradier'
-import { isOption, getUnderlying } from '@penny/option-symbol-parser'
+import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
 import { uniq } from 'lodash'
 
@@ -74,8 +74,12 @@ export const sellSpread = async (chain: OptionChainLink[], symbol: string, type:
 
 
 
-export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number) => {
+export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true) => {
   try {
+    if (!put && !call) {
+      return
+    }
+
     const expiratons = await tradier.getExpirations(symbol)
     if (!expiratons || expiratons.length === 0) {
       return
@@ -83,8 +87,12 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
     const expiration = expiratons[0]
     const chain = await tradier.getOptionChain(symbol, expiration)
 
-    await sellSpread(chain, symbol, 'put', shortDelta, targetStrikeWidth)
-    await sellSpread(chain, symbol, 'call', shortDelta, targetStrikeWidth)
+    if (put) {
+      await sellSpread(chain, symbol, 'put', shortDelta, targetStrikeWidth)
+    }
+    if (call) {
+      await sellSpread(chain, symbol, 'call', shortDelta, targetStrikeWidth)
+    }
   } catch (e) {
     // TODO Log error
   }
@@ -120,10 +128,10 @@ export const sellIronCondors = async () => {
   // TODO Is iron condor enabled?
 
   // Is market open?
-  const isOpen = await tradier.isMarketOpen()
-  if (!isOpen) {
-    return
-  }
+  // const isOpen = await tradier.isMarketOpen()
+  // if (!isOpen) {
+  //   return
+  // }
 
   // TODO get stocks from DB
   const symbols = [
@@ -141,16 +149,27 @@ export const sellIronCondors = async () => {
     // Map out just symbols
 
 
-  //  Filter out ones where positions already exist
   const positions = await tradier.getPositions()
-  const openSymbols = uniq(positions.reduce((acc, pos) =>
-    isOption(pos.symbol) ? [ ...acc, getUnderlying(pos.symbol) ] : acc, []))
-  const symbolsWithoutPositions = symbols.filter(symbol => !openSymbols.includes(symbol))
+  const openOptions = positions.filter(x => isOption(x.symbol))
+  const openOptionSymbols = openOptions.map(x => x.symbol)
 
-  // TODO Filter out ones where orders already exist
+  const orders = await tradier.getOrders()
+  const multilegOrders = orders.filter(x => x.class === 'multileg' && (x.status === 'open' || x.status === 'pending'))
+  const legs = multilegOrders.reduce((acc, x) => [ ...acc, ...x.leg ], [])
+  const openOrderSymbols = legs.map(x => x.option_symbol)
 
-  for (let x = 0; x < symbolsWithoutPositions.length; x++) {
-    console.log(symbolsWithoutPositions[x])
-    await sellIronCondor(symbolsWithoutPositions[x], 0.1, 1)
+  const openSymbols = uniq([ ...openOptionSymbols, ...openOrderSymbols ])
+
+  // Map out what symbols have open positions or orders for calls/puts
+  const openPositionTypes = symbols.map(symbol => ({
+    symbol,
+    hasCall: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
+    hasPut: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
+  }))
+
+
+  for (let x = 0; x < openPositionTypes.length; x++) {
+    const position = openPositionTypes[x]
+    await sellIronCondor(position.symbol, 0.1, 1, !position.hasPut, !position.hasCall)
   }
 }

@@ -84,6 +84,7 @@ export const wingAdjustment = async () => {
   // TODO Get settings for all tickers for minimum distance
   // For now, it will just be zero and applied to all of them
   const spreadsToClose = spreadsWithDist.filter(spread => spread.dist <= 0)
+
   await closeBadWings(spreadsToClose)
   await openNewWings(spreadsToClose)
 }
