@@ -1,4 +1,4 @@
-import { isOption, getType, getStrike, getUnderlying } from '@penny/option-symbol-parser'
+import { isOption, getType, getStrike, getUnderlying, getExpiration } from '@penny/option-symbol-parser'
 import { Position } from '.'
 
 
@@ -39,8 +39,9 @@ const groupIntoSpreads = (longOptSymbols: string[], shortOptSymbols: string[], t
 
   return shortOptSymbols.reduce((acc, shortOpt) => {
     const underlying = getUnderlying(shortOpt)
+    const expiration = getExpiration(shortOpt)
     const longsWithCompatibleStrike =
-      acc.longOptsLeft.filter(x => getUnderlying(x) === underlying && longFilterFunc(shortOpt, x))
+      acc.longOptsLeft.filter(x => getUnderlying(x) === underlying && getExpiration(x) === expiration && longFilterFunc(shortOpt, x))
         .sort(longSortFunc)
 
     if (longsWithCompatibleStrike.length === 0) {
