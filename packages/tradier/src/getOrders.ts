@@ -7,6 +7,7 @@ export type OrderStatus = 'open' | 'partially_filled' | 'filled' | 'expired' | '
 export type OrderDuration = 'day' | 'pre' | 'post' | 'gtc'
 export type OrderClass = 'equity' | 'option' | 'combo' | 'multileg'
 
+export type OrderLeg = Order
 export type Order = {
   id: number,
   symbol: string,
@@ -18,6 +19,7 @@ export type Order = {
   duration: OrderDuration,
   price: number,
   class: OrderClass,
+  leg?: Order[]
 }
 
 
