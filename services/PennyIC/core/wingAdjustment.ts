@@ -72,12 +72,16 @@ export const wingAdjustment = async () : Promise<void> => {
     return
   }
 
+  const today = new Date().toISOString().split('T')[0]
   const positions = await tradier.getPositions()
-  const spreadGroupResults = tradier.groupOptionsIntoSpreads(positions)
+
+  // Filter out ones opened today
+  const positionsNotOpenedToday = positions.filter(pos => pos.date_acquired.split('T')[0] !== today)
+
+  const spreadGroupResults = tradier.groupOptionsIntoSpreads(positionsNotOpenedToday)
   const allSpreads = [ ...spreadGroupResults.call.spreads, ...spreadGroupResults.put.spreads ]
 
   // Filter out ones that expire today
-  const today = new Date().toISOString().split('T')[0]
   const spreadsNotExpiringToday = allSpreads.filter(spread => getExpiration(spread.short) !== today)
 
   const spreadTickers = uniq(spreadsNotExpiringToday.map(spread => getUnderlying(spread.short)))
