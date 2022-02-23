@@ -24,7 +24,8 @@ const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap:
 
 
 export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) : Promise<void> => {
-  await Promise.all(spreadsToClose.map(async spread => {
+  for (let x = 0; x < spreadsToClose.length; x++) {
+    const spread = spreadsToClose[x]
     const underlying = getUnderlying(spread.short)
     const legs: MultilegOptionLeg[] = [
       {
@@ -39,7 +40,7 @@ export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) : Prom
       },
     ]
     await tradier.multilegOptionOrder(underlying, 'market', legs)
-  }))
+  }
 }
 
 
