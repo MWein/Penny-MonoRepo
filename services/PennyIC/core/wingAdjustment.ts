@@ -15,7 +15,7 @@ type SpreadWithDistance = {
 
 
 // Returns the distance between the short strike and the current price
-const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap: object) => {
+const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap: object) : number => {
   const price = priceMap[getUnderlying(spread.short)]
   const shortStrike = getStrike(spread.short)
   return getType(spread.short) === 'call' ? shortStrike - price : price - shortStrike
@@ -23,7 +23,7 @@ const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap:
 
 
 
-export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) => {
+export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) : Promise<void> => {
   await Promise.all(spreadsToClose.map(async spread => {
     const underlying = getUnderlying(spread.short)
     const legs: MultilegOptionLeg[] = [
@@ -44,7 +44,7 @@ export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) => {
 
 
 
-export const openNewWings = async (closedSpreads: SpreadWithDistance[]) => {
+export const openNewWings = async (closedSpreads: SpreadWithDistance[]) : Promise<void> => {
   const newWingsToOpen = closedSpreads.map(spread => ({
     type: getType(spread.short),
     symbol: getUnderlying(spread.short),
@@ -63,7 +63,7 @@ export const openNewWings = async (closedSpreads: SpreadWithDistance[]) => {
 
 
 
-export const wingAdjustment = async () => {
+export const wingAdjustment = async () : Promise<void> => {
   // TODO Is wingAdjustment enabled
 
   // is market open
