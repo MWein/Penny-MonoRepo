@@ -57,7 +57,7 @@ export const openNewWings = async (closedSpreads: SpreadWithDistance[]) => {
     // TODO Get settings for this symbol
 
     const chain = await tradier.getOptionChain(symbol, expiration)
-    await sellIronCondor.sellSpread(chain, symbol, type, 0.10, 1)
+    await sellIronCondor.sellSpread(chain, symbol, type, 0.15, 1)
   }
 }
 

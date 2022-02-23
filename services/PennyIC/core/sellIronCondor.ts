@@ -142,7 +142,8 @@ export const sellIronCondors = async () => {
     'GM', 'ZNGA', 'NCLH', 'WKHS', 'SQ', 'DKNG', 'ABNB', 'BA', 'WMT',
     'JNJ', 'CHPT', 'LUV', 'MRO', 'ARKK', 'RIOT', 'XOM', 'SOFI', 'WISH', 'SONY',
     'PENN', 'COST', 'ZM', 'JPM',
-    'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA'
+    'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA',
+    'XLB', 'XLC', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XLY'
   ]
 
   // TODO Filter for enabled
@@ -170,6 +171,6 @@ export const sellIronCondors = async () => {
 
   for (let x = 0; x < openPositionTypes.length; x++) {
     const position = openPositionTypes[x]
-    await sellIronCondor(position.symbol, 0.1, 1, !position.hasPut, !position.hasCall)
+    await sellIronCondor(position.symbol, 0.15, 1, !position.hasPut, !position.hasCall)
   }
 }
