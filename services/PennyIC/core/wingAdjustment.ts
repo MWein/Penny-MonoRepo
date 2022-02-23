@@ -2,7 +2,6 @@ import * as tradier from '@penny/tradier'
 import { getUnderlying, getStrike, getType, getExpiration } from '@penny/option-symbol-parser'
 import { uniq } from 'lodash'
 import * as sellIronCondor from './sellIronCondor'
-import { MultilegOptionLeg } from '@penny/tradier'
 import * as logger from '@penny/logger'
 import { closeSpreads } from '../common/closeSpreads'
 
