@@ -7,8 +7,7 @@ export type OrderStatus = 'open' | 'partially_filled' | 'filled' | 'expired' | '
 export type OrderDuration = 'day' | 'pre' | 'post' | 'gtc'
 export type OrderClass = 'equity' | 'option' | 'combo' | 'multileg'
 
-export type OrderLeg = Order
-export type Order = {
+export type OrderLeg = {
   id: number,
   symbol: string,
   option_symbol?: string,
@@ -18,8 +17,10 @@ export type Order = {
   status: OrderStatus,
   duration: OrderDuration,
   price: number,
-  class: OrderClass,
-  leg?: Order[]
+  class: OrderClass
+}
+export type Order = OrderLeg & {
+  leg?: OrderLeg[]
 }
 
 
