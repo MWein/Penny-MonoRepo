@@ -74,7 +74,9 @@ const launchCrons = async () => {
 
 
   new CronJob('0 0 10 * * 1-5', sellOptions, null, true, 'America/New_York')
+  new CronJob('0 0 11 * * 1-5', sellOptions, null, true, 'America/New_York')
   new CronJob('0 0 12 * * 1-5', sellOptions, null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-5', sellOptions, null, true, 'America/New_York')
   new CronJob('0 0 14 * * 1-5', sellOptions, null, true, 'America/New_York')
 
   // Close expiring puts before options sales on fridays
