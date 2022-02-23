@@ -128,10 +128,10 @@ export const sellIronCondors = async () => {
   // TODO Is iron condor enabled?
 
   // Is market open?
-  // const isOpen = await tradier.isMarketOpen()
-  // if (!isOpen) {
-  //   return
-  // }
+  const isOpen = await tradier.isMarketOpen()
+  if (!isOpen) {
+    return
+  }
 
   // TODO get stocks from DB
   const symbols = [
