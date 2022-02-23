@@ -12,6 +12,11 @@ import {
 import {
   wingAdjustment
 } from './core/wingAdjustment'
+
+import {
+  closeExpiringPositions
+} from './core/closeExpiringPositions'
+
 //const { sellCoveredCalls } = require('./core/coveredCall')
 //const { createGTCOrders } = require('./core/gtcOrders')
 //const { log, clearOldLogs } = require('./utils/log')
@@ -78,6 +83,9 @@ const launchCrons = async () => {
   new CronJob('0 0 12 * * 1-5', sellOptions, null, true, 'America/New_York')
   new CronJob('0 0 13 * * 1-5', sellOptions, null, true, 'America/New_York')
   new CronJob('0 0 14 * * 1-5', sellOptions, null, true, 'America/New_York')
+
+  // One hour before Tradier does it
+  new CronJob('0 15 14 * * 1-5', closeExpiringPositions, null, true, 'America/New_York')
 
   // Close expiring puts before options sales on fridays
   // new CronJob('0 0 09 * * 5', closeExpiringPuts, null, true, 'America/New_York')
