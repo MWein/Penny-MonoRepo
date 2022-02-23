@@ -3,7 +3,7 @@ import { getUnderlying, getStrike, getType, getExpiration } from '@penny/option-
 import { uniq } from 'lodash'
 import * as sellIronCondor from './sellIronCondor'
 import { MultilegOptionLeg } from '@penny/tradier'
-
+import * as logger from '@penny/logger'
 
 
 type SpreadWithDistance = {
@@ -94,6 +94,13 @@ export const wingAdjustment = async () : Promise<void> => {
   // TODO Get settings for all tickers for minimum distance
   // For now, it will just be zero and applied to all of them
   const spreadsToClose = spreadsWithDist.filter(spread => spread.dist <= 0)
+
+  if (spreadsToClose.length > 0) {
+    logger.log({
+      type: 'info',
+      message: 'WING ADJUSTMENT HAPPENED'
+    })
+  }
 
   await closeBadWings(spreadsToClose)
   await openNewWings(spreadsToClose)
