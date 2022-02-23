@@ -18,11 +18,11 @@ const getSymbolsOfType = (options: Position[], type: 'call' | 'put', longOrShort
 }
 
 
-type Spread = {
+export type Spread = {
   short: string,
   long: string,
 }
-type SpreadGroupResult = {
+export type SpreadGroupResult = {
   spreads: Spread[],
   longOptsLeft: string[],
   lonelyShorts: string[]
