@@ -1,6 +1,6 @@
 import * as tradier from '@penny/tradier'
-import { getExpiration, getUnderlying } from '@penny/option-symbol-parser'
-import { MultilegOptionLeg } from '@penny/tradier'
+import { getExpiration } from '@penny/option-symbol-parser'
+import { closeSpreads } from '../common/closeSpreads'
 
 
 export const closeExpiringPositions = async () => {
@@ -11,21 +11,5 @@ export const closeExpiringPositions = async () => {
   const today = new Date().toISOString().split('T')[0]
   const expiringToday = allSpreads.filter(spread => getExpiration(spread.short) === today)
 
-  for (let x = 0; x < expiringToday.length; x++) {
-    const spread = expiringToday[x]
-    const underlying = getUnderlying(spread.short)
-    const legs: MultilegOptionLeg[] = [
-      {
-        symbol: spread.short,
-        side: 'buy_to_close',
-        quantity: 1
-      },
-      {
-        symbol: spread.long,
-        side: 'sell_to_close',
-        quantity: 1
-      },
-    ]
-    await tradier.multilegOptionOrder(underlying, 'market', legs)
-  }
+  await closeSpreads(expiringToday)
 }

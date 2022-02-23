@@ -4,6 +4,7 @@ import { uniq } from 'lodash'
 import * as sellIronCondor from './sellIronCondor'
 import { MultilegOptionLeg } from '@penny/tradier'
 import * as logger from '@penny/logger'
+import { closeSpreads } from '../common/closeSpreads'
 
 
 type SpreadWithDistance = {
@@ -19,28 +20,6 @@ const getDistanceFromPrice = (spread: { short: string, long: string }, priceMap:
   const price = priceMap[getUnderlying(spread.short)]
   const shortStrike = getStrike(spread.short)
   return getType(spread.short) === 'call' ? shortStrike - price : price - shortStrike
-}
-
-
-
-export const closeBadWings = async (spreadsToClose: SpreadWithDistance[]) : Promise<void> => {
-  for (let x = 0; x < spreadsToClose.length; x++) {
-    const spread = spreadsToClose[x]
-    const underlying = getUnderlying(spread.short)
-    const legs: MultilegOptionLeg[] = [
-      {
-        symbol: spread.short,
-        side: 'buy_to_close',
-        quantity: 1
-      },
-      {
-        symbol: spread.long,
-        side: 'sell_to_close',
-        quantity: 1
-      },
-    ]
-    await tradier.multilegOptionOrder(underlying, 'market', legs)
-  }
 }
 
 
@@ -103,6 +82,6 @@ export const wingAdjustment = async () : Promise<void> => {
     })
   }
 
-  await closeBadWings(spreadsToClose)
+  await closeSpreads(spreadsToClose)
   await openNewWings(spreadsToClose)
 }
