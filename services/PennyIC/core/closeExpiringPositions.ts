@@ -4,6 +4,8 @@ import { closeSpreads } from '../common/closeSpreads'
 
 
 export const closeExpiringPositions = async () => {
+  // TODO Is market open
+
   const positions = await tradier.getPositions()
   const spreads = tradier.groupOptionsIntoSpreads(positions)
   const allSpreads = [ ...spreads.call.spreads, ...spreads.put.spreads ]
