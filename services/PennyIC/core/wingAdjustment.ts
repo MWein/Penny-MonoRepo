@@ -60,14 +60,11 @@ export const wingAdjustment = async () : Promise<void> => {
   const spreadGroupResults = tradier.groupOptionsIntoSpreads(positionsNotOpenedToday)
   const allSpreads = [ ...spreadGroupResults.call.spreads, ...spreadGroupResults.put.spreads ]
 
-  // Filter out ones that expire today
-  const spreadsNotExpiringToday = allSpreads.filter(spread => getExpiration(spread.short) !== today)
-
-  const spreadTickers = uniq(spreadsNotExpiringToday.map(spread => getUnderlying(spread.short)))
+  const spreadTickers = uniq(allSpreads.map(spread => getUnderlying(spread.short)))
   const prices = await tradier.getPrices(spreadTickers)
   const priceMap = prices.reduce((acc, price) => ({ ...acc, [price.symbol]: price.price }), {})
 
-  const spreadsWithDist = spreadsNotExpiringToday
+  const spreadsWithDist = allSpreads
     .map(spread => ({ ...spread, dist: getDistanceFromPrice(spread, priceMap) }))
 
   // TODO Get settings for all tickers for minimum distance
@@ -82,5 +79,9 @@ export const wingAdjustment = async () : Promise<void> => {
   }
 
   await closeSpreads(spreadsToClose)
-  await openNewWings(spreadsToClose)
+
+// Filter out ones that expire today
+  const spreadsNotExpiringToday = spreadsToClose.filter(spread => getExpiration(spread.short) !== today)
+
+  await openNewWings(spreadsNotExpiringToday)
 }
