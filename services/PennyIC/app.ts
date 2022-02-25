@@ -17,6 +17,10 @@ import {
   closeExpiringPositions
 } from './core/closeExpiringPositions'
 
+// import {
+//   takeProfits
+// } from './core/takeProfits'
+
 //const { sellCoveredCalls } = require('./core/coveredCall')
 //const { createGTCOrders } = require('./core/gtcOrders')
 //const { log, clearOldLogs } = require('./utils/log')
@@ -44,7 +48,10 @@ const sellOptions = async () => {
 
     await sellIronCondorBigThree()
     await sellIronCondors()
-    await wingAdjustment()
+
+    // Adjusting the wings may have actual cost more money than it saved
+    // Lets try just letting the positions do their thing instead for a bit
+    //await wingAdjustment()
 
     //await sellSpreads()
 
