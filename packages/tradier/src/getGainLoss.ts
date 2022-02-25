@@ -3,6 +3,7 @@ import * as network from './network'
 
 export type GainLossDetails = {
   symbol: string,
+  cost: number,
   quantity: number,
   gain_loss: number,
   open_date: string,
