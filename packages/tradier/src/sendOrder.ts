@@ -113,13 +113,13 @@ export type MultilegOptionLeg = {
   quantity: number,
 }
 
-export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[]) => {
+export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[], price: number = 0.07) => {
   const mainBody = {
     class: 'multileg',
     symbol: underlying,
     type,
     duration: 'day',
-    price: 0.07,
+    price,
   }
 
   const bodyWithLegs = legs.reduce((acc, leg, index) => {
