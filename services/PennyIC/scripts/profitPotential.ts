@@ -65,10 +65,25 @@ const spreadStandings = async (positions) => {
 
 
 const getStandings = async () => {
+  const gainLoss = await tradier.getGainLoss()
+
+  const startDate = new Date('2022-02-19')
+  const gainLossSinceStart = gainLoss.filter(x => {
+    const openDate = new Date(x.open_date)
+    return openDate > startDate
+  })
+
+  console.log(gainLossSinceStart)
+
   const positions = await tradier.getPositions()
-  await spreadStandings(positions)
+
+
+  await spreadStandings([ ...positions, ...gainLossSinceStart ])
   const totalCostBasis = positions.reduce((acc, x) => acc + x.cost_basis, 0) * -1
-  console.log(`Total Current Profit Potential $${totalCostBasis}\n`)
+
+  const totalCostBasisClosed = gainLossSinceStart.reduce((acc, x) => acc + (x.cost * x.quantity * -1), 0)
+
+  console.log(`Total Current Profit Potential $${totalCostBasis + totalCostBasisClosed}\n`)
 }
 
 
