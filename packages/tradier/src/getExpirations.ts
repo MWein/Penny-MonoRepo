@@ -40,9 +40,9 @@ export const getExpirations = async (symbol: string, limit: number = 2): Promise
     const dates = response.expirations.date.filter(x => x != currentDate)
 
     // These symbols have multiple expirations per week
-    if ([ 'SPY', 'IWM', 'QQQ' ].includes(symbol)) {
-      return [ dates[0] ]
-    }
+    // if ([ 'SPY', 'IWM', 'QQQ' ].includes(symbol)) {
+    //   return [ dates[0] ]
+    // }
 
     return dates.slice(0, limit)
   } catch (e) {

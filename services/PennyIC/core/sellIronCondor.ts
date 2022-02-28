@@ -74,17 +74,29 @@ export const sellSpread = async (chain: OptionChainLink[], symbol: string, type:
 
 
 
-export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true) => {
+export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true, minDTE = 30) => {
   try {
     if (!put && !call) {
       return
     }
 
-    const expiratons = await tradier.getExpirations(symbol)
-    if (!expiratons || expiratons.length === 0) {
+    const expirations = await tradier.getExpirations(symbol, 100)
+    if (!expirations || expirations.length === 0) {
       return
     }
-    const expiration = expiratons[0]
+
+
+    // At least 30 days out
+    // TODO Make this a setting
+    const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
+    const today = new Date().getTime()
+    console.log(expirations)
+    const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
+
+    if (!expiration) {
+      return
+    }
+
     const chain = await tradier.getOptionChain(symbol, expiration)
 
     if (put) {
@@ -171,6 +183,6 @@ export const sellIronCondors = async () => {
 
   for (let x = 0; x < openPositionTypes.length; x++) {
     const position = openPositionTypes[x]
-    await sellIronCondor(position.symbol, 0.15, 1, !position.hasPut, !position.hasCall)
+    await sellIronCondor(position.symbol, 0.1, 1, !position.hasPut, !position.hasCall)
   }
 }
