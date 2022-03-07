@@ -183,6 +183,6 @@ export const sellIronCondors = async () => {
 
   for (let x = 0; x < openPositionTypes.length; x++) {
     const position = openPositionTypes[x]
-    await sellIronCondor(position.symbol, 0.1, 1, !position.hasPut, !position.hasCall)
+    await sellIronCondor(position.symbol, 0.15, 1, !position.hasPut, !position.hasCall)
   }
 }

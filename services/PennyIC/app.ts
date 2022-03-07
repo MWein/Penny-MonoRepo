@@ -46,7 +46,7 @@ import {
 const sellOptions = async () => {
   try {
 
-    await sellIronCondorBigThree()
+    //await sellIronCondorBigThree()
     await sellIronCondors()
 
     // Adjusting the wings may have actual cost more money than it saved
@@ -85,11 +85,11 @@ const launchCrons = async () => {
   }, null, true, 'America/New_York')
 
 
-  new CronJob('0 0 10 * * 1-5', sellOptions, null, true, 'America/New_York')
-  new CronJob('0 0 11 * * 1-5', sellOptions, null, true, 'America/New_York')
-  new CronJob('0 0 12 * * 1-5', sellOptions, null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-5', sellOptions, null, true, 'America/New_York')
-  new CronJob('0 0 14 * * 1-5', sellOptions, null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', sellOptions, null, true, 'America/New_York')
+  //new CronJob('0 0 11 * * 1-5', sellOptions, null, true, 'America/New_York')
+  //new CronJob('0 0 12 * * 1-5', sellOptions, null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-4', sellOptions, null, true, 'America/New_York')
+  //new CronJob('0 0 14 * * 1-5', sellOptions, null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', closeExpiringPositions, null, true, 'America/New_York')
