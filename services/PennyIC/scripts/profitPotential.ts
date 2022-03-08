@@ -65,25 +65,33 @@ const spreadStandings = async (positions) => {
 
 
 const getStandings = async () => {
-  const gainLoss = await tradier.getGainLoss()
+  // const gainLoss = await tradier.getGainLoss()
 
-  const startDate = new Date('2022-02-19')
-  const gainLossSinceStart = gainLoss.filter(x => {
-    const openDate = new Date(x.open_date)
-    return openDate > startDate
-  })
+  // const startDate = new Date('2022-02-19')
+  // const gainLossSinceStart = gainLoss.filter(x => {
+  //   const openDate = new Date(x.open_date)
+  //   return openDate > startDate
+  // })
 
-  console.log(gainLossSinceStart)
+  // console.log(gainLossSinceStart)
 
   const positions = await tradier.getPositions()
 
 
-  await spreadStandings([ ...positions, ...gainLossSinceStart ])
+  await spreadStandings(positions)
   const totalCostBasis = positions.reduce((acc, x) => acc + x.cost_basis, 0) * -1
 
-  const totalCostBasisClosed = gainLossSinceStart.reduce((acc, x) => acc + (x.cost * x.quantity * -1), 0)
+  //const totalCostBasisClosed = gainLossSinceStart.reduce((acc, x) => acc + (x.cost * x.quantity * -1), 0)
 
-  console.log(`Total Current Profit Potential $${totalCostBasis + totalCostBasisClosed}\n`)
+  console.log(`Total Current Profit Potential $${totalCostBasis}\n`)
+
+
+  const tickers = uniq(positions.map(x => getUnderlying(x.symbol)))
+  tickers.map(ticker => {
+    const positionsWithTicker = positions.filter(x => getUnderlying(x.symbol) === ticker)
+    const costBasis = positionsWithTicker.reduce((acc, x) => acc + x.cost_basis, 0) * -1
+    console.log(ticker, costBasis, 100 - costBasis)
+  })
 }
 
 

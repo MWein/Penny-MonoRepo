@@ -113,7 +113,7 @@ export type MultilegOptionLeg = {
   quantity: number,
 }
 
-export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[], price: number = 0.14) => {
+export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[], price: number = 0.07) => {
   const mainBody = {
     class: 'multileg',
     symbol: underlying,
@@ -142,6 +142,7 @@ export const multilegOptionOrder = async (underlying: string, type: MultilegOpti
 
 export const cancelOrders = async (orderIDs: number[]) => {
   for (let x = 0; x < orderIDs.length; x++) {
+    console.log('Cancelling order number', orderIDs[x])
     const url = `accounts/${process.env.ACCOUNTNUM}/orders/${orderIDs[x]}`
     try {
       await network.deleteReq(url)

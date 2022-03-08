@@ -31,6 +31,11 @@ export const sellSpread = async (chain: OptionChainLink[], symbol: string, type:
     const typeChainWithDist = _insertDistanceToTargetDelta(typeChain, shortDelta)
     const shortLink = _selectLinkClosestToTarget(typeChainWithDist)
   
+    // Too far from target delta
+    if (shortLink.distanceToDeltaTarget > 0.10) {
+      return
+    }
+
     // Different filter params depending on the type
     const filterFunc = type === 'put' ?
       (link: OptionChainLink) => (shortLink.strike - link.strike) <= targetStrikeWidth && link.strike < shortLink.strike
@@ -88,10 +93,12 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
 
     // At least 30 days out
     // TODO Make this a setting
-    const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
-    const today = new Date().getTime()
-    console.log(expirations)
-    const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
+    // const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
+    // const today = new Date().getTime()
+    // console.log(expirations)
+    // const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
+
+    const expiration = expirations[0]
 
     if (!expiration) {
       return
@@ -155,7 +162,9 @@ export const sellIronCondors = async () => {
     'JNJ', 'CHPT', 'LUV', 'MRO', 'ARKK', 'RIOT', 'XOM', 'SOFI', 'WISH', 'SONY',
     'PENN', 'COST', 'ZM', 'JPM',
     'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA',
-    'XLB', 'XLC', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XLY'
+    'XLB', 'XLC', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XLY',
+
+    'SPY', 'IWM', 'QQQ'
   ]
 
   // TODO Filter for enabled
