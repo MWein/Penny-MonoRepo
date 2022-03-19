@@ -8,6 +8,7 @@ export type GainLossDetails = {
   gain_loss: number,
   open_date: string,
   close_date: string,
+  proceeds: number,
 }
 
 

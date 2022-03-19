@@ -21,6 +21,70 @@ const _selectLinkClosestToTarget = (chain: ChainLinkWithDeltaDist[]): ChainLinkW
 
 
 
+// Modified function that goes for a premium spread rather than a delta target
+export const sellSpreadByPremium = async (chain: OptionChainLink[], symbol: string, type: 'call' | 'put' | 'neither', premiumTarget: number, targetStrikeWidth: number): Promise<void> => {
+  try {
+    if (type === 'neither') {
+      return
+    }
+
+    const typeChain = chain.filter(x => x.type === type)
+    const typeChainOrdered = type === 'call' ? typeChain.reverse() : typeChain
+
+    let longLink
+    const shortLink = typeChainOrdered.find((shortCandidate, index) => {
+      if (index === 0) {
+        return false
+      }
+
+      const shortCandidatePremium = shortCandidate.premium
+
+      // Some chains have a strike spread less than the target. Find a good one
+      for (let x = index - 1; x >= 0; x--) {
+        longLink = typeChainOrdered[x]
+        if (!(Math.abs(longLink.strike - shortCandidate.strike) < targetStrikeWidth)) {
+          break
+        }
+      }
+
+      const longCandidatePremium = longLink.premium
+
+      const netPremium = shortCandidatePremium - longCandidatePremium
+      return netPremium >= premiumTarget
+    })
+
+    // Too high a delta
+    if (!shortLink || shortLink.delta >= 0.30) {
+      return
+    }
+
+    // Strike width too wide
+    if (Math.abs(shortLink.strike - longLink.strike) > targetStrikeWidth) {
+      return
+    }
+  
+    const legs: MultilegOptionLeg[] = [
+      {
+        symbol: shortLink.symbol,
+        side: 'sell_to_open',
+        quantity: 1
+      },
+      {
+        symbol: longLink.symbol,
+        side: 'buy_to_open',
+        quantity: 1
+      }
+    ]
+
+    await tradier.multilegOptionOrder(symbol, 'credit', legs, 0.14)
+  } catch (e) {
+    // TODO Log error
+  }
+}
+
+
+
+
 export const sellSpread = async (chain: OptionChainLink[], symbol: string, type: 'call' | 'put' | 'neither', shortDelta: number, targetStrikeWidth: number): Promise<void> => {
   try {
     if (type === 'neither') {
@@ -107,10 +171,10 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
     const chain = await tradier.getOptionChain(symbol, expiration)
 
     if (put) {
-      await sellSpread(chain, symbol, 'put', shortDelta, targetStrikeWidth)
+      await sellSpreadByPremium(chain, symbol, 'put', shortDelta, targetStrikeWidth)
     }
     if (call) {
-      await sellSpread(chain, symbol, 'call', shortDelta, targetStrikeWidth)
+      await sellSpreadByPremium(chain, symbol, 'call', shortDelta, targetStrikeWidth)
     }
   } catch (e) {
     // TODO Log error
@@ -192,6 +256,6 @@ export const sellIronCondors = async () => {
 
   for (let x = 0; x < openPositionTypes.length; x++) {
     const position = openPositionTypes[x]
-    await sellIronCondor(position.symbol, 0.15, 1, !position.hasPut, !position.hasCall)
+    await sellIronCondor(position.symbol, 15, 1, !position.hasPut, !position.hasCall)
   }
 }
