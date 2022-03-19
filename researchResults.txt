@@ -1,0 +1,20 @@
+Week of 5 Mar to 11 Mar
+
+Total gain loss of $482
+With a target of >=$15 per side and missing positoins made up: Potential of $476 difference
+Total gain loss would have been about $958 if premium was targeted rather than delta.
+This may also have better guarenteed other side position openings
+
+
+Week of 14 Mar to 18 Mar
+
+Total loss of $-1326
+With target of >=$15 and missing positions: Diff of $565 and total loss of $-761.
+
+
+
+All time (can't run script for all time because it's difficult to come up with other side)
+
+Total potential difference: $1041
+Total gain/loss: 958 + -761 = $197
+  - Not great, but definitely better than the current loss of $-854 since 7 Mar
