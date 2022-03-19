@@ -23,4 +23,7 @@ COPY . .
 # Go to PennyIC directory
 WORKDIR /usr/src/app/services/PennyIC
 
+# Run install to grab monorepo dependencies
+RUN yarn install
+
 CMD [ "ts-node", "app.ts" ]
