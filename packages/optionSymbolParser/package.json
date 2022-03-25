@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Package that extracts data from option symbols",
   "scripts": {
+    "build": "tsc index.ts",
     "test": "jest --coverage"
   }
 }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Package for comms with Tradier",
   "scripts": {
+    "build": "tsc index.ts",
     "test": "jest --coverage"
   },
   "dependencies": {

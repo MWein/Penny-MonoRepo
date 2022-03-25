@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Overkill, but package for custom sleep function",
   "scripts": {
+    "build": "tsc index.ts",
     "test": "jest --coverage"
   }
 }
