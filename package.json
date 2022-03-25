@@ -8,6 +8,7 @@
     "services/*"
   ],
   "scripts": {
+    "build": "lerna run build",
     "test": "lerna run test"
   },
   "dependencies": {
