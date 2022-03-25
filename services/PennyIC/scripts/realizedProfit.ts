@@ -13,6 +13,7 @@ const realizedProfit = async () => {
     const openDate = new Date(x.open_date)
     return openDate > startDate
   }).map(x => ({ ...x, underlying: getUnderlying(x.symbol) }))
+  //.filter(x => x.quantity > 0)
     //.filter(x => x.open_date.split('T')[0] === '2022-03-17')
     //.filter(x => x.close_date.split('T')[0] === '2022-03-16' || x.close_date.split('T')[0] === '2022-03-18')
 

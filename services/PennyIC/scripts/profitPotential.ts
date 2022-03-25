@@ -65,27 +65,46 @@ const spreadStandings = async (positions) => {
 
 
 const getStandings = async () => {
-  // const gainLoss = await tradier.getGainLoss()
-
-  // const startDate = new Date('2022-02-19')
-  // const gainLossSinceStart = gainLoss.filter(x => {
-  //   const openDate = new Date(x.open_date)
-  //   return openDate > startDate
-  // })
-
-  // console.log(gainLossSinceStart)
-
   const positions = await tradier.getPositions()
-
+  const optionTickers = positions.map(x => x.symbol)
+  const prices = await tradier.getPrices(optionTickers)
 
   await spreadStandings(positions)
   const totalCostBasis = positions.reduce((acc, x) => acc + x.cost_basis, 0) * -1
 
-  //const totalCostBasisClosed = gainLossSinceStart.reduce((acc, x) => acc + (x.cost * x.quantity * -1), 0)
 
-  console.log(`Total Current Profit Potential $${totalCostBasis}\n`)
+  // Total profit if closed out now
+  const currentGainLoss = positions.reduce((acc: number, pos: tradier.Position) => {
+    const price = prices.find(x => x.symbol === pos.symbol)?.price
+    if (!price) {
+      return acc
+    }
+
+    // Short position
+    if (pos.quantity < 0) {
+      const salePrice = Math.abs(pos.cost_basis)
+      const currentBuyBackPrice = Number((price * 100).toFixed(0))
+      const gainLoss = salePrice - currentBuyBackPrice
+      return acc + gainLoss
+      //return acc
+    }
+
+    // Long position
+    if (pos.quantity > 0) {
+      const buyPrice = pos.cost_basis
+      const currentSalePrice = Number((price * 100).toFixed(0))
+      const gainLoss = currentSalePrice - buyPrice
+      return acc + gainLoss
+      //return acc
+    }
+    return 0
+  }, 0)
 
 
+  console.log(`Total Profit Potential $${totalCostBasis}\n`)
+  console.log(`Total Profit if Closed Now $${currentGainLoss}\n`)
+
+  return
   const tickers = uniq(positions.map(x => getUnderlying(x.symbol)))
   tickers.map(ticker => {
     const positionsWithTicker = positions.filter(x => getUnderlying(x.symbol) === ticker)
