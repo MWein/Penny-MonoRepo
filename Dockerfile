@@ -20,10 +20,14 @@ RUN yarn install
 # Bundle app source
 COPY . .
 
+# Build app
+RUN yarn build
+
 # Go to PennyIC directory
 WORKDIR /usr/src/app/services/PennyIC
 
 # Run install to grab monorepo dependencies
 RUN yarn install
 
-CMD [ "ts-node", "app.ts" ]
+# Run the transpiled version
+CMD [ "node", "app.js" ]
