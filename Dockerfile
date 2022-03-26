@@ -1,13 +1,7 @@
 FROM node:16
 
-# Test
-
 # Create app directory
 WORKDIR /usr/src/app
-
-# Install typescript
-RUN npm install -g typescript
-RUN npm install -g ts-node
 
 # Bundle app source
 COPY . .
@@ -22,4 +16,4 @@ WORKDIR /usr/src/app/services/PennyIC
 RUN yarn install
 
 # Run the transpiled version
-CMD [ "ts-node", "dev.ts" ]
+CMD [ "node", "dev.js" ]
