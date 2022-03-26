@@ -17,4 +17,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build the Docker image
+      env:
+        ACCOUNTNUM: ${{ ACCOUNTNUM }}
+        APIKEY: ${{ APIKEY }}
+        BASEPATH: ${{ secrets.BASEPATH }}
+        CONNECTION_STRING: ${{ CONNECTION_STRING }}
       run: docker build . --file Dockerfile --tag penny-np:$(date +%s)
