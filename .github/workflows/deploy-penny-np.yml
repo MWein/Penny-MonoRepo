@@ -9,17 +9,15 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
     environment: nonprod
 
     steps:
     - uses: actions/checkout@v2
-
     - name: Build the Docker image
       env:
-        ACCOUNTNUM: ${{ ACCOUNTNUM }}
-        APIKEY: ${{ APIKEY }}
+        ACCOUNTNUM: ${{ secrets.ACCOUNTNUM }}
+        APIKEY: ${{ secrets.APIKEY }}
         BASEPATH: ${{ secrets.BASEPATH }}
-        CONNECTION_STRING: ${{ CONNECTION_STRING }}
+        CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
       run: docker build . --file Dockerfile --tag penny-np:$(date +%s)
