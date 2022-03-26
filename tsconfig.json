@@ -6,7 +6,8 @@
   },
   "exclude": [
     "*.test.ts",
-    "*.test.js"
+    "*.test.js",
+    "node_modules"
   ],
   "module": "commonjs",
   "esModuleInterop": true
