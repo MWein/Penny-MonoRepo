@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
+    "outDir": "built",
     "allowJs": true,
     "lib": [ "es2017" ],
-    "target": "es5"
+    "target": "es5",
+    "resolveJsonModule": true,
   },
+  "include": [
+    "**/*",
+    "**/package.json"
+  ],
   "exclude": [
     "node_modules",
     "*/*/coverage",
     "*/*/*.test.ts",
-    "*/*/*/*.test.ts"
+    "*/*/*/*.test.ts",
+    "package.json"
   ],
   "module": "commonjs",
   "esModuleInterop": true

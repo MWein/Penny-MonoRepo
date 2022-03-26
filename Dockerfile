@@ -5,15 +5,13 @@ WORKDIR /usr/src/app
 
 # Install typescript
 RUN npm install -g typescript
+RUN npm install -g ts-node
 
 # Bundle app source
 COPY . .
 
 # Install top level deps
 RUN yarn install
-
-# Build app
-RUN yarn build
 
 # Go to PennyIC directory
 WORKDIR /usr/src/app/services/PennyIC
@@ -22,4 +20,4 @@ WORKDIR /usr/src/app/services/PennyIC
 RUN yarn install
 
 # Run the transpiled version
-CMD [ "node", "app.js" ]
+CMD [ "ts-node", "dev.js" ]
