@@ -20,4 +20,4 @@ WORKDIR /usr/src/app/services/PennyIC
 RUN yarn install
 
 # Run the transpiled version
-CMD [ "ts-node", "dev.js" ]
+CMD [ "ts-node", "dev.ts" ]
