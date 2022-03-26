@@ -5,11 +5,9 @@
     "target": "es5"
   },
   "exclude": [
-    "*.test.ts",
-    "*.test.js",
     "node_modules",
-    "packages/*/coverage",
-    "services/*/coverage"
+    "*/*/coverage",
+    "*/*/test.ts"
   ],
   "module": "commonjs",
   "esModuleInterop": true
