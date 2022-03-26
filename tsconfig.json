@@ -7,7 +7,8 @@
   "exclude": [
     "*.test.ts",
     "*.test.js",
-    "node_modules"
+    "node_modules",
+    "packages/*/coverage"
   ],
   "module": "commonjs",
   "esModuleInterop": true
