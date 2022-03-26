@@ -8,7 +8,8 @@
     "*.test.ts",
     "*.test.js",
     "node_modules",
-    "packages/*/coverage"
+    "packages/*/coverage",
+    "services/*/coverage"
   ],
   "module": "commonjs",
   "esModuleInterop": true
