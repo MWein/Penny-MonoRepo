@@ -1,4 +1,3 @@
-require('dotenv').config({ path: '../../.env' })
 const CronJob = require('cron').CronJob
 const mongoose = require('mongoose')
 
