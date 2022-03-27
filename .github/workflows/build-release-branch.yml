@@ -27,7 +27,6 @@ jobs:
           git checkout -b release
 
           git merge --no-ff master -m "Auto-merge master to release"
-          git push --set-upstream origin release
 
     - name: Compile typescript
       run: |
@@ -35,4 +34,4 @@ jobs:
           tsc
           git add .
           git commit -m 'Auto-compile typescript'
-          git push
+          git push --set-upstream origin release
