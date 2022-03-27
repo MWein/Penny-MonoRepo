@@ -19,6 +19,8 @@ jobs:
       run: |
           git fetch --unshallow
 
+          git branch
+
           # Delete release branch
           git branch -d release
           git push origin --delete release
