@@ -30,3 +30,8 @@ jobs:
           git add .
           git commit -m 'Auto-compile typescript'
           git push
+
+    - name: Create Tag
+      run: |
+          git tag latest
+          git push origin --tags
