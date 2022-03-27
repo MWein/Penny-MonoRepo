@@ -15,24 +15,18 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
 
-    - name: Delete old release branch
+    - name: Merge master to release
       run: |
           git fetch --unshallow
+          git checkout release
+          git pull
+          git merge --no-ff master -m "Auto-merge master to release"
+          git push
 
-          git branch
-
-          # Delete release branch
-          git branch -d release
-          git push origin --delete release
-
-    - name: Create new release branch
-      run: |
-          # Create new release branch
-          git checkout -b release
     - name: Compile typescript
       run: |
           npm i typescript
           tsc
           git add .
           git commit -m 'Auto-compile typescript'
-          git push --set-upstream origin release
+          git push
