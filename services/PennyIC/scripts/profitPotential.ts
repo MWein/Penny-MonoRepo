@@ -104,7 +104,6 @@ const getStandings = async () => {
   console.log(`Total Profit Potential $${totalCostBasis}\n`)
   console.log(`Total Profit if Closed Now $${currentGainLoss}\n`)
 
-  return
   const tickers = uniq(positions.map(x => getUnderlying(x.symbol)))
   tickers.map(ticker => {
     const positionsWithTicker = positions.filter(x => getUnderlying(x.symbol) === ticker)
