@@ -18,7 +18,11 @@ jobs:
     - name: Merge master to release
       run: |
           git fetch --unshallow
-          git checkout release
+
+          git branch -d release
+          git push origin --delete release
+
+          git checkout -b release
           git pull
           git merge --no-ff master -m "Auto-merge master to release"
           git push
