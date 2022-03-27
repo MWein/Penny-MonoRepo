@@ -26,8 +26,6 @@ jobs:
           # Create new release branch
           git checkout -b release
 
-          git merge --no-ff master -m "Auto-merge master to release"
-
     - name: Compile typescript
       run: |
           npm i typescript
