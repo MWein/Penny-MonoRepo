@@ -15,7 +15,7 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
 
-    - name: Merge master to release
+    - name: Delete old release branch
       run: |
           git fetch --unshallow
 
@@ -23,9 +23,10 @@ jobs:
           git branch -d release
           git push origin --delete release
 
+    - name: Create new release branch
+      run: |
           # Create new release branch
           git checkout -b release
-
     - name: Compile typescript
       run: |
           npm i typescript
