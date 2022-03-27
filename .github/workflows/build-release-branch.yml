@@ -26,11 +26,8 @@ jobs:
           # Create new release branch
           git checkout -b release
 
-          # Push to origin
-          git push --set-upstream origin release
-
           git merge --no-ff master -m "Auto-merge master to release"
-          git push
+          git push --set-upstream origin release
 
     - name: Compile typescript
       run: |
