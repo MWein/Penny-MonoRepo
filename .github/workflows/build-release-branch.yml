@@ -1,4 +1,4 @@
-name: Merge to Release Branch
+name: Create tag
 on: 
   push:
     branches: [master]
@@ -14,14 +14,6 @@ jobs:
       run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-
-    - name: Merge master to release
-      run: |
-          git fetch --unshallow
-          git checkout release
-          git pull
-          git merge --no-ff master -m "Auto-merge master to release"
-          git push
 
     - name: Compile typescript
       run: |
