@@ -18,9 +18,6 @@ jobs:
     - name: Patch version
       run: |
           npm version patch
-          git add .
-          git commit -m 'Auto patch version'
-          git push origin
 
     - name: Compile typescript
       run: |
