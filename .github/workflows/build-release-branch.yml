@@ -6,7 +6,7 @@ on:
     branches: [master]
     types: [merged]
 jobs:
-  merge-master-to-release:
+  create-tag:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -15,22 +15,26 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
 
-    - name: Patch version
+    # Have to create a new branch so JS files don't end up in master
+    - name: Create release branch
       run: |
-          npm version patch
-          git push
+          git checkout -b release
 
     - name: Compile typescript
       run: |
           npm i typescript
           tsc
+          git add .
+          git commit -m 'Auto: Compile Typescript'
+          git push
 
-      # Patch version creates a tag but it auto-commits and doesn't include the typescript
-      # I don't want typescript in the branch so I have to create a new tag and delete the old one
-      # Super annoying
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
-          git tag -d v$VERSION
-          git tag $VERSION
+          npm version patch
           git push origin --tags
+
+    - name: Delete release branch
+      run: |
+          git branch -d release
+          git push origin --delete release
