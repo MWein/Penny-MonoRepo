@@ -25,7 +25,12 @@ jobs:
           npm i typescript
           tsc
 
+      # Patch version creates a tag but it auto-commits and doesn't include the typescript
+      # I don't want typescript in the branch so I have to create a new tag and delete the old one
+      # Super annoying
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
+          git tag -d v$VERSION
+          git tag v$VERSION
           git push origin --tags
