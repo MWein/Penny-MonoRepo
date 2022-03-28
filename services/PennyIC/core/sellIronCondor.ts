@@ -228,7 +228,10 @@ export const sellIronCondors = async () => {
     'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA',
     'XLB', 'XLC', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XLY',
 
-    'SPY', 'IWM', 'QQQ'
+    'SPY', 'IWM', 'QQQ',
+
+    // Leveraged
+    'TQQQ', 'SOXL', 'DUST', 'ERX', 'FAS', 'FAZ', 'JNUG', 'LABD', 'LABU', 'NUGT', 'SDS', 'TNA', 'UPRO', 'YINN'
   ]
 
   // TODO Filter for enabled
