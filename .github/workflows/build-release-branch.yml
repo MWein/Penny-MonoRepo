@@ -38,7 +38,6 @@ jobs:
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           npm version patch
           git push origin --tags
-          gh release create v$VERSION --notes "Nobody cares"
 
     - name: Delete release branch
       run: |
