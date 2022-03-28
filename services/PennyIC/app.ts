@@ -106,6 +106,8 @@ const launchCrons = async () => {
   new CronJob('0 10 16 * * *', () => {
     //housekeeping()
   }, null, true, 'America/New_York')
+
+  console.log('Deployment successful')
 }
 
 
