@@ -12,6 +12,11 @@
     "test": "lerna run test"
   },
   "dependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
     "@types/mongoose": "^5.11.97",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -22,11 +27,7 @@
     "mongoose": "^6.0.12",
     "node-cache": "^5.1.2",
     "superagent": "^6.1.0",
-    "@babel/core": "^7.17.5",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/preset-typescript": "^7.16.7"
+    "typescript": "^4.6.3"
   },
   "devDependencies": {
     "@jest-mock/express": "1.4.5",
