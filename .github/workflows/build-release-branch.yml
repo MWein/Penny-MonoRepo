@@ -18,6 +18,7 @@ jobs:
     - name: Patch version
       run: |
           npm version patch
+          git push
 
     - name: Compile typescript
       run: |
@@ -27,5 +28,4 @@ jobs:
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
-          git tag $VERSION
           git push origin --tags
