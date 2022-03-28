@@ -126,6 +126,10 @@ const connectToDB = () => {
       message: 'Connection Established'
     })
 
+    log({
+      message: 'Log to check for latest tag'
+    })
+
     launchCrons()
   })
 }
