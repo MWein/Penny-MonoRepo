@@ -29,11 +29,16 @@ jobs:
           git commit -m 'Auto: Compile Typescript'
           git push
 
+    - name: Delete typescript and test files
+      run: |
+          echo TODO
+
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           npm version patch
           git push origin --tags
+          gh release create v$VERSION --notes "Nobody cares"
 
     - name: Delete release branch
       run: |
@@ -47,3 +52,7 @@ jobs:
         git add package.json
         git commit -m "Auto version increment"
         git push
+
+    - name: Deploy to nonprod
+      run: |
+        echo TODO
