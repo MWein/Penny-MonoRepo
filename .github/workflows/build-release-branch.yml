@@ -40,3 +40,8 @@ jobs:
           git checkout master
           git branch -d release
           git push origin --delete release
+
+    - name: Increment version on master
+      run: |
+        npm version patch
+        git push
