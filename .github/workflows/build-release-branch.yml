@@ -19,9 +19,6 @@ jobs:
       run: |
           npm i typescript
           tsc
-          git add .
-          git commit -m 'Auto-compile typescript'
-          git push
 
     - name: Create Tag
       run: |
