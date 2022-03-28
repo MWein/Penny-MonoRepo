@@ -32,5 +32,5 @@ jobs:
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           git tag -d v$VERSION
-          git tag v$VERSION
+          git tag $VERSION
           git push origin --tags
