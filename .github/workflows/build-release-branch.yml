@@ -44,4 +44,6 @@ jobs:
     - name: Increment version on master
       run: |
         npm --no-git-tag-version version patch
+        git add package.json
+        git commit -m "Auto version increment"
         git push
