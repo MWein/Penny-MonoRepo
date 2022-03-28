@@ -30,10 +30,6 @@ jobs:
           git commit -m 'Auto: Compile Typescript'
           git push
 
-    - name: Delete typescript and test files
-      run: |
-          echo TODO
-
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
