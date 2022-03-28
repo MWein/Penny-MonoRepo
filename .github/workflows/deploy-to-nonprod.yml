@@ -29,15 +29,4 @@ jobs:
 
     - name: Run deploy script
       run: |
-          ssh staging
-          docker stop penny-np
-          docker rm penny-np
-          cd Penny-np/
-          git fetch --tags
-          latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          git checkout $latestTag
-          docker build . -t penny-np
-          cd ..
-          docker run -d --restart on-failure --name penny-np  penny-np
-          TZ=America/Chicago date > lastNPDeploy
-          exit
+          ssh staging './deployNP.sh'
