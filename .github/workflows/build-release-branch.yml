@@ -43,5 +43,5 @@ jobs:
 
     - name: Increment version on master
       run: |
-        npm version patch
+        npm --no-git-tag-version version patch
         git push
