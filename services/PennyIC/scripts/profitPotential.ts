@@ -34,7 +34,7 @@ const printResult = (title, numberWinning, numberLosing, total) => {
   console.log(`\n------ ${title} ------`)
   console.log('Winning', numberWinning, `${((numberWinning / total) * 100).toFixed(2)}%`)
   console.log('Losing', numberLosing, `${((numberLosing / total) * 100).toFixed(2)}%`)
-  console.log('-------------------\n')
+  console.log('-------------------')
 }
 
 
@@ -66,7 +66,9 @@ const spreadStandings = async (positions) => {
 
 const getStandings = async () => {
   const positions = await tradier.getPositions()
+  //const positions = allPositions.filter(x => ['TQQQ', 'SOXL', 'DUST', 'ERX', 'FAS', 'FAZ', 'JNUG', 'LABD', 'LABU', 'NUGT', 'SDS', 'TNA', 'UPRO', 'YINN'].includes(getUnderlying(x.symbol)))
   const optionTickers = positions.map(x => x.symbol)
+
   const prices = await tradier.getPrices(optionTickers)
 
   await spreadStandings(positions)
@@ -74,7 +76,13 @@ const getStandings = async () => {
 
 
   // Total profit if closed out now
+  const byTicker = {}
   const currentGainLoss = positions.reduce((acc: number, pos: tradier.Position) => {
+    const underlying = getUnderlying(pos.symbol)
+    if (!byTicker[underlying]) {
+      byTicker[underlying] = 0
+    }
+
     const price = prices.find(x => x.symbol === pos.symbol)?.price
     if (!price) {
       return acc
@@ -85,6 +93,7 @@ const getStandings = async () => {
       const salePrice = Math.abs(pos.cost_basis)
       const currentBuyBackPrice = Number((price * 100).toFixed(0))
       const gainLoss = salePrice - currentBuyBackPrice
+      byTicker[underlying] += gainLoss
       return acc + gainLoss
       //return acc
     }
@@ -94,6 +103,7 @@ const getStandings = async () => {
       const buyPrice = pos.cost_basis
       const currentSalePrice = Number((price * 100).toFixed(0))
       const gainLoss = currentSalePrice - buyPrice
+      byTicker[underlying] += gainLoss
       return acc + gainLoss
       //return acc
     }
@@ -101,15 +111,33 @@ const getStandings = async () => {
   }, 0)
 
 
-  console.log(`Total Profit Potential $${totalCostBasis}\n`)
+  console.log(`\nTotal Profit Potential $${totalCostBasis}`)
   console.log(`Total Profit if Closed Now $${currentGainLoss}\n`)
 
-  // const tickers = uniq(positions.map(x => getUnderlying(x.symbol)))
-  // tickers.map(ticker => {
-  //   const positionsWithTicker = positions.filter(x => getUnderlying(x.symbol) === ticker)
-  //   const costBasis = positionsWithTicker.reduce((acc, x) => acc + x.cost_basis, 0) * -1
-  //   console.log(ticker, costBasis, 100 - costBasis)
-  // })
+  // Analytics
+  const bigThreeTickers = [ 'SPY', 'IWM', 'QQQ' ]
+  const leveragedTickers = [ 'TQQQ', 'SOXL', 'DUST', 'ERX', 'FAS', 'FAZ', 'JNUG', 'LABD', 'LABU', 'NUGT', 'SDS', 'TNA', 'UPRO', 'YINN' ]
+  const byTickerArr = Object.keys(byTicker).map(x => ({ ticker: x, gl: byTicker[x] }))
+  const winning = byTickerArr.filter(x => x.gl > 0)
+  const losing = byTickerArr.filter(x => x.gl < 0)
+
+  const getAverage = (set) => Number((set.reduce((acc: number, x) => acc + x.gl, 0) / set.length).toFixed(2))
+  console.log(`Number Winning: ${winning.length} | Number Losing: ${losing.length}`)
+  console.log(`Average Win: $${getAverage(winning)} | Average Loss: $${getAverage(losing)}\n`)
+
+  const formatForPrinting = (set) => set.map(x => `${x.ticker}: $${x.gl}`).join(' | ')
+
+  // Big three
+  const bigThree = formatForPrinting(byTickerArr.filter(x => bigThreeTickers.includes(x.ticker)))
+  console.log('Big Three:', bigThree, '\n')
+
+  // Leveraged
+  const leveraged = formatForPrinting(byTickerArr.filter(x => leveragedTickers.includes(x.ticker)))
+  console.log('Leveraged:', leveraged, '\n')
+
+  // All others
+  const allOthers = formatForPrinting(byTickerArr.filter(x => ![ ...bigThreeTickers, ...leveragedTickers ].includes(x.ticker)))
+  console.log(`All Others:\n${allOthers}`)
 }
 
 
