@@ -121,9 +121,11 @@ const getStandings = async () => {
   const winning = byTickerArr.filter(x => x.gl > 0)
   const losing = byTickerArr.filter(x => x.gl < 0)
 
+  const getSum = (set) => set.reduce((acc: number, x) => acc + x.gl, 0)
   const getAverage = (set) => Number((set.reduce((acc: number, x) => acc + x.gl, 0) / set.length).toFixed(2))
   console.log(`Number Winning: ${winning.length} | Number Losing: ${losing.length}`)
-  console.log(`Average Win: $${getAverage(winning)} | Average Loss: $${getAverage(losing)}\n`)
+  console.log(`Average Win: $${getAverage(winning)} | Average Loss: $${getAverage(losing)}`)
+  console.log(`Total Win: $${getSum(winning)} | Total Loss: $${getSum(losing)}\n`)
 
   const formatForPrinting = (set) => set.map(x => `${x.ticker}: $${x.gl}`).join(' | ')
 
@@ -135,9 +137,13 @@ const getStandings = async () => {
   const leveraged = formatForPrinting(byTickerArr.filter(x => leveragedTickers.includes(x.ticker)))
   console.log('Leveraged:', leveraged, '\n')
 
-  // All others
-  const allOthers = formatForPrinting(byTickerArr.filter(x => ![ ...bigThreeTickers, ...leveragedTickers ].includes(x.ticker)))
-  console.log(`All Others:\n${allOthers}`)
+  // All others - winners
+  const winningTickers = formatForPrinting(byTickerArr.filter(x => ![ ...bigThreeTickers, ...leveragedTickers ].includes(x.ticker) && x.gl > 0))
+  console.log(`Winners:\n${winningTickers}\n`)
+
+  // All others - losers
+  const losingTickers = formatForPrinting(byTickerArr.filter(x => ![ ...bigThreeTickers, ...leveragedTickers ].includes(x.ticker) && x.gl < 0))
+  console.log(`Losers:\n${losingTickers}`)
 }
 
 
