@@ -154,49 +154,6 @@ describe('getExpirations', () => {
     expect(network.get).toHaveBeenCalledWith('/markets/options/expirations?symbol=AAPL')
   })
 
-  it('Returns only the next expiration regardless of the limit if given SPY, QQQ, or IWM', async () => {
-    // @ts-ignore
-    network.get.mockReturnValue({
-      expirations: {
-        date: [
-          '2021-01-01',
-          '2022-01-01'
-        ]
-      }
-    })
-
-    const spyResult = await getExpirations('SPY', 50)
-    expect(spyResult).toEqual([ '2021-01-01' ])
-
-    const iwmResult = await getExpirations('IWM', 50)
-    expect(iwmResult).toEqual([ '2021-01-01' ])
-
-    const qqqResult = await getExpirations('QQQ', 50)
-    expect(qqqResult).toEqual([ '2021-01-01' ])
-  })
-
-  it('Excludes current date for SPY, QQQ, and IWM', async () => {
-    // @ts-ignore
-    network.get.mockReturnValue({
-      expirations: {
-        date: [
-          '2021-10-12', // Date mocked above
-          '2021-01-01',
-          '2022-01-01'
-        ]
-      }
-    })
-
-    const spyResult = await getExpirations('SPY', 50)
-    expect(spyResult).toEqual([ '2021-01-01' ])
-
-    const iwmResult = await getExpirations('IWM', 50)
-    expect(iwmResult).toEqual([ '2021-01-01' ])
-
-    const qqqResult = await getExpirations('QQQ', 50)
-    expect(qqqResult).toEqual([ '2021-01-01' ])
-  })
-
   it('By default, only returns the first 2 expirations', async () => {
     // @ts-ignore
     network.get.mockReturnValue({
