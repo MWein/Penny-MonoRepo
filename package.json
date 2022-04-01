@@ -9,8 +9,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
-    "test": "lerna run test",
-    "deep-install": "lerna run install"
+    "test": "lerna run test"
   },
   "dependencies": {
     "@types/mongoose": "^5.11.97",

@@ -12,7 +12,6 @@ jobs:
     - name: Install Dependencies
       run: |
         yarn install
-        yarn deep-install
 
     - name: Run tests
       run: yarn test
