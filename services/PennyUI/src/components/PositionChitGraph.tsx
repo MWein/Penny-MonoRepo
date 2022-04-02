@@ -69,7 +69,7 @@ const PositionChitGraph = ({
 
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height='50px' width={graphWidth} viewBox="0 0 100 50">
+    <svg xmlns="http://www.w3.org/2000/svg" height={graphHeight} width={graphWidth} viewBox="0 0 100 50">
       <g>
         {/* Base Graph */}
         <path d={`M ${graphStartPos} 25 L ${graphEndPos} 25`} stroke={baseGraphColor} />

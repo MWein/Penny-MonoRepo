@@ -1,15 +1,49 @@
 import PositionChit from './components/PositionChit'
+import AccountInfoPanel from './components/AccountInfoPanel'
 
 const App = () => {
   return (
-    <div>
-      <PositionChit ticker='TQQQ' gainLoss={70} maxGain={70} maxLoss={-30} hasCall hasPut />
-      <PositionChit ticker='SPY' gainLoss={40} maxGain={100} maxLoss={-8} hasCall />
-      <PositionChit ticker='IWM' gainLoss={20} maxGain={40} maxLoss={-15} hasPut />
-      <PositionChit ticker='SPY' gainLoss={-2} maxGain={50} maxLoss={-20} hasPut />
-      <PositionChit ticker='TQQQ' gainLoss={5} maxGain={50} maxLoss={-100} hasCall />
-      <PositionChit ticker='IWM' gainLoss={-12} maxGain={50} maxLoss={-7} hasPut />
-      <PositionChit ticker='IWM' gainLoss={56} maxGain={50} maxLoss={-7} hasPut />
+    <div style={{ display: 'flex' }}>
+      <AccountInfoPanel />
+
+      <div style={{ display: 'inline-block', marginTop: '5px' }}>
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='IWM' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='SPY' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+        <PositionChit ticker='TQQQ' gainLoss={50} maxLoss={-20} maxGain={100} hasPut />
+      </div>
     </div>
   )
 }
