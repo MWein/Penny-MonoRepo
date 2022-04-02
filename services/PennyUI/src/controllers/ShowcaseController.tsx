@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
+import fetchPennyStatus from '../network/checkPenny'
 
 
 // ****************** MOCK DATA *********************
@@ -80,7 +81,7 @@ const ShowcaseController = ({
   const [ loading, setLoading ] = useState<boolean>(false)
 
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
-  const [ pennyHealthy, setPennyHeathy ] = useState<boolean>(false)
+  const [ pennyHealthy, setPennyHealthy ] = useState<boolean>(false)
 
   const [ equity, setEquity ] = useState<number>(0)
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
@@ -95,6 +96,16 @@ const ShowcaseController = ({
   useEffect(() => {
     
 
+  }, [])
+
+
+  // Check penny status every minute
+  useEffect(() => {
+    fetchPennyStatus(setCheckingPenny, setPennyHealthy)
+    const intervalId = setInterval(() => {
+      fetchPennyStatus(setCheckingPenny, setPennyHealthy)
+    }, 60000)
+    return () => clearInterval(intervalId)
   }, [])
 
 
