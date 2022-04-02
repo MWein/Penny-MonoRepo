@@ -4,13 +4,13 @@ const mongoose = require('mongoose')
 import { log } from '@penny/logger'
 
 import {
-  sellIronCondorBigThree,
+  //sellIronCondorBigThree,
   sellIronCondors
 } from './core/sellIronCondor'
 
-import {
-  wingAdjustment
-} from './core/wingAdjustment'
+// import {
+//   wingAdjustment
+// } from './core/wingAdjustment'
 
 import {
   closeExpiringPositions
