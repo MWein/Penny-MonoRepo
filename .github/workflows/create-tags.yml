@@ -31,6 +31,7 @@ jobs:
 
     - name: Clean folder
       run: |
+          VERSION=$(grep version package.json | awk -F \" '{print $4}')
           for FILE in *; do
             if [[ $FILE != "Dockerfile-ui" && $FILE != "bundle" ]]; then
               rm -rf $FILE
@@ -43,7 +44,6 @@ jobs:
 
     - name: Create Tag
       run: |
-          VERSION=$(grep version package.json | awk -F \" '{print $4}')
           echo v$VERSION-ui
           git tag -a v$VERSION-ui
           git push origin --tags
@@ -67,8 +67,8 @@ jobs:
     # Have to create a new branch so JS files don't end up in master
     - name: Create release branch
       run: |
-          git checkout -b release
-          git push --set-upstream origin release
+          git checkout -b ic-release
+          git push --set-upstream origin ic-release
 
     - name: Remove other services
       run: |
@@ -93,8 +93,8 @@ jobs:
     - name: Delete release branch
       run: |
           git checkout master
-          git branch -D release
-          git push origin --delete release
+          git branch -D ic-release
+          git push origin --delete ic-release
 
   create-penny-data-tag:
     runs-on: ubuntu-latest
@@ -108,8 +108,8 @@ jobs:
     # Have to create a new branch so JS files don't end up in master
     - name: Create release branch
       run: |
-          git checkout -b release
-          git push --set-upstream origin release
+          git checkout -b data-release
+          git push --set-upstream origin data-release
 
     - name: Remove other services
       run: |
@@ -134,5 +134,5 @@ jobs:
     - name: Delete release branch
       run: |
           git checkout master
-          git branch -D release
-          git push origin --delete release
+          git branch -D data-release
+          git push origin --delete data-release
