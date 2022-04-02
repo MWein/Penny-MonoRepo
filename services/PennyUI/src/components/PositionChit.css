@@ -10,6 +10,7 @@
 }
 
 .call-put {
+    width: 25px;
     height: 20px;
     text-align: center;
 }

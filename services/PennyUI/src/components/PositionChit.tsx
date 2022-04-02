@@ -29,10 +29,10 @@ const PositionChit = ({
 
       <div className='horizontal-center'>
         <Typography variant='subtitle2' className='call-put'>
-          {hasCall ? 'Call' : ' '}
+          {hasCall && 'Call'}
         </Typography>
         <Typography variant='subtitle2' className='call-put'>
-          {hasPut ? 'Put' : ' '}
+          {hasPut && 'Put'}
         </Typography>
       </div>
     </Paper>
