@@ -1,0 +1,16 @@
+name: Increment Version
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+    types: [merged]
+
+jobs:
+  increment-version:
+    - name: Increment version on master
+      run: |
+        npm --no-git-tag-version version patch
+        git add package.json
+        git commit -m "Auto version increment"
+        git push
