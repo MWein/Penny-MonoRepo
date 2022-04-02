@@ -89,7 +89,7 @@ const Showcase = ({
   const [ yearEarnings, setYearEarnings ] = useState<number>(0)
   const [ theft, setTheft ] = useState<number>(0)
   const [ lastYearTheft, setLastYearTheft ] = useState<number>(0)
-  const [ positions, setPositions ] = useState<PositionChitProps[]>([])
+  const [ positions, setPositions ] = useState<PositionChitProps[]>(mockPositions)
 
   // TODO Network call
 
@@ -117,7 +117,6 @@ const Showcase = ({
               lastYearTheft={lastYearTheft}
           />
         </div>
-
         <PositionChitsController positions={positions} />
       </div>
     </>
