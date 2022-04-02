@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
-import PositionChit from '../components/PositionChit'
+import { useEffect, useState } from 'react'
+import { PositionChitProps } from '../components/PositionChit'
 import AccountInfoPanel from '../components/AccountInfoPanel'
 import PennyStatus from '../components/PennyStatus'
+
+import PositionChitsController from './PositionChitsController'
 
 
 // ****************** MOCK DATA *********************
@@ -57,16 +59,16 @@ const symbols = [
   'TQQQ', 'SOXL', 'DUST', 'ERX', 'FAS', 'FAZ', 'JNUG', 'LABD', 'LABU', 'NUGT', 'SDS', 'TNA', 'UPRO', 'YINN'
 ]
 
-const positions = symbols.map(symbol => randomMockPosition(symbol))
+const mockPositions = symbols.map(symbol => randomMockPosition(symbol))
 
-positions.push(generateMockPosition('FAKE', 40000, -20, 35, true, true))
-positions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
+mockPositions.push(generateMockPosition('FAKE', 40000, -20, 35, true, true))
+mockPositions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
 
-const equity = 20000 + (Math.random() * 40000)
-const monthEarnings = -500 + (Math.random() * 1000)
-const yearEarnings = Math.random() * 30000
-const theft = yearEarnings * .22
-const lastYearTheft = (Math.random() * 30000) * .22
+const mockEquity = 20000 + (Math.random() * 40000)
+const mockMonthEarnings = -500 + (Math.random() * 1000)
+const mockYearEarnings = Math.random() * 30000
+const mockTheft = mockYearEarnings * .22
+const mockLastYearTheft = (Math.random() * 30000) * .22
 
 // ****************** MOCK DATA *********************
 
@@ -75,35 +77,35 @@ type ShowcaseProps = {
   isNonProd: boolean,
 }
 
-
 const Showcase = ({
   isNonProd,
 }: ShowcaseProps) => {
+  const [ loading, setLoading ] = useState<boolean>(true)
 
+  const [ pennyHealthy, setPennyHeathy ] = useState<boolean>(false)
+  const [ equity, setEquity ] = useState<number>(0)
+  const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
+  const [ monthEarnings, setMonthEarnings ] = useState<number>(0)
+  const [ yearEarnings, setYearEarnings ] = useState<number>(0)
+  const [ theft, setTheft ] = useState<number>(0)
+  const [ lastYearTheft, setLastYearTheft ] = useState<number>(0)
+  const [ positions, setPositions ] = useState<PositionChitProps[]>([])
 
-  // TODO Network calls, useEffect, etc
+  // TODO Network call
 
   useEffect(() => {
-    console.log('LOADING!!!')
+    
 
   }, [])
 
 
-  const sortedPositions = positions.sort((a, b) => b.gainLoss - a.gainLoss)
-
-  // Only count towards total if gainLoss is within bounds
-  const weekEarnings = sortedPositions.reduce((acc, pos) => {
-    const gainLoss = pos.gainLoss
-    return gainLoss > pos.maxGain || gainLoss < pos.maxLoss ? acc : acc + gainLoss
-  }, 0)
-
   return (
     <>
       <div style={{ display: 'flex' }}>
-        <div style={{ padding: '10px', width: '500px' }}>
+        <div style={{ padding: '10px', width: '250px', minWidth: '250px' }}>
           <PennyStatus
-            loading={false}
-            healthy={true}
+            loading={loading}
+            healthy={pennyHealthy}
           />
           <div style={{ height: '10px' }} />
           <AccountInfoPanel
@@ -116,13 +118,7 @@ const Showcase = ({
           />
         </div>
 
-        <div style={{ display: 'inline-block', marginTop: '5px' }}>
-          {
-            sortedPositions.map(pos =>
-              <PositionChit key={pos.ticker} ticker={pos.ticker} gainLoss={pos.gainLoss} maxLoss={pos.maxLoss} maxGain={pos.maxGain} hasPut={pos.hasPut} hasCall={pos.hasCall} />
-            )
-          }
-        </div>
+        <PositionChitsController positions={positions} />
       </div>
     </>
   )
