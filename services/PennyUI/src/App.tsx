@@ -1,8 +1,11 @@
+import { Routes, Route } from 'react-router-dom'
 import Showcase from './controllers/Showcase'
 
 const App = () => {
   return (
-    <Showcase />
+    <Routes>
+      <Route path='/' element={<Showcase />} />
+    </Routes>
   )
 }
 
