@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import AccountInfoPanel from '../components/AccountInfoPanel'
 import PennyStatus from '../components/PennyStatus'
+import LoadingModal from '../components/LoadingModal'
 
 import PositionChitsController from './PositionChitsController'
 
@@ -82,7 +83,9 @@ const Showcase = ({
 }: ShowcaseProps) => {
   const [ loading, setLoading ] = useState<boolean>(true)
 
+  const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
   const [ pennyHealthy, setPennyHeathy ] = useState<boolean>(false)
+
   const [ equity, setEquity ] = useState<number>(0)
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
   const [ monthEarnings, setMonthEarnings ] = useState<number>(0)
@@ -104,7 +107,7 @@ const Showcase = ({
       <div style={{ display: 'flex' }}>
         <div style={{ padding: '10px', width: '250px', minWidth: '250px' }}>
           <PennyStatus
-            loading={loading}
+            loading={checkingPenny}
             healthy={pennyHealthy}
           />
           <div style={{ height: '10px' }} />
@@ -119,6 +122,7 @@ const Showcase = ({
         </div>
         <PositionChitsController positions={positions} />
       </div>
+      {loading && <LoadingModal />}
     </>
   )
 }
