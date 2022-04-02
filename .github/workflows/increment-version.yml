@@ -8,6 +8,7 @@ on:
 
 jobs:
   increment-version:
+    steps:
     - name: Increment version on master
       run: |
         npm --no-git-tag-version version patch
