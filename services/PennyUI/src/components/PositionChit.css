@@ -1,0 +1,15 @@
+.ticker {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.horizontal-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.call-put {
+    height: 20px;
+    text-align: center;
+}
