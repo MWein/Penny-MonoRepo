@@ -1,6 +1,6 @@
 import * as tradier from '@penny/tradier'
 import { useCache } from '../utils/cache'
-
+import { getICPositions } from '../services/getICPositions'
 
 const getSunday = (d) => {
   d = new Date(d);
@@ -20,6 +20,7 @@ const retrieveEquity = async () => {
 }
 
 const showcaseController = async (req, res) => {
+  const positions = await useCache('positions', getICPositions, [], 840)
   const equity = await useCache('equity', retrieveEquity, 0)
 
   const today = new Date()
@@ -32,16 +33,25 @@ const showcaseController = async (req, res) => {
   const monthEarnings = await useCache('monthEarnings', () => retrieveGainLoss(firstOfMonth), 0)
   const yearEarnings = await useCache('yearEarnings', () => retrieveGainLoss(firstOfYear), 0)
 
+  // TODO Make service for this
+  const theft = Math.max(0, yearEarnings * 0.22)
+
   const realizedWeekEarnings = await useCache('realizedWeekEarnings', () => retrieveGainLoss(firstOfWeek), 0)
+  const unrealizedWeekEarnings = positions.reduce((acc, pos) => {
+    const gl = pos.gainLoss
+    return gl > pos.maxGain || gl < pos.maxLoss ? acc : acc + gl
+  }, 0)
+
+  const weekEarnings = unrealizedWeekEarnings + realizedWeekEarnings
 
   res.json({
     equity,
-    weekEarnings: realizedWeekEarnings,
+    weekEarnings,
     monthEarnings,
     yearEarnings,
-    theft: 4,
-    lastYearTheft: 5,
-    positions: []
+    theft,
+    lastYearTheft: 0,
+    positions
   })
 }
 
