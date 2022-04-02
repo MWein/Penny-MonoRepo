@@ -3,3 +3,4 @@ dist
 coverage/
 .env
 lerna-debug.log
+.DS_Store

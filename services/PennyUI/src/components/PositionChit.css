@@ -1,0 +1,27 @@
+.position-chit {
+    padding: 10px;
+    width: 190px;
+    display: inline-flex;
+    /* margin: 5px; */
+
+    /* Easier to use transform than more css to scale down  */
+    transform: scale(0.9);
+    margin-bottom: calc(-30px * (1 - 0.9));
+    margin-left: calc(-80px * (1 - 0.9));
+    margin-right: calc(-80px * (1 - 0.9));
+}
+
+.ticker {
+    width: 55px;
+}
+
+.vertical-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.call-put {
+    height: 20px;
+    text-align: center;
+}
