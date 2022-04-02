@@ -26,6 +26,27 @@ const PositionChit = ({
     </Typography>
   )
 
+
+  const calcPosition = (
+    graphStart: number,
+    graphEnd: number,
+    valueMin: number,
+    valueMax: number,
+    value: number,
+  ): number => {
+    if (value < valueMin) {
+      return graphStart
+    }
+    if (value > valueMax) {
+      return graphEnd
+    }
+    const valueWidth = valueMax - valueMin
+    const relativeValuePos = Math.abs(valueMin - value)
+    const graphWidth = graphEnd - graphStart
+    return ((graphWidth * relativeValuePos) / valueWidth) + graphStart
+  }
+
+
   // Graph position settings
   const graphStartPos = 10
   const graphEndPos = 90
@@ -36,9 +57,8 @@ const PositionChit = ({
 
   const gainLossTickColor = gainLoss > 0 ? 'green' : 'red'
 
-  // Calculated positions
-  const zeroPosition = 25
-  const gainLossPosition = 55
+  const zeroPosition = calcPosition(graphStartPos, graphEndPos, maxLoss, maxGain, 0)
+  const gainLossPosition = calcPosition(graphStartPos, graphEndPos, maxLoss, maxGain, gainLoss)
 
 
   return (
