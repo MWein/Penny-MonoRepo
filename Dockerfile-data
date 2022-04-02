@@ -16,4 +16,4 @@ WORKDIR /usr/src/app/services/Penny-Data
 RUN yarn install
 
 # Run the transpiled version
-CMD [ "node", "app.js" ]
+CMD [ "node", "dev.js" ]
