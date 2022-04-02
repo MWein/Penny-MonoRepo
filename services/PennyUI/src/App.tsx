@@ -11,7 +11,14 @@ const App = () => {
           healthy={true}
         />
         <div style={{ height: '10px' }} />
-        <AccountInfoPanel />
+        <AccountInfoPanel
+            equity={1234}
+            weekEarnings={12}
+            monthEarnings={50}
+            yearEarnings={60}
+            theft={70}
+            lastYearTheft={80}
+        />
       </div>
 
       <div style={{ display: 'inline-block', marginTop: '5px' }}>

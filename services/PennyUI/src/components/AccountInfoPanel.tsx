@@ -1,18 +1,25 @@
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import { moneyFormat, moneyColor } from '../common/formatting'
-
-const months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+import { moneyFormat, moneyColor, months } from '../common/formatting'
 
 type AccountInfoPanelProps = {
-  accountEquity: number,
+  equity: number,
+  weekEarnings: number,
+  monthEarnings: number,
+  yearEarnings: number,
+  theft: number,
+  lastYearTheft: number,
 }
 
-const AccountInfoPanel = () => {
-  const currentWeekEarnings = 564.1248
-  const allTimeEarnings = 1000000
-
+const AccountInfoPanel = ({
+  equity,
+  weekEarnings,
+  monthEarnings,
+  yearEarnings,
+  theft,
+  lastYearTheft,
+}: AccountInfoPanelProps) => {
   const createValueRow = (
     label: string,
     value: number,
@@ -34,7 +41,6 @@ const AccountInfoPanel = () => {
 
   const today = new Date()
   const currentMonth = months[today.getUTCMonth()]
-  //const lastMonth = months[today.getUTCMonth() - 1] || 'Dec'
   const thisYear = today.getFullYear()
   const lastYear = thisYear - 1
 
@@ -42,31 +48,23 @@ const AccountInfoPanel = () => {
     <>
       <Paper style={{ padding: '10px' }}>
         <Typography variant='h4' style={{ textAlign: 'center', width: '100%' }}>
-          {moneyFormat(10000.0164)}
+          {moneyFormat(equity)}
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-        {createValueRow('This Week', currentWeekEarnings, true, 'green')}
-        {createValueRow(currentMonth, allTimeEarnings, true)}
-        {createValueRow(`${thisYear}`, allTimeEarnings, true)}
-        {createValueRow('All Time', allTimeEarnings)}
+        {createValueRow('This Week', weekEarnings, true, 'green')}
+        {createValueRow(currentMonth, monthEarnings, true)}
+        {createValueRow(`${thisYear}`, yearEarnings)}
       </Paper>
 
       <div style={{ height: '10px' }} />
-
-      {/* <Paper style={{ padding: '10px' }}>
-        {createValueRow(lastMonth, allTimeEarnings, true)}
-        {createValueRow(`${lastYear}`, allTimeEarnings)}
-      </Paper>
-
-      <div style={{ height: '10px' }} /> */}
 
       <Paper style={{ padding: '10px' }}>
         <Typography variant='h5' style={{ textAlign: 'center', width: '100%' }}>
           Estimated Theft
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-        {createValueRow(`${thisYear}`, allTimeEarnings, true)}
-        {createValueRow(`${lastYear}`, allTimeEarnings)}
+        {createValueRow(`${thisYear}`, theft, true)}
+        {createValueRow(`${lastYear}`, lastYearTheft)}
       </Paper>
     </>
   )

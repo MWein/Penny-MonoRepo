@@ -6,3 +6,5 @@ export const moneyFormat = (value: number) =>
 export const moneyColor = (value: number, positiveColor: string = 'green') => {
   return value >= 0 ? positiveColor : 'red'
 }
+
+export const months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
