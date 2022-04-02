@@ -22,7 +22,7 @@ const PositionChit = ({
   hasCall = false,
 }: PositionChitProps) => {
   const callPutText = (active: boolean, text: string) => (
-    <Typography style={{ color: active ? 'black' : 'gray' }} variant='subtitle2' className='call-put'>
+    <Typography style={{ color: active ? 'black' : 'lightGray' }} variant='subtitle2' className='call-put'>
       {text}
     </Typography>
   )
