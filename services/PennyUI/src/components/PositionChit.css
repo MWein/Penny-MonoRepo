@@ -1,6 +1,12 @@
+.position-chit {
+    padding: 10px;
+    width: 200px;
+    display: inline-flex;
+    /* margin: 10px; */
+}
+
 .ticker {
-    font-size: 20px;
-    font-weight: bold;
+    width: 55px;
 }
 
 .horizontal-center {
