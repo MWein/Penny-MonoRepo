@@ -61,7 +61,7 @@ const positions = symbols.map(symbol => randomMockPosition(symbol))
 positions.push(generateMockPosition('FAKE', 40000, -20, 35, true, true))
 positions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
 
-
+const equity = 20000 + (Math.random() * 40000)
 const monthEarnings = -500 + (Math.random() * 1000)
 const yearEarnings = Math.random() * 30000
 const theft = yearEarnings * .22
@@ -95,7 +95,7 @@ const Showcase = () => {
           />
           <div style={{ height: '10px' }} />
           <AccountInfoPanel
-              equity={94243.1248}
+              equity={equity}
               weekEarnings={weekEarnings}
               monthEarnings={monthEarnings}
               yearEarnings={yearEarnings}

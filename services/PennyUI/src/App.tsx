@@ -3,7 +3,7 @@ import Showcase from './controllers/Showcase'
 import EnvironmentRibbon from './components/EnvironmentRibbon'
 
 const App = () => {
-  const [ searchParams, setSearchParams ] = useSearchParams()
+  const [ searchParams ] = useSearchParams()
   const env = searchParams.get('env')
 
   const isNonProd = env?.toLowerCase() === 'nonprod'
