@@ -41,7 +41,7 @@ const PositionChit = ({
         maxLoss={maxLoss}
       />
 
-      <div style={{ width: '10px' }} />
+      <div style={{ width: '5px' }} />
 
       <div className='vertical-center'>
         {callPutText(hasCall, 'Call')}

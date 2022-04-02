@@ -59,13 +59,25 @@ const symbols = [
 
 const positions = symbols.map(symbol => randomMockPosition(symbol))
 
+positions.push(generateMockPosition('FAKE', 40000, -20, 35, true, true))
+positions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
+
 // ****************** MOCK DATA *********************
 
 
 
 const Showcase = () => {
 
-  // Do stuff
+  // TODO Network calls, useEffect, etc
+
+
+  const sortedPositions = positions.sort((a, b) => b.gainLoss - a.gainLoss)
+
+  // Only count towards total if gainLoss is within bounds
+  const weekEarnings = sortedPositions.reduce((acc, pos) => {
+    const gainLoss = pos.gainLoss
+    return gainLoss > pos.maxGain || gainLoss < pos.maxLoss ? acc : acc + gainLoss
+  }, 0)
 
   return (
     <>
@@ -79,7 +91,7 @@ const Showcase = () => {
           <div style={{ height: '10px' }} />
           <AccountInfoPanel
               equity={94243.1248}
-              weekEarnings={12}
+              weekEarnings={weekEarnings}
               monthEarnings={50}
               yearEarnings={60}
               theft={70}
@@ -89,8 +101,8 @@ const Showcase = () => {
 
         <div style={{ display: 'inline-block', marginTop: '5px' }}>
           {
-            positions.map(pos =>
-              <PositionChit ticker={pos.ticker} gainLoss={pos.gainLoss} maxLoss={pos.maxLoss} maxGain={pos.maxGain} hasPut={pos.hasPut} hasCall={pos.hasCall} />
+            sortedPositions.map(pos =>
+              <PositionChit key={pos.ticker} ticker={pos.ticker} gainLoss={pos.gainLoss} maxLoss={pos.maxLoss} maxGain={pos.maxGain} hasPut={pos.hasPut} hasCall={pos.hasCall} />
             )
           }
         </div>

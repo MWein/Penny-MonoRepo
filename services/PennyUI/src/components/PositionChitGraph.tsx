@@ -30,7 +30,7 @@ const PositionChitGraph = ({
   maxGain,
   maxLoss,
 }: PositionChitGraphProps) => {
-  const graphWidth = '110px'
+  const graphWidth = '100px'
   const graphHeight= '50px'
 
   if (gainLoss < maxLoss || gainLoss > maxGain) {
