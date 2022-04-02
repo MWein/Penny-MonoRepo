@@ -88,6 +88,8 @@ const ShowcaseController = () => {
 
   // TODO Network call
 
+  console.log(positions)
+
   // Refresh every 15 minutes
   useEffect(() => {
     const fetchShorthand = () => fetchShowcaseData(
