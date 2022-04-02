@@ -26,7 +26,7 @@ const PennyStatus = ({
 
 
   return (
-    <Paper style={{ width: '250px', height: 'fit-content', display: 'flex' }}>
+    <Paper style={{ height: 'fit-content', display: 'flex' }}>
       {
         loading ? (
           <div style={{ paddingTop: '12px', paddingLeft: '10px', paddingRight: '9px' }}>

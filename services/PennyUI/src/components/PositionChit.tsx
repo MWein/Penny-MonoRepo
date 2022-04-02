@@ -4,7 +4,7 @@ import PositionChitGraph from './PositionChitGraph'
 import './PositionChit.css'
 
 
-type PositionChitProps = {
+export type PositionChitProps = {
   ticker: string,
   gainLoss: number,
   maxLoss: number,
