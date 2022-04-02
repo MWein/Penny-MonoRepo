@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
 import fetchPennyStatus from '../network/checkPenny'
+import fetchShowcaseData from '../network/showcase'
 
 
 // ****************** MOCK DATA *********************
@@ -93,9 +94,23 @@ const ShowcaseController = ({
 
   // TODO Network call
 
+  // Refresh every 15 minutes
   useEffect(() => {
-    
-
+    const fetchShorthand = () => fetchShowcaseData(
+      setLoading,
+      setEquity,
+      setWeekEarnings,
+      setMonthEarnings,
+      setYearEarnings,
+      setTheft,
+      setLastYearTheft,
+      setPositions,
+    )
+    fetchShorthand()
+    const intervalId = setInterval(() => {
+      fetchShorthand()
+    }, 60000 * 15)
+    return () => clearInterval(intervalId)
   }, [])
 
 
