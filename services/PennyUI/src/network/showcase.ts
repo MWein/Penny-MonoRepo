@@ -1,3 +1,4 @@
+import getPennyDataUrl from "./getPennyDataUrl"
 const superagent = require('superagent')
 
 // TODO CHANGE URL
@@ -11,8 +12,10 @@ const fetchShowcaseData = async (
   setLastYearTheft: Function,
   setPositions: Function,
 ) => {
+  const basePath = getPennyDataUrl()
+
   setLoading(true)
-  const result = await superagent.get(`http://localhost:3001/showcase`).timeout({
+  const result = await superagent.get(`${basePath}/showcase`).timeout({
     deadline: 20000
   }).retry(5).catch(() => {
     setLoading(false)

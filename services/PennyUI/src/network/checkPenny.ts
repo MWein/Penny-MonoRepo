@@ -1,12 +1,14 @@
+import getPennyDataUrl from "./getPennyDataUrl"
 const superagent = require('superagent')
 
-// TODO CHANGE URL
 const fetchPennyStatus = async (
   setLoadingCallback: Function,
   setStatusCallback: Function,
 ) => {
+  const basePath = getPennyDataUrl()
+
   setLoadingCallback(true)
-  const result = await superagent.get(`http://localhost:3001/penny-status`).timeout({
+  const result = await superagent.get(`${basePath}/penny-status`).timeout({
     deadline: 5000
   }).retry(5).catch(() => {
     setLoadingCallback(false)
