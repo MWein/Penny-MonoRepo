@@ -83,16 +83,16 @@ const PositionChitGraph = ({
         <path d={`M ${gainLossPosition} 20 L ${gainLossPosition} 25`} stroke={gainLossTickColor} strokeWidth={2} />
 
         {/* Max Loss */}
-        <text text-anchor="middle" x={`${graphStartPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: baseFontSize }}>{maxLoss}</text>
+        <text textAnchor="middle" x={`${graphStartPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: baseFontSize }}>{maxLoss}</text>
 
         {/* Zero */}
-        <text text-anchor="middle" x={zeroPosition} y="35" style={{ fontSize: baseFontSize }}>0</text>
+        <text textAnchor="middle" x={zeroPosition} y="35" style={{ fontSize: baseFontSize }}>0</text>
 
         {/* Max Gain */}
-        <text text-anchor="middle" x={`${graphEndPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: baseFontSize }}>{maxGain}</text>
+        <text textAnchor="middle" x={`${graphEndPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: baseFontSize }}>{maxGain}</text>
 
         {/* Gain Loss */}
-        <text text-anchor="middle" x={gainLossPosition} y="15" style={{ fontSize: gainLossFontSize }} fill={gainLossTickColor}>{gainLoss}</text>
+        <text textAnchor="middle" x={gainLossPosition} y="15" style={{ fontSize: gainLossFontSize }} fill={gainLossTickColor}>{gainLoss}</text>
       </g>
     </svg>
   )
