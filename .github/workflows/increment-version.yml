@@ -8,6 +8,7 @@ on:
 
 jobs:
   increment-version:
+    runs-on: ubuntu-latest
     steps:
     - name: Increment version on master
       run: |
