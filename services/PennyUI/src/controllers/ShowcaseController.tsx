@@ -77,7 +77,7 @@ type ShowcaseControllerProps = {
 const ShowcaseController = ({
   isNonProd,
 }: ShowcaseControllerProps) => {
-  const [ loading, setLoading ] = useState<boolean>(true)
+  const [ loading, setLoading ] = useState<boolean>(false)
 
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
   const [ pennyHealthy, setPennyHeathy ] = useState<boolean>(false)
