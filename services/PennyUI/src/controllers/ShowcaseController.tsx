@@ -72,13 +72,7 @@ import fetchShowcaseData from '../network/showcase'
 // ****************** MOCK DATA *********************
 
 
-type ShowcaseControllerProps = {
-  isNonProd: boolean,
-}
-
-const ShowcaseController = ({
-  isNonProd,
-}: ShowcaseControllerProps) => {
+const ShowcaseController = () => {
   const [ loading, setLoading ] = useState<boolean>(false)
 
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
