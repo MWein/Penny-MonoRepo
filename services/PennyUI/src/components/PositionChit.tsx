@@ -2,6 +2,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import './PositionChit.css'
 
+
 type PositionChitProps = {
   ticker: string,
   gainLoss: number,
@@ -19,6 +20,13 @@ const PositionChit = ({
   hasPut = false,
   hasCall = false,
 }: PositionChitProps) => {
+  const callPutText = (active: boolean, text: string) => (
+    <Typography style={{ color: active ? 'black' : 'lightGray' }} variant='subtitle2' className='call-put'>
+      {text}
+    </Typography>
+  )
+
+
   return (
     <Paper style={{ padding: '10px', width: '200px', height: '40px', display: 'inline-flex' }}>
       <Typography variant='h6' className='horizontal-center'>
@@ -28,12 +36,8 @@ const PositionChit = ({
       <div style={{ flex: 1 }} />
 
       <div className='horizontal-center'>
-        <Typography variant='subtitle2' className='call-put'>
-          {hasCall && 'Call'}
-        </Typography>
-        <Typography variant='subtitle2' className='call-put'>
-          {hasPut && 'Put'}
-        </Typography>
+        {callPutText(hasCall, 'Call')}
+        {callPutText(hasPut, 'Put')}
       </div>
     </Paper>
   )
