@@ -97,3 +97,45 @@ jobs:
           git checkout master
           git branch -D release
           git push origin --delete release
+
+  create-penny-data-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set Git config
+      run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+
+    # Have to create a new branch so JS files don't end up in master
+    - name: Create release branch
+      run: |
+          git checkout -b release
+          git push --set-upstream origin release
+
+    - name: Remove other services
+      run: |
+          rm -rf services/PennyUI
+          rm -rf services/PennyIC
+
+    - name: Compile typescript
+      run: |
+          npm i typescript
+          tsc
+          mv Dockerfile-data Dockerfile
+          git add .
+          git commit -m 'Auto: Compile Typescript'
+          git push
+
+    - name: Create Tag
+      run: |
+          npm --no-git-tag-version version patch
+          VERSION=$(grep version package.json | awk -F \" '{print $4}')
+          git tag -a v$VERSION-data
+          git push origin --tags
+
+    - name: Delete release branch
+      run: |
+          git checkout master
+          git branch -D release
+          git push origin --delete release
