@@ -16,7 +16,7 @@ const fetchShowcaseData = async (
     deadline: 20000
   }).retry(5).catch(() => {
     setLoading(false)
-    
+
     setEquity(0)
     setWeekEarnings(0)
     setMonthEarnings(0)
@@ -28,7 +28,7 @@ const fetchShowcaseData = async (
 
   if (result.body) {
     setLoading(false)
-    
+
     setEquity(result.body.equity)
     setWeekEarnings(result.body.weekEarnings)
     setMonthEarnings(result.body.monthEarnings)
