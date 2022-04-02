@@ -10,24 +10,26 @@ describe('getGainLoss', () => {
     network.get = jest.fn()
   })
 
-  it('Creates the URL using the account number env; page number is 1 if not provided', async () => {
+  it('Creates the URL using defaults', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2021-10-12').getTime())
     process.env.ACCOUNTNUM = 'somethingsomthing'
     // @ts-ignore
     network.get.mockReturnValue({
       gainloss: 'null'
     })
     await getGainLoss()
-    expect(network.get).toHaveBeenCalledWith('accounts/somethingsomthing/gainloss?page=1&limit=1000')
+    expect(network.get).toHaveBeenCalledWith('accounts/somethingsomthing/gainloss?page=1&limit=1000&start=2020-01-01&end=2021-10-12')
+    jest.useRealTimers()
   })
 
-  it('Creates the URL using the account number env and page number if provided', async () => {
+  it('Creates the URL using params', async () => {
     process.env.ACCOUNTNUM = 'somethingsomthing'
     // @ts-ignore
     network.get.mockReturnValue({
       gainloss: 'null'
     })
-    await getGainLoss(3)
-    expect(network.get).toHaveBeenCalledWith('accounts/somethingsomthing/gainloss?page=3&limit=1000')
+    await getGainLoss(3, 1200, '2021-02-03', '2022-02-02')
+    expect(network.get).toHaveBeenCalledWith('accounts/somethingsomthing/gainloss?page=3&limit=1200&start=2021-02-03&end=2022-02-02')
   })
 
   it('Returns empty array if Tradier returns null', async () => {
