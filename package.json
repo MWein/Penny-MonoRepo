@@ -24,6 +24,7 @@
     "superagent": "^6.1.0"
   },
   "devDependencies": {
+    "ts-node": "10.7.0",
     "@babel/core": "^7.17.5",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",

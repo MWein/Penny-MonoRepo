@@ -1,5 +1,5 @@
 import { Routes, Route, useSearchParams } from 'react-router-dom'
-import Showcase from './controllers/ShowcaseController'
+import ShowcaseController from './controllers/ShowcaseController'
 import EnvironmentRibbon from './components/EnvironmentRibbon'
 
 const App = () => {
@@ -7,12 +7,11 @@ const App = () => {
   const env = searchParams.get('env')
   const isNonProd = env?.toLowerCase() === 'nonprod'
 
-
   return (
     <>
       {isNonProd && <EnvironmentRibbon />}
       <Routes>
-        <Route path='/' element={<Showcase isNonProd={isNonProd} />} />
+        <Route path='/' element={<ShowcaseController />} />
       </Routes>
     </>
   )

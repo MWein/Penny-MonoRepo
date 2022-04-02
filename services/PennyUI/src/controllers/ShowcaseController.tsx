@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
+import fetchPennyStatus from '../network/checkPenny'
+import fetchShowcaseData from '../network/showcase'
 
 
 // ****************** MOCK DATA *********************
@@ -61,26 +63,20 @@ const mockPositions = symbols.map(symbol => randomMockPosition(symbol))
 mockPositions.push(generateMockPosition('FAKE', 40000, -20, 35, true, true))
 mockPositions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
 
-const mockEquity = 20000 + (Math.random() * 40000)
-const mockMonthEarnings = -500 + (Math.random() * 1000)
-const mockYearEarnings = Math.random() * 30000
-const mockTheft = mockYearEarnings * .22
-const mockLastYearTheft = (Math.random() * 30000) * .22
+//const mockEquity = 20000 + (Math.random() * 40000)
+//const mockMonthEarnings = -500 + (Math.random() * 1000)
+//const mockYearEarnings = Math.random() * 30000
+//const mockTheft = mockYearEarnings * .22
+//const mockLastYearTheft = (Math.random() * 30000) * .22
 
 // ****************** MOCK DATA *********************
 
 
-type ShowcaseControllerProps = {
-  isNonProd: boolean,
-}
-
-const ShowcaseController = ({
-  isNonProd,
-}: ShowcaseControllerProps) => {
+const ShowcaseController = () => {
   const [ loading, setLoading ] = useState<boolean>(false)
 
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
-  const [ pennyHealthy, setPennyHeathy ] = useState<boolean>(false)
+  const [ pennyHealthy, setPennyHealthy ] = useState<boolean>(false)
 
   const [ equity, setEquity ] = useState<number>(0)
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
@@ -88,13 +84,39 @@ const ShowcaseController = ({
   const [ yearEarnings, setYearEarnings ] = useState<number>(0)
   const [ theft, setTheft ] = useState<number>(0)
   const [ lastYearTheft, setLastYearTheft ] = useState<number>(0)
-  const [ positions, setPositions ] = useState<PositionChitProps[]>(mockPositions)
+  const [ positions, setPositions ] = useState<PositionChitProps[]>([])
 
   // TODO Network call
 
-  useEffect(() => {
-    
+  console.log(positions)
 
+  // Refresh every 15 minutes
+  useEffect(() => {
+    const fetchShorthand = () => fetchShowcaseData(
+      setLoading,
+      setEquity,
+      setWeekEarnings,
+      setMonthEarnings,
+      setYearEarnings,
+      setTheft,
+      setLastYearTheft,
+      setPositions,
+    )
+    fetchShorthand()
+    const intervalId = setInterval(() => {
+      fetchShorthand()
+    }, 60000 * 15)
+    return () => clearInterval(intervalId)
+  }, [])
+
+
+  // Check penny status every minute
+  useEffect(() => {
+    fetchPennyStatus(setCheckingPenny, setPennyHealthy)
+    const intervalId = setInterval(() => {
+      fetchPennyStatus(setCheckingPenny, setPennyHealthy)
+    }, 60000)
+    return () => clearInterval(intervalId)
   }, [])
 
 
@@ -109,7 +131,7 @@ const ShowcaseController = ({
       yearEarnings={yearEarnings}
       theft={theft}
       lastYearTheft={lastYearTheft}
-      positions={positions}
+      positions={mockPositions}
     />
   )
 }
