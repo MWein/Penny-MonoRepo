@@ -1,7 +1,6 @@
 import PositionChit from '../components/PositionChit'
 import AccountInfoPanel from '../components/AccountInfoPanel'
 import PennyStatus from '../components/PennyStatus'
-import EnvironmentRibbon from '../components/EnvironmentRibbon'
 
 
 // ****************** MOCK DATA *********************
@@ -68,6 +67,7 @@ positions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
 
 const Showcase = () => {
 
+
   // TODO Network calls, useEffect, etc
 
 
@@ -81,7 +81,6 @@ const Showcase = () => {
 
   return (
     <>
-      <EnvironmentRibbon />
       <div style={{ display: 'flex' }}>
         <div style={{ padding: '10px', width: '500px' }}>
           <PennyStatus
