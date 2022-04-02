@@ -43,7 +43,6 @@ jobs:
 
     - name: Create Tag
       run: |
-          npm --no-git-tag-version version patch
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           echo v$VERSION-ui
           git tag -a v$VERSION-ui
@@ -87,7 +86,6 @@ jobs:
 
     - name: Create Tag
       run: |
-          npm --no-git-tag-version version patch
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           git tag -a v$VERSION-ic
           git push origin --tags
@@ -129,7 +127,6 @@ jobs:
 
     - name: Create Tag
       run: |
-          npm --no-git-tag-version version patch
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           git tag -a v$VERSION-data
           git push origin --tags
