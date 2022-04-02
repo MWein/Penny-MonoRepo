@@ -12,8 +12,8 @@ export type GainLossDetails = {
 }
 
 
-export const getGainLoss = async (pageNum: number = 1) : Promise<GainLossDetails[]> => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/gainloss?page=${pageNum}&limit=1000`
+export const getGainLoss = async (pageNum: number = 1, limit: number = 1000) : Promise<GainLossDetails[]> => {
+  const url = `accounts/${process.env.ACCOUNTNUM}/gainloss?page=${pageNum}&limit=${limit}`
   const response = await network.get(url)
   if (response.gainloss === 'null') {
     return []
