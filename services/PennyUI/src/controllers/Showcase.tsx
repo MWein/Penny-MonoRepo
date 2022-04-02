@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import PositionChit from '../components/PositionChit'
 import AccountInfoPanel from '../components/AccountInfoPanel'
 import PennyStatus from '../components/PennyStatus'
@@ -70,11 +71,22 @@ const lastYearTheft = (Math.random() * 30000) * .22
 // ****************** MOCK DATA *********************
 
 
+type ShowcaseProps = {
+  isNonProd: boolean,
+}
 
-const Showcase = () => {
+
+const Showcase = ({
+  isNonProd,
+}: ShowcaseProps) => {
 
 
   // TODO Network calls, useEffect, etc
+
+  useEffect(() => {
+    console.log('LOADING!!!')
+
+  }, [])
 
 
   const sortedPositions = positions.sort((a, b) => b.gainLoss - a.gainLoss)

@@ -5,7 +5,6 @@ import EnvironmentRibbon from './components/EnvironmentRibbon'
 const App = () => {
   const [ searchParams ] = useSearchParams()
   const env = searchParams.get('env')
-
   const isNonProd = env?.toLowerCase() === 'nonprod'
 
 
@@ -13,7 +12,7 @@ const App = () => {
     <>
       {isNonProd && <EnvironmentRibbon />}
       <Routes>
-        <Route path='/' element={<Showcase />} />
+        <Route path='/' element={<Showcase isNonProd={isNonProd} />} />
       </Routes>
     </>
   )
