@@ -7,6 +7,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "node-cache": "^5.1.2",
     "@penny/option-symbol-parser": "1.0.0",
     "@penny/db-models": "1.0.0",
     "@penny/settings": "1.0.0",
