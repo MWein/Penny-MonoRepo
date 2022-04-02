@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import { moneyFormat, moneyColor, months } from '../common/formatting'
 
-type AccountInfoPanelProps = {
+export type AccountInfoPanelProps = {
   equity: number,
   weekEarnings: number,
   monthEarnings: number,

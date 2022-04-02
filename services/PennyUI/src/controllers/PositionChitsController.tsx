@@ -2,7 +2,7 @@ import Typography from '@mui/material/Typography'
 import PositionChit, { PositionChitProps } from '../components/PositionChit'
 
 
-type PositionChitsControllerProps = {
+export type PositionChitsControllerProps = {
   positions: PositionChitProps[],
 }
 

@@ -5,6 +5,7 @@ import PennyStatus from '../components/PennyStatus'
 import LoadingModal from '../components/LoadingModal'
 
 import PositionChitsController from './PositionChitsController'
+import Showcase from '../components/Showcase'
 
 
 // ****************** MOCK DATA *********************
@@ -74,13 +75,13 @@ const mockLastYearTheft = (Math.random() * 30000) * .22
 // ****************** MOCK DATA *********************
 
 
-type ShowcaseProps = {
+type ShowcaseControllerProps = {
   isNonProd: boolean,
 }
 
-const Showcase = ({
+const ShowcaseController = ({
   isNonProd,
-}: ShowcaseProps) => {
+}: ShowcaseControllerProps) => {
   const [ loading, setLoading ] = useState<boolean>(true)
 
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
@@ -103,28 +104,19 @@ const Showcase = ({
 
 
   return (
-    <>
-      <div style={{ display: 'flex' }}>
-        <div style={{ padding: '10px', width: '250px', minWidth: '250px' }}>
-          <PennyStatus
-            loading={checkingPenny}
-            healthy={pennyHealthy}
-          />
-          <div style={{ height: '10px' }} />
-          <AccountInfoPanel
-              equity={equity}
-              weekEarnings={weekEarnings}
-              monthEarnings={monthEarnings}
-              yearEarnings={yearEarnings}
-              theft={theft}
-              lastYearTheft={lastYearTheft}
-          />
-        </div>
-        <PositionChitsController positions={positions} />
-      </div>
-      {loading && <LoadingModal />}
-    </>
+    <Showcase
+      loading={loading}
+      checkingPenny={checkingPenny}
+      pennyHealthy={pennyHealthy}
+      equity={equity}
+      weekEarnings={weekEarnings}
+      monthEarnings={monthEarnings}
+      yearEarnings={yearEarnings}
+      theft={theft}
+      lastYearTheft={lastYearTheft}
+      positions={positions}
+    />
   )
 }
 
-export default Showcase
+export default ShowcaseController

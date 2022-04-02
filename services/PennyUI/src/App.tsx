@@ -1,5 +1,5 @@
 import { Routes, Route, useSearchParams } from 'react-router-dom'
-import Showcase from './controllers/Showcase'
+import Showcase from './controllers/ShowcaseController'
 import EnvironmentRibbon from './components/EnvironmentRibbon'
 
 const App = () => {
