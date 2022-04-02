@@ -27,6 +27,7 @@ const AccountInfoPanel = () => {
         <Typography variant='h5' style={{ textAlign: 'center', width: '100%', color: moneyColor(value, positiveTextColor) }}>
           {moneyFormat(value)}
         </Typography>
+        {withDivider && <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />}
       </>
     )
   }
@@ -45,19 +46,15 @@ const AccountInfoPanel = () => {
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
         {createValueRow('This Week', currentWeekEarnings, true, 'green')}
-        <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
         {createValueRow(currentMonth, allTimeEarnings, true)}
-        <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
         {createValueRow(`${thisYear}`, allTimeEarnings, true)}
-        <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
         {createValueRow('All Time', allTimeEarnings)}
       </Paper>
 
       <div style={{ height: '10px' }} />
 
       <Paper style={{ padding: '10px' }}>
-        {createValueRow(lastMonth, allTimeEarnings)}
-        <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
+        {createValueRow(lastMonth, allTimeEarnings, true)}
         {createValueRow(`${lastYear}`, allTimeEarnings)}
       </Paper>
 
@@ -68,8 +65,7 @@ const AccountInfoPanel = () => {
           Estimated Theft
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-        {createValueRow(`${thisYear}`, allTimeEarnings)}
-        <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
+        {createValueRow(`${thisYear}`, allTimeEarnings, true)}
         {createValueRow(`${lastYear}`, allTimeEarnings)}
       </Paper>
     </>
