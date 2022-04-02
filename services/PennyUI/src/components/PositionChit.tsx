@@ -28,7 +28,7 @@ const PositionChit = ({
   )
 
   return (
-    <Paper className='position-chit' style={{ background: 'lightGray' }}>
+    <Paper className='position-chit'>
       <Typography variant='h6' className='vertical-center'>
         {ticker}
       </Typography>
