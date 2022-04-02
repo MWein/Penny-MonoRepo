@@ -31,9 +31,8 @@ jobs:
 
     - name: Clean folder
       run: |
-          VERSION=$(grep version package.json | awk -F \" '{print $4}')
           for FILE in *; do
-            if [[ $FILE != "Dockerfile-ui" && $FILE != "bundle" ]]; then
+            if [[ $FILE != "Dockerfile-ui" && $FILE != "bundle" && $FILE != "package.json" ]]; then
               rm -rf $FILE
             fi
           done
@@ -44,7 +43,8 @@ jobs:
 
     - name: Create Tag
       run: |
-          echo v$VERSION-ui
+          VERSION=$(grep version package.json | awk -F \" '{print $4}')
+          rm -rf package.json
           git tag -a v$VERSION-ui -m 'UI Build'
           git push origin --tags
 
