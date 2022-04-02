@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
-import AccountInfoPanel from '../components/AccountInfoPanel'
-import PennyStatus from '../components/PennyStatus'
-import LoadingModal from '../components/LoadingModal'
-
-import PositionChitsController from './PositionChitsController'
 import Showcase from '../components/Showcase'
 
 

@@ -25,7 +25,7 @@ const LoadingModal = () => {
         }}
       >
         <div>
-          <Typography variant="h6" component="h2">
+          <Typography variant='h6' component='h2'>
             Loading
           </Typography>
           <div style={{ height: '10px' }} />
