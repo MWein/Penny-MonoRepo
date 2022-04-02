@@ -9,7 +9,7 @@
     width: 55px;
 }
 
-.horizontal-center {
+.vertical-center {
     display: flex;
     flex-direction: column;
     justify-content: center;

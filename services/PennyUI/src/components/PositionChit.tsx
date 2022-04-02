@@ -29,7 +29,7 @@ const PositionChit = ({
 
   return (
     <Paper className='position-chit' style={{ background: 'lightGray' }}>
-      <Typography variant='h6' className='horizontal-center'>
+      <Typography variant='h6' className='vertical-center'>
         {ticker}
       </Typography>
 
@@ -41,10 +41,9 @@ const PositionChit = ({
         maxLoss={maxLoss}
       />
 
-
       <div style={{ width: '10px' }} />
 
-      <div className='horizontal-center'>
+      <div className='vertical-center'>
         {callPutText(hasCall, 'Call')}
         {callPutText(hasPut, 'Put')}
       </div>

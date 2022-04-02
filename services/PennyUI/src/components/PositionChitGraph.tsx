@@ -1,3 +1,24 @@
+import './PositionChit.css'
+
+const calcPosition = (
+  graphStart: number,
+  graphEnd: number,
+  valueMin: number,
+  valueMax: number,
+  value: number,
+): number => {
+  if (value < valueMin) {
+      return graphStart
+  }
+  if (value > valueMax) {
+      return graphEnd
+  }
+  const valueWidth = valueMax - valueMin
+  const relativeValuePos = Math.abs(valueMin - value)
+  const graphWidth = graphEnd - graphStart
+  return ((graphWidth * relativeValuePos) / valueWidth) + graphStart
+}
+
 type PositionChitGraphProps = {
   gainLoss: number,
   maxLoss: number,
@@ -9,23 +30,23 @@ const PositionChitGraph = ({
   maxGain,
   maxLoss,
 }: PositionChitGraphProps) => {
-  const calcPosition = (
-    graphStart: number,
-    graphEnd: number,
-    valueMin: number,
-    valueMax: number,
-    value: number,
-    ): number => {
-    if (value < valueMin) {
-        return graphStart
-    }
-    if (value > valueMax) {
-        return graphEnd
-    }
-    const valueWidth = valueMax - valueMin
-    const relativeValuePos = Math.abs(valueMin - value)
-    const graphWidth = graphEnd - graphStart
-    return ((graphWidth * relativeValuePos) / valueWidth) + graphStart
+  const graphWidth = '110px'
+  const graphHeight= '50px'
+
+  if (gainLoss < maxLoss || gainLoss > maxGain) {
+    return (
+      <div
+        className='vertical-center'
+        style={{
+          background: 'darkGray',
+          width: graphWidth,
+          height: graphHeight,
+          textAlign: 'center' 
+        }}
+      >
+        Out of Bounds
+      </div>
+    )
   }
 
   // Graph position settings
@@ -35,6 +56,11 @@ const PositionChitGraph = ({
 
   // Color settings
   const baseGraphColor = 'black'
+  const zeroTickColor = 'black'
+
+  // Font Size
+  const baseFontSize = '12px'
+  const gainLossFontSize = '15px'
 
   const gainLossTickColor = gainLoss > 0 ? 'green' : 'red'
 
@@ -43,7 +69,7 @@ const PositionChitGraph = ({
 
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height='50px' width='110px' viewBox="0 0 100 50">
+    <svg xmlns="http://www.w3.org/2000/svg" height='50px' width={graphWidth} viewBox="0 0 100 50">
       <g>
         {/* Base Graph */}
         <path d={`M ${graphStartPos} 25 L ${graphEndPos} 25`} stroke={baseGraphColor} />
@@ -51,22 +77,22 @@ const PositionChitGraph = ({
         <path d={`M ${graphEndPos} 15 L ${graphEndPos} 30`} stroke={baseGraphColor} />
 
         {/* Zero Tick */}
-        <path d={`M ${zeroPosition} 20 L ${zeroPosition} 25`} stroke='black' />
+        <path d={`M ${zeroPosition} 20 L ${zeroPosition} 25`} stroke={zeroTickColor} />
 
         {/* Gain Loss Tick */}
         <path d={`M ${gainLossPosition} 20 L ${gainLossPosition} 25`} stroke={gainLossTickColor} strokeWidth={2} />
 
         {/* Max Loss */}
-        <text text-anchor="middle" x={`${graphStartPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: '12px' }}>{maxLoss}</text>
+        <text text-anchor="middle" x={`${graphStartPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: baseFontSize }}>{maxLoss}</text>
 
         {/* Zero */}
-        <text text-anchor="middle" x={zeroPosition} y="35" style={{ fontSize: '12px' }}>0</text>
+        <text text-anchor="middle" x={zeroPosition} y="35" style={{ fontSize: baseFontSize }}>0</text>
 
         {/* Max Gain */}
-        <text text-anchor="middle" x={`${graphEndPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: '12px' }}>{maxGain}</text>
+        <text text-anchor="middle" x={`${graphEndPos}`} y={`${maxGainLossHeight}`} style={{ fontSize: baseFontSize }}>{maxGain}</text>
 
         {/* Gain Loss */}
-        <text text-anchor="middle" x={gainLossPosition} y="15" style={{ fontSize: '15px' }} fill={gainLossTickColor}>{gainLoss}</text>
+        <text text-anchor="middle" x={gainLossPosition} y="15" style={{ fontSize: gainLossFontSize }} fill={gainLossTickColor}>{gainLoss}</text>
       </g>
     </svg>
   )
