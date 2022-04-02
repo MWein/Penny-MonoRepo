@@ -45,7 +45,7 @@ jobs:
     - name: Create Tag
       run: |
           echo v$VERSION-ui
-          git tag -a v$VERSION-ui
+          git tag -a v$VERSION-ui -m 'UI Build'
           git push origin --tags
 
     - name: Delete ui-release branch
@@ -87,7 +87,7 @@ jobs:
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
-          git tag -a v$VERSION-ic
+          git tag -a v$VERSION-ic -m 'IC Build'
           git push origin --tags
 
     - name: Delete release branch
@@ -128,7 +128,7 @@ jobs:
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
-          git tag -a v$VERSION-data
+          git tag -a v$VERSION-data -m 'Data Build'
           git push origin --tags
 
     - name: Delete release branch
