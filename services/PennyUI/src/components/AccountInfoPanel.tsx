@@ -34,7 +34,7 @@ const AccountInfoPanel = () => {
 
   const today = new Date()
   const currentMonth = months[today.getUTCMonth()]
-  const lastMonth = months[today.getUTCMonth() - 1] || 'Dec'
+  //const lastMonth = months[today.getUTCMonth() - 1] || 'Dec'
   const thisYear = today.getFullYear()
   const lastYear = thisYear - 1
 
@@ -53,12 +53,12 @@ const AccountInfoPanel = () => {
 
       <div style={{ height: '10px' }} />
 
-      <Paper style={{ padding: '10px' }}>
+      {/* <Paper style={{ padding: '10px' }}>
         {createValueRow(lastMonth, allTimeEarnings, true)}
         {createValueRow(`${lastYear}`, allTimeEarnings)}
       </Paper>
 
-      <div style={{ height: '10px' }} />
+      <div style={{ height: '10px' }} /> */}
 
       <Paper style={{ padding: '10px' }}>
         <Typography variant='h5' style={{ textAlign: 'center', width: '100%' }}>
