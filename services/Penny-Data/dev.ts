@@ -1,2 +1,2 @@
 require('dotenv').config({ path: '../../.env' })
-require('./server.ts')
+require('./server')
