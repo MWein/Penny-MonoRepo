@@ -23,11 +23,21 @@ describe('pennyStatusController', () => {
     expect(res.send).toHaveBeenCalledWith('Error')
   })
 
-  it('Happy path', async () => {
+  it('Returns unhealthy', async () => {
     (pennyStatusUtil.getLastLogDate as unknown as jest.Mock).mockReturnValue('2020-01-01')
     await pennyStatusController(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      lastLogDate: '2020-01-01'
+      healthy: false,
     })
+  })
+
+  it('Happy path', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2020-01-01').getTime());
+    (pennyStatusUtil.getLastLogDate as unknown as jest.Mock).mockReturnValue('2020-01-01')
+    await pennyStatusController(req, res)
+    expect(res.json).toHaveBeenCalledWith({
+      healthy: true,
+    })
+    jest.useRealTimers()
   })
 })
