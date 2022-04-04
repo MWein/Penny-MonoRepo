@@ -32,17 +32,38 @@ type MockPositionObject = {
 }
 
 
+
 export const generateSymbol = (
-    symbol: string,
-    type: EquityType
-  ) : string => {
+  symbol: string,
+  type: EquityType,
+  customExp: string | null = null,
+  customStrike: number | null = null
+) => {
+  const expText = customExp ? customExp.replace(/-/g, '').slice(2) : '1234'
+
+  let strikeText = '3214'
+  if (customStrike) {
+    const beforeDecimalDigits = `${customStrike}`.split('.')[0].split('')
+    const afterDecimalDigits = `${customStrike}`.split('.')[1]?.split('') || []
+
+    while (beforeDecimalDigits.length !== 5) {
+      beforeDecimalDigits.unshift('0')
+    }
+
+    while (afterDecimalDigits.length !== 3) {
+      afterDecimalDigits.push('0')
+    }
+
+    strikeText = beforeDecimalDigits.join('') + afterDecimalDigits.join('')
+  }
+
   switch (type) {
   case 'stock':
     return symbol
   case 'call':
-    return `${symbol}1234C3214`
+    return `${symbol}${expText}C${strikeText}`
   case 'put':
-    return `${symbol}1234P3214`
+    return `${symbol}${expText}P${strikeText}`
   }
 }
 
@@ -88,17 +109,19 @@ export const generateOrderObject = (
 
 
 export const generatePositionObject = (
-    symbol: string,
-    quantity: number = 1,
-    type: EquityType ='stock',
-    cost_basis: number = 100,
-    date_acquired: string = '2019-01-31T17:05',
-    id: number = 123456
-  ) : MockPositionObject =>
+  symbol: string,
+  quantity: number = 1,
+  type: EquityType = 'stock',
+  cost_basis: number = 100,
+  date_acquired: string ='2019-01-31T17:05',
+  id: number = 123456,
+  customExp: string | null = null,
+  customStrike: number | null = null
+) =>
   ({
     cost_basis,
     date_acquired,
     id,
     quantity,
-    symbol: generateSymbol(symbol, type)
+    symbol: generateSymbol(symbol, type, customExp, customStrike)
   })

@@ -1,5 +1,5 @@
-import * as network from './network'
 import { isOption, getType } from '@penny/option-symbol-parser'
+import { callTradierHelper } from './callTradierHelper'
 
 export type OrderType = 'market' | 'limit' | 'stop' | 'stop_limit' | 'debit' | 'credit' | 'even'
 export type OrderSide = 'buy' | 'buy_to_cover' | 'sell' | 'sell_short' | 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
@@ -52,24 +52,12 @@ export const filterForOptionBuyToCloseOrders = (orders: Order[]) : Order[] =>
 
 
 export const getOrder = async (orderId: number) : Promise<Order> => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders/${orderId}`
-  const response = await network.get(url)
-  if (response.order === 'null') {
-    return null
-  }
-  return response.order
+  const response = await callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/orders/${orderId}`, 'order', null, false)
+  return response as unknown as Order
 }
 
 
 export const getOrders = async () : Promise<Order[]> => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/orders`
-  const response = await network.get(url)
-  if (response.orders === 'null') {
-    return []
-  }
-  if (Array.isArray(response.orders.order)) {
-    return response.orders.order
-  } else {
-    return [ response.orders.order ]
-  }
+  const response = await callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/orders`, 'orders', 'order', true)
+  return response as unknown as Order[]
 }

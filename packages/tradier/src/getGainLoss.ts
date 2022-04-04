@@ -1,5 +1,4 @@
-import * as network from './network'
-
+import { callTradierHelper } from './callTradierHelper'
 
 export type GainLossDetails = {
   symbol: string,
@@ -19,13 +18,6 @@ export const getGainLoss = async (
   end: string = new Date().toISOString().split('T')[0],
 ) : Promise<GainLossDetails[]> => {
   const url = `accounts/${process.env.ACCOUNTNUM}/gainloss?page=${pageNum}&limit=${limit}&start=${start}&end=${end}`
-  const response = await network.get(url)
-  if (response.gainloss === 'null') {
-    return []
-  }
-  if (Array.isArray(response.gainloss.closed_position)) {
-    return response.gainloss.closed_position
-  } else {
-    return [ response.gainloss.closed_position ]
-  }
+  const response = await callTradierHelper(url, 'gainloss', 'closed_position', true)
+  return response as unknown as GainLossDetails[]
 }

@@ -1,4 +1,4 @@
-import * as network from './network'
+import { callTradierHelper } from './callTradierHelper'
 
 export type TradierPrice = {
   symbol: string,
@@ -10,23 +10,9 @@ export const getPrices = async (symbols: string[]) : Promise<TradierPrice[]> => 
     return []
   }
 
-  const symbolQuery = symbols.join(',')
-  const url = `markets/quotes?symbols=${symbolQuery}`
-  const response = await network.get(url)
-  const quotes = response.quotes.quote
-
-  // Why do they do this?
-  if (Array.isArray(quotes)) {
-    return response.quotes.quote.map(quote => ({
-      symbol: quote.symbol,
-      price: quote.ask,
-    }))
-  } else {
-    return [
-      {
-        symbol: quotes.symbol,
-        price: quotes.ask,
-      }
-    ]
-  }
+  const response = await callTradierHelper(`markets/quotes?symbols=${symbols.join(',')}`, 'quotes', 'quote', true)
+  return response.map(quote => ({
+    symbol: quote.symbol,
+    price: quote.ask,
+  }))
 }
