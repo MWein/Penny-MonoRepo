@@ -57,19 +57,19 @@ describe('getSetting', () => {
     (settingsModel.findOne as unknown as jest.Mock).mockImplementation(() => {
       throw new Error('Damn')
     })
-    const result = await getSetting('reserve')
-    expect(result).toEqual(defaultSettings.reserve)
+    const result = await getSetting('maximumPricePerSpread')
+    expect(result).toEqual(defaultSettings.maximumPricePerSpread)
   })
 
   it('Returns a default setting if Mongo doesnt have it', async () => {
     (settingsModel.findOne as unknown as jest.Mock).mockReturnValue(null)
-    const result = await getSetting('reserve')
-    expect(result).toEqual(defaultSettings.reserve)
+    const result = await getSetting('maximumPricePerSpread')
+    expect(result).toEqual(defaultSettings.maximumPricePerSpread)
   })
 
   it('Returns setting from mongo', async () => {
-    (settingsModel.findOne as unknown as jest.Mock).mockReturnValue({ key: 'reserve', value: 20 })
-    const result = await getSetting('reserve')
+    (settingsModel.findOne as unknown as jest.Mock).mockReturnValue({ key: 'maximumPricePerSpread', value: 20 })
+    const result = await getSetting('maximumPricePerSpread')
     expect(result).toEqual(20)
   })
 })
@@ -81,7 +81,7 @@ describe('setSettings', () => {
     settingsModel.findOneAndUpdate = jest.fn()
   })
 
-  it('If empty object, just returns settings', async () => {
+  it('If empty object, just returns default settings', async () => {
     (settingsModel.find as unknown as jest.Mock).mockReturnValue([])
     const newSettings = await setSettings({})
     expect(newSettings).toEqual(defaultSettings)
@@ -91,26 +91,26 @@ describe('setSettings', () => {
   it('Updates for each setting updated', async () => {
     (settingsModel.find as unknown as jest.Mock).mockReturnValue([])
     const newSettings = await setSettings({
-      callsEnabled: false,
-      putsEnabled: true,
-      reserve: -100
+      ironCondorsEnabled: false,
+      ironCondorSymbols: [ 'SPY', 'IWM' ],
+      maximumPricePerSpread: 0.50
     })
     expect(newSettings).toEqual(defaultSettings)
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledTimes(3)
 
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { key: 'callsEnabled' },
-      { key: 'callsEnabled', value: false },
+      { key: 'ironCondorsEnabled' },
+      { key: 'ironCondorsEnabled', value: false },
       { upsert: true }
     )
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { key: 'putsEnabled' },
-      { key: 'putsEnabled', value: true },
+      { key: 'ironCondorSymbols' },
+      { key: 'ironCondorSymbols', value: [ 'SPY', 'IWM' ] },
       { upsert: true }
     )
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { key: 'reserve' },
-      { key: 'reserve', value: -100 },
+      { key: 'maximumPricePerSpread' },
+      { key: 'maximumPricePerSpread', value: 0.50 },
       { upsert: true }
     )
   })

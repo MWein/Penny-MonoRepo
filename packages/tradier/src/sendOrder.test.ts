@@ -6,7 +6,9 @@ import {
   buyToClose,
   sellToClose,
   buyToCloseMarket,
+  multilegOptionOrder,
   cancelOrders,
+  MultilegOptionLeg,
 } from './sendOrder'
 
 
@@ -66,12 +68,28 @@ const runTests = async (func: Function, funcArgs: Array<any>, successMessage: st
 describe('sendOrder common functions', () => {
   let symbol
   let optionSymbol
+  let optionSymbol2
   let quantity
+  let legs
 
   beforeEach(() => {
     symbol = randomStock()
     optionSymbol = symbol + '1234P3214'
+    optionSymbol2 = symbol + '1234C3214'
     quantity = Math.floor(Math.random() * 100) + 1
+
+    legs = [
+      {
+        symbol: optionSymbol,
+        side: 'sell_to_open',
+        quantity: 2,
+      },
+      {
+        symbol: optionSymbol2,
+        side: 'buy_to_open',
+        quantity: 3,
+      },
+    ]
   })
 
   it('buy', async () => {
@@ -138,8 +156,41 @@ describe('sendOrder common functions', () => {
       duration: 'gtc',
     })
   })
-})
 
+  it('multilegOptionOrder', async () => {
+    await runTests(multilegOptionOrder, [ symbol, 'debit', legs, 0.12 ], `Multileg Order ${symbol}`, `Multileg Order ${symbol} Failed`, {
+      account_id: 'thisisanaccountnumber',
+      class: 'multileg',
+      symbol,
+      'option_symbol[0]': optionSymbol,
+      'option_symbol[1]': optionSymbol2,
+      'quantity[0]': 2,
+      'quantity[1]': 3,
+      'side[0]': 'sell_to_open',
+      'side[1]': 'buy_to_open',
+      price: 0.12,
+      type: 'debit',
+      duration: 'day',
+    })
+  })
+
+  it('multilegOptionOrder with default price', async () => {
+    await runTests(multilegOptionOrder, [ symbol, 'debit', legs ], `Multileg Order ${symbol}`, `Multileg Order ${symbol} Failed`, {
+      account_id: 'thisisanaccountnumber',
+      class: 'multileg',
+      symbol,
+      'option_symbol[0]': optionSymbol,
+      'option_symbol[1]': optionSymbol2,
+      'quantity[0]': 2,
+      'quantity[1]': 3,
+      'side[0]': 'sell_to_open',
+      'side[1]': 'buy_to_open',
+      price: 0.07,
+      type: 'debit',
+      duration: 'day',
+    })
+  })
+})
 
 
 describe('cancelOrders', () => {
