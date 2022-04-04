@@ -6,7 +6,7 @@ type TradierChainLink = {
   strike: number,
   bid: number,
   option_type: 'put' | 'call',
-  expiration_date,
+  expiration_date: string,
   greeks: {
     delta: number,
   }
