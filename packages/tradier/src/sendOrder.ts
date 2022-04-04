@@ -11,7 +11,7 @@ export const _sendOrder = async (body: object, successLog: string, failureLog: s
   }
 
   try {
-    const result = await network.post(url, bodyWithAccountId, false)
+    const result = await network.post(url, bodyWithAccountId, false, false)
     logUtil.log(successLog)
     return result
   } catch (e) {
