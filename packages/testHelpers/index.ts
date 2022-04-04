@@ -109,17 +109,19 @@ export const generateOrderObject = (
 
 
 export const generatePositionObject = (
-    symbol: string,
-    quantity: number = 1,
-    type: EquityType ='stock',
-    cost_basis: number = 100,
-    date_acquired: string = '2019-01-31T17:05',
-    id: number = 123456
-  ) : MockPositionObject =>
+  symbol: string,
+  quantity: number = 1,
+  type: EquityType = 'stock',
+  cost_basis: number = 100,
+  date_acquired: string ='2019-01-31T17:05',
+  id: number = 123456,
+  customExp: string | null = null,
+  customStrike: number | null = null
+) =>
   ({
     cost_basis,
     date_acquired,
     id,
     quantity,
-    symbol: generateSymbol(symbol, type)
+    symbol: generateSymbol(symbol, type, customExp, customStrike)
   })

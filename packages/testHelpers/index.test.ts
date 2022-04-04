@@ -298,4 +298,15 @@ describe('generatePositionObject', () => {
       date_acquired: '2021-01-01'
     })
   })
+
+  it('Generates a position object custom expiration and strike', () => {
+    const position = generatePositionObject('TSLA', 4, 'call', 125.12, '2021-01-01', 654321, '2022-01-07', 14.5)
+    expect(position).toEqual({
+      symbol: 'TSLA220107C00014500',
+      id: 654321,
+      quantity: 4,
+      cost_basis: 125.12,
+      date_acquired: '2021-01-01'
+    })
+  })
 })
