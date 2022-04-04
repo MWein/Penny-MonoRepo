@@ -84,6 +84,10 @@ jobs:
           git commit -m 'Auto: Compile Typescript'
           git push
 
+    - name: Remove typescript files
+      run: |
+          find . -type f | grep "\.ts" | rm -rf
+
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
