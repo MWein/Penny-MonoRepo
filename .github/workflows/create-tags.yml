@@ -77,7 +77,7 @@ jobs:
 
     - name: Compile typescript
       run: |
-          npm install -g typescript
+          npm i typescript
           tsc
           mv Dockerfile-ic Dockerfile
           git add .
@@ -127,7 +127,7 @@ jobs:
 
     - name: Compile typescript
       run: |
-          npm install -g typescript
+          npm i typescript
           tsc
           mv Dockerfile-data Dockerfile
           git add .
