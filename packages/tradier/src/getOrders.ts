@@ -51,13 +51,11 @@ export const filterForOptionBuyToCloseOrders = (orders: Order[]) : Order[] =>
   )
 
 
-export const getOrder = async (orderId: number) : Promise<Order> => {
-  const response = await callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/orders/${orderId}`, 'order', null, false)
-  return response as unknown as Order
-}
+export const getOrder = async (orderId: number) : Promise<Order> =>
+  callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/orders/${orderId}`, 'order', null, false)
 
 
-export const getOrders = async () : Promise<Order[]> => {
-  const response = await callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/orders`, 'orders', 'order', true)
-  return response as unknown as Order[]
-}
+
+export const getOrders = async () : Promise<Order[]> =>
+  callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/orders`, 'orders', 'order', true)
+

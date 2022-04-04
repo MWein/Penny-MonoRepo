@@ -21,8 +21,5 @@ export const filterForShortCallPositions = (positions: Position[]) : Position[] 
   positions.filter(pos => getType(pos.symbol) === 'call' && pos.quantity < 0)
 
 
-export const getPositions = async () : Promise<Position[]> => {
-  const url = `accounts/${process.env.ACCOUNTNUM}/positions`
-  const response = await callTradierHelper(url, 'positions', 'position', true)
-  return response as unknown as Position[]
-}
+export const getPositions = async () : Promise<Position[]> =>
+  callTradierHelper(`accounts/${process.env.ACCOUNTNUM}/positions`, 'positions', 'position', true)

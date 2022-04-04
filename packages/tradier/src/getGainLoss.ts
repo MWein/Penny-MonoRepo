@@ -18,6 +18,5 @@ export const getGainLoss = async (
   end: string = new Date().toISOString().split('T')[0],
 ) : Promise<GainLossDetails[]> => {
   const url = `accounts/${process.env.ACCOUNTNUM}/gainloss?page=${pageNum}&limit=${limit}&start=${start}&end=${end}`
-  const response = await callTradierHelper(url, 'gainloss', 'closed_position', true)
-  return response as unknown as GainLossDetails[]
+  return callTradierHelper(url, 'gainloss', 'closed_position', true)
 }
