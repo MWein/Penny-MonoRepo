@@ -1,0 +1,22 @@
+name: Delete Build Branch
+on: 
+  workflow_run:
+    workflows: ["Create tags"]
+    types:
+      - completed
+
+jobs:
+  create-ui-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set Git config
+      run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions" 
+
+    - name: Delete release branch
+      run: |
+          git checkout master
+          git branch -D build-apis
+          git push origin --delete build-apis
