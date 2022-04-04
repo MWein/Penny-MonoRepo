@@ -35,7 +35,11 @@ export const buy = async (symbol: string, quantity: number) => {
     type: 'market',
     duration: 'day',
   }
-  const result = await _sendOrder(body, `Buy ${quantity} ${symbol}`, `Buy ${quantity} ${symbol} Failed`)
+  const result = await _sendOrder(
+    body,
+    `Buy ${quantity} ${symbol}`,
+    `Buy ${quantity} ${symbol} Failed`
+  )
   return result
 }
 
@@ -51,7 +55,11 @@ export const sellToOpen = async (symbol: string, option_symbol: string, quantity
     duration: 'day',
   }
 
-  const result = await _sendOrder(body, `Sell-to-open ${quantity} ${option_symbol}`, `Sell-to-open ${quantity} ${option_symbol} Failed`)
+  const result = await _sendOrder(
+    body,
+    `Sell-to-open ${quantity} ${option_symbol}`,
+    `Sell-to-open ${quantity} ${option_symbol} Failed`
+  )
   return result
 }
 
@@ -67,12 +75,21 @@ export const sellToClose = async (symbol: string, option_symbol: string, quantit
     duration: 'gtc',
   }
 
-  const result = await _sendOrder(body, `Sell-to-close ${quantity} ${option_symbol}`, `Sell-to-close ${quantity} ${option_symbol} Failed`)
+  const result = await _sendOrder(
+    body,
+    `Sell-to-close ${quantity} ${option_symbol}`,
+    `Sell-to-close ${quantity} ${option_symbol} Failed`
+  )
   return result
 }
 
 
-export const buyToClose = async (symbol: string, option_symbol: string, quantity: number, buyToCloseAmount: number) => {
+export const buyToClose = async (
+  symbol: string,
+  option_symbol: string,
+  quantity: number,
+  buyToCloseAmount: number
+) => {
   const body = {
     class: 'option',
     symbol,
@@ -84,7 +101,11 @@ export const buyToClose = async (symbol: string, option_symbol: string, quantity
     duration: 'gtc',
   }
 
-  const result = await _sendOrder(body, `Buy-to-close ${quantity} ${option_symbol}`, `Buy-to-close ${quantity} ${option_symbol} Failed`)
+  const result = await _sendOrder(
+    body,
+    `Buy-to-close ${quantity} ${option_symbol}`,
+    `Buy-to-close ${quantity} ${option_symbol} Failed`
+  )
   return result
 }
 
@@ -100,7 +121,11 @@ export const buyToCloseMarket = async (symbol: string, option_symbol: string, qu
     duration: 'gtc',
   }
 
-  const result = await _sendOrder(body, `Buy-to-close Market Price ${quantity} ${option_symbol}`, `Buy-to-close Market Price ${quantity} ${option_symbol} Failed`)
+  const result = await _sendOrder(
+    body,
+    `Buy-to-close Market Price ${quantity} ${option_symbol}`,
+    `Buy-to-close Market Price ${quantity} ${option_symbol} Failed`
+  )
   return result
 }
 
@@ -113,7 +138,12 @@ export type MultilegOptionLeg = {
   quantity: number,
 }
 
-export const multilegOptionOrder = async (underlying: string, type: MultilegOptionType, legs: MultilegOptionLeg[], price: number = 0.07) => {
+export const multilegOptionOrder = async (
+  underlying: string,
+  type: MultilegOptionType,
+  legs: MultilegOptionLeg[],
+  price: number = 0.07
+) => {
   const mainBody = {
     class: 'multileg',
     symbol: underlying,
@@ -135,7 +165,11 @@ export const multilegOptionOrder = async (underlying: string, type: MultilegOpti
     }
   }, mainBody)
 
-  const result = await _sendOrder(bodyWithLegs, `Multileg Order ${underlying}`, `Multileg Order ${underlying} Failed`)
+  const result = await _sendOrder(
+    bodyWithLegs,
+    `Multileg Order ${underlying}`,
+    `Multileg Order ${underlying} Failed`
+  )
   return result
 }
 
