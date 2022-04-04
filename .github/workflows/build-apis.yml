@@ -1,4 +1,4 @@
-name: Build APIs
+name: Build API Code
 on: 
   workflow_run:
     workflows: ["Increment Version"]

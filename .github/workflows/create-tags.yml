@@ -1,7 +1,7 @@
 name: Create tags
 on: 
   workflow_run:
-    workflows: ["Build APIs"]
+    workflows: ["Build API Code"]
     types:
       - completed
 
@@ -67,6 +67,7 @@ jobs:
     # Have to create a new branch so JS files don't end up in master
     - name: Checkout API Build Branch
       run: |
+          git pull
           git checkout build-apis
 
     - name: Remove other services
