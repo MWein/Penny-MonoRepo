@@ -150,3 +150,9 @@ jobs:
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
           git tag -a v$VERSION-data -m 'Data Build'
           git push origin --tags
+
+    - name: Delete release branch
+      run: |
+          git checkout master
+          git branch -D data-release
+          git push origin --delete data-release
