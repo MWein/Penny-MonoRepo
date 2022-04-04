@@ -6,8 +6,11 @@ import { moneyFormat, moneyColor, months } from '../common/formatting'
 export type AccountInfoPanelProps = {
   equity: number,
   weekEarnings: number,
+  weekPercReturn: number,
   monthEarnings: number,
+  monthPercReturn: number,
   yearEarnings: number,
+  yearPercReturn: number,
   theft: number,
   lastYearTheft: number,
 }
@@ -15,22 +18,41 @@ export type AccountInfoPanelProps = {
 const AccountInfoPanel = ({
   equity,
   weekEarnings,
+  weekPercReturn,
   monthEarnings,
+  monthPercReturn,
   yearEarnings,
+  yearPercReturn,
   theft,
   lastYearTheft,
 }: AccountInfoPanelProps) => {
   const createValueRow = (
     label: string,
+    percentReturn: number | null,
     value: number,
     withDivider: boolean = false,
     positiveTextColor: string = 'black'
   ) => {
+    const showPercentReturn = () => percentReturn === null ? null : (
+      <>
+        <div style={{ width: '5px', display: 'inline-block' }} />
+        <Typography
+          variant='subtitle1'
+          style={{ display: 'inline-block', color: percentReturn > 0 ? 'green' : 'red' }}
+        >
+          {percentReturn > 0 && '+'}{percentReturn}%
+        </Typography>
+      </>
+    )
+
     return (
       <>
-        <Typography variant='subtitle1' style={{ textAlign: 'center', width: '100%' }}>
-          {label}
-        </Typography>
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          <Typography variant='subtitle1' style={{ display: 'inline-block' }}>
+            {label}
+          </Typography>
+          {showPercentReturn()}
+        </div>
         <Typography variant='h5' style={{ textAlign: 'center', width: '100%', color: moneyColor(value, positiveTextColor) }}>
           {moneyFormat(value)}
         </Typography>
@@ -51,9 +73,9 @@ const AccountInfoPanel = ({
           {moneyFormat(equity)}
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-        {createValueRow('This Week', weekEarnings, true, 'green')}
-        {createValueRow(currentMonth, monthEarnings, true)}
-        {createValueRow(`${thisYear}`, yearEarnings)}
+        {createValueRow('This Week', weekPercReturn, weekEarnings, true, 'green')}
+        {createValueRow(currentMonth, monthPercReturn, monthEarnings, true)}
+        {createValueRow(`${thisYear}`, yearPercReturn, yearEarnings)}
       </Paper>
 
       <div style={{ height: '10px' }} />
@@ -63,8 +85,8 @@ const AccountInfoPanel = ({
           Estimated Theft
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-        {createValueRow(`${thisYear}`, theft, true)}
-        {createValueRow(`${lastYear}`, lastYearTheft)}
+        {createValueRow(`${thisYear}`, null, theft, true)}
+        {createValueRow(`${lastYear}`, null, lastYearTheft)}
       </Paper>
     </>
   )

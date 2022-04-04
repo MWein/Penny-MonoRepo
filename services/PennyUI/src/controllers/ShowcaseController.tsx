@@ -80,8 +80,14 @@ const ShowcaseController = () => {
 
   const [ equity, setEquity ] = useState<number>(0)
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
+  const [ weekPercReturn, setWeekPercReturn ] = useState<number>(0)
+
   const [ monthEarnings, setMonthEarnings ] = useState<number>(0)
+  const [ monthPercReturn, setMonthPercReturn ] = useState<number>(0)
+
   const [ yearEarnings, setYearEarnings ] = useState<number>(0)
+  const [ yearPercReturn, setYearPercReturn ] = useState<number>(0)
+
   const [ theft, setTheft ] = useState<number>(0)
   const [ lastYearTheft, setLastYearTheft ] = useState<number>(0)
   const [ positions, setPositions ] = useState<PositionChitProps[]>([])
@@ -92,8 +98,11 @@ const ShowcaseController = () => {
       setLoading,
       setEquity,
       setWeekEarnings,
+      setWeekPercReturn,
       setMonthEarnings,
+      setMonthPercReturn,
       setYearEarnings,
+      setYearPercReturn,
       setTheft,
       setLastYearTheft,
       setPositions,
@@ -123,8 +132,11 @@ const ShowcaseController = () => {
       pennyHealthy={pennyHealthy}
       equity={equity}
       weekEarnings={weekEarnings}
+      weekPercReturn={weekPercReturn}
       monthEarnings={monthEarnings}
+      monthPercReturn={monthPercReturn}
       yearEarnings={yearEarnings}
+      yearPercReturn={yearPercReturn}
       theft={theft}
       lastYearTheft={lastYearTheft}
       positions={positions}

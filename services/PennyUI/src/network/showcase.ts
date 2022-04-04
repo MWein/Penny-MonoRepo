@@ -6,8 +6,11 @@ const fetchShowcaseData = async (
   setLoading: Function,
   setEquity: Function,
   setWeekEarnings: Function,
+  setWeekPercReturn: Function,
   setMonthEarnings: Function,
+  setMonthPercReturn: Function,
   setYearEarnings: Function,
+  setYearPercReturn: Function,
   setTheft: Function,
   setLastYearTheft: Function,
   setPositions: Function,
@@ -34,8 +37,11 @@ const fetchShowcaseData = async (
 
     setEquity(result.body.equity)
     setWeekEarnings(result.body.weekEarnings)
+    setWeekPercReturn(result.body.weekPercReturn)
     setMonthEarnings(result.body.monthEarnings)
+    setMonthPercReturn(result.body.monthPercReturn)
     setYearEarnings(result.body.yearEarnings)
+    setYearPercReturn(result.body.yearPercReturn)
     setTheft(result.body.theft)
     setLastYearTheft(result.body.lastYearTheft)
     setPositions(result.body.positions)

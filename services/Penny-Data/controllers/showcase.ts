@@ -9,9 +9,20 @@ const getSunday = (d) => {
   return new Date(d.setDate(diff))
 }
 
-const retrieveGainLoss = async (start: string): Promise<number> => {
-  const gainLoss = await tradier.getGainLoss(1, 20000, start)
-  return Number(gainLoss.reduce((acc, gl) => acc + gl.gain_loss, 0).toFixed(2))
+const retrieveGainLoss = async (start: string): Promise<{ gainLoss: number, percReturn: number, totalRisked: number }> => {
+  const gainLossResult = await tradier.getGainLoss(1, 20000, start)
+  const gainLoss = Number(gainLossResult.reduce((acc, gl) => acc + gl.gain_loss, 0).toFixed(2))
+
+  const totalRisked = Math.abs(
+    gainLossResult.reduce((acc, gl) => acc + (gl.quantity > 0 ? gl.cost : gl.proceeds * -1), 0)
+  )
+  const percReturn = Number(((gainLoss / totalRisked) * 100).toFixed(2))
+
+  return {
+    gainLoss,
+    totalRisked,
+    percReturn,
+  }
 }
 
 const retrieveEquity = async () => {
@@ -30,25 +41,35 @@ const showcaseController = async (req, res) => {
   const firstOfMonth = `${today.getFullYear()}-${monthNum < 10 ? `0${monthNum}` : monthNum}-01`
   const firstOfWeek = getSunday(today).toISOString().split('T')[0]
 
-  const monthEarnings = await useCache('monthEarnings', () => retrieveGainLoss(firstOfMonth), 0)
-  const yearEarnings = await useCache('yearEarnings', () => retrieveGainLoss(firstOfYear), 0)
+  const monthResult = await useCache('monthEarnings', () => retrieveGainLoss(firstOfMonth), 0)
+  const { gainLoss: monthEarnings, percReturn: monthPercReturn } = monthResult
+
+  const yearResult = await useCache('yearEarnings', () => retrieveGainLoss(firstOfYear), 0)
+  const { gainLoss: yearEarnings, percReturn: yearPercReturn } = yearResult
 
   // TODO Make service for this
   const theft = Math.max(0, yearEarnings * 0.22)
 
-  const realizedWeekEarnings = await useCache('realizedWeekEarnings', () => retrieveGainLoss(firstOfWeek), 0)
+  const weekResult = await useCache('realizedWeekEarnings', () => retrieveGainLoss(firstOfWeek), 0)
+  const { gainLoss: realizedWeekEarnings, totalRisked: realizedWeekTotalRisked } = weekResult
+
   const unrealizedWeekEarnings = positions.reduce((acc, pos) => {
     const gl = pos.gainLoss
     return gl > pos.maxGain || gl < pos.maxLoss ? acc : acc + gl
   }, 0)
+  const unrealizedWeekTotalRisked = positions.reduce((acc, pos) => acc + pos.maxLoss, 0) * -1
 
   const weekEarnings = unrealizedWeekEarnings + realizedWeekEarnings
+  const weekPercReturn = Number(((weekEarnings / (realizedWeekTotalRisked + unrealizedWeekTotalRisked)) * 100).toFixed(2))
 
   res.json({
     equity,
     weekEarnings,
+    weekPercReturn,
     monthEarnings,
+    monthPercReturn,
     yearEarnings,
+    yearPercReturn,
     theft,
     lastYearTheft: 0,
     positions
