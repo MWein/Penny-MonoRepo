@@ -129,6 +129,7 @@ jobs:
     - name: Compile typescript
       run: |
           npm i typescript
+          rm -rf package-lock.json
           tsc
           mv Dockerfile-data Dockerfile
           git add .
