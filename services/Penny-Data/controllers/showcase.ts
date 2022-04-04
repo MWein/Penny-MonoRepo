@@ -65,11 +65,11 @@ const showcaseController = async (req, res) => {
   res.json({
     equity,
     weekEarnings,
-    weekPercReturn,
+    weekPercReturn: isNaN(weekPercReturn) ? 0 : weekPercReturn,
     monthEarnings,
-    monthPercReturn,
+    monthPercReturn: isNaN(monthPercReturn) ? 0 : monthPercReturn,
     yearEarnings,
-    yearPercReturn,
+    yearPercReturn: isNaN(yearPercReturn) ? 0 : yearPercReturn,
     theft,
     lastYearTheft: 0,
     positions
