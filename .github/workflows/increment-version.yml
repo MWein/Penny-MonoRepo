@@ -26,4 +26,4 @@ jobs:
 
     - name: Remove old tags
       run: |
-        git push origin --delete $(git tag -l)
+        git tag -l | xargs -n 1 git push --delete origin
