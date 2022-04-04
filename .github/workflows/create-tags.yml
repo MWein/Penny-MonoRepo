@@ -86,7 +86,11 @@ jobs:
 
     - name: Remove typescript files
       run: |
-          find . -type f | grep "\.ts" | rm -rf
+          rm -rf node_modules
+          rm -rf $(find . -type f | grep "\.ts")
+          git add .
+          git commit -m 'Auto: Removed Typescript'
+          git push
 
     - name: Create Tag
       run: |
