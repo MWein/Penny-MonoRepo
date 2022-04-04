@@ -176,7 +176,6 @@ export const multilegOptionOrder = async (
 
 export const cancelOrders = async (orderIDs: number[]) => {
   for (let x = 0; x < orderIDs.length; x++) {
-    console.log('Cancelling order number', orderIDs[x])
     const url = `accounts/${process.env.ACCOUNTNUM}/orders/${orderIDs[x]}`
     try {
       await network.deleteReq(url)
