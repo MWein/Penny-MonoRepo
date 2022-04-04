@@ -23,7 +23,3 @@ jobs:
         git add package.json
         git commit -m "Auto version increment"
         git push
-
-    - name: Remove old tags
-      run: |
-        git tag -l | xargs -n 1 git push --delete origin
