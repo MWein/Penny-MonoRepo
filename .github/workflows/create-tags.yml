@@ -103,5 +103,5 @@ jobs:
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
-          git tag -a v$VERSION-ic -m 'IC Build'
+          git tag -a v$VERSION-data -m 'IC Build'
           git push origin --tags
