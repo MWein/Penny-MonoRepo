@@ -3,10 +3,11 @@ const mongoose = require('mongoose')
 
 import { log } from '@penny/logger'
 
-import {
-  //sellIronCondorBigThree,
-  sellIronCondors
-} from './core/sellIronCondor'
+// import {
+//   sellIronCondors
+// } from './core/sellIronCondor'
+
+import { buyIronCondors } from './core/buyIronCondor'
 
 // import {
 //   wingAdjustment
@@ -46,7 +47,8 @@ const sellOptions = async () => {
   try {
 
     //await sellIronCondorBigThree()
-    await sellIronCondors()
+    //await sellIronCondors()
+    await buyIronCondors()
 
     // Adjusting the wings may have actual cost more money than it saved
     // Lets try just letting the positions do their thing instead for a bit
