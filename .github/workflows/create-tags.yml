@@ -134,6 +134,15 @@ jobs:
           git commit -m 'Auto: Compile Typescript'
           git push
 
+    - name: Remove unneeded files
+      run: |
+          rm -rf node_modules .github .gitignore Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
+          rm -rf $(find . -type f | grep "babel\.config\.js")
+          rm -rf $(find . -type f | grep "\.ts")
+          git add .
+          git commit -m 'Auto: Unneeded Typescript'
+          git push
+
     - name: Create Tag
       run: |
           VERSION=$(grep version package.json | awk -F \" '{print $4}')
