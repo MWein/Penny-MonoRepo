@@ -1,4 +1,4 @@
-name: Deploy to Nonprod
+name: Deploy to NonProd
 on: 
   workflow_run:
     workflows: ["Create tags"]
