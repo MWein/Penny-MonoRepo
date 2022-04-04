@@ -1,5 +1,6 @@
 import * as tradier from '@penny/tradier'
 import { getType, getUnderlying, isOption } from '@penny/option-symbol-parser'
+import { uniq } from 'lodash'
 
 type ICPosition = {
   ticker: string,
@@ -10,12 +11,14 @@ type ICPosition = {
   hasCall?: boolean,
 }
 
+const roundedNumber = (num: number) => Number(num.toFixed(0))
+
 const getICPositions = async (): Promise<ICPosition[]> => {
   const positions = await tradier.getPositions()
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
 
   const optionTickers = optionPositions.map(x => x.symbol)
-  const tickers = optionPositions.map(x => getUnderlying(x.symbol))
+  const tickers = uniq(optionPositions.map(x => getUnderlying(x.symbol)))
   const prices = await tradier.getPrices(optionTickers)
 
   return tickers.map(ticker => {
@@ -54,9 +57,9 @@ const getICPositions = async (): Promise<ICPosition[]> => {
 
     return {
       ticker,
-      gainLoss,
-      maxLoss,
-      maxGain,
+      gainLoss: roundedNumber(gainLoss),
+      maxLoss: roundedNumber(maxLoss),
+      maxGain: roundedNumber(maxGain),
       hasPut,
       hasCall,
     }
