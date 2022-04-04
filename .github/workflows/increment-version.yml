@@ -11,13 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - name: Set Git config
       run: |
           git config --local user.email "actions@github.com"
-          git config --local user.name "Github Actions" 
+          git config --local user.name "Github Actions"
+
     - name: Increment version on master
       run: |
         npm --no-git-tag-version version patch
         git add package.json
         git commit -m "Auto version increment"
         git push
+
+    - name: Remove old tags
+      run: |
+        git push origin --delete $(git tag -l)
