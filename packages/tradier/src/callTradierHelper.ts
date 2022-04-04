@@ -1,6 +1,9 @@
 import * as network from './network'
 
 // This is to address that stupid array thing that Tradier does
+// If theres a single object, it returns it as an object
+// If theres multiple, it returns an array
+// Really fricken annoying
 export const callTradierHelper = async (
   url: string,
   firstKey: string,
