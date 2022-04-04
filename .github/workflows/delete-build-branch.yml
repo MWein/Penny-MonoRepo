@@ -6,7 +6,7 @@ on:
       - completed
 
 jobs:
-  create-ui-tag:
+  delete-build-branch:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -17,6 +17,6 @@ jobs:
 
     - name: Delete release branch
       run: |
-          git checkout master
-          git branch -D build-apis
-          git push origin --delete build-apis
+          git pull
+          git branch -D api-build
+          git push origin --delete api-build

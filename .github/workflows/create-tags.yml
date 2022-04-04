@@ -68,7 +68,7 @@ jobs:
     - name: Checkout API Build Branch
       run: |
           git pull
-          git checkout build-apis
+          git checkout api-build
 
     - name: Remove other services
       run: |
@@ -93,7 +93,8 @@ jobs:
     # Have to create a new branch so JS files don't end up in master
     - name: Checkout API Build Branch
       run: |
-          git checkout build-apis
+          git pull
+          git checkout api-build
 
     - name: Remove other services
       run: |

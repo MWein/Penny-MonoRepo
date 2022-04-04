@@ -18,8 +18,8 @@ jobs:
 
     - name: Create build branch
       run: |
-          git checkout -b build-apis
-          git push --set-upstream origin build-apis
+          git checkout -b api-build
+          git push --set-upstream origin api-build
 
     - name: Remove UI code
       run: |
