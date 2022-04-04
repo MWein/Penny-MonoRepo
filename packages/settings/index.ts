@@ -1,25 +1,15 @@
 import { settingsModel } from '@penny/db-models'
 
 type Settings = {
-  callsEnabled?: boolean,
-  putsEnabled?: boolean,
-  closeExpiringPuts?: boolean,
-  allocateUnutilizedCash?: boolean,
-  defaultVolatility?: number,
-  reserve?: number,
-  profitTarget?: number,
-  priorityList?: Array<string>,
+  ironCondorsEnabled?: boolean,
+  ironCondorSymbols?: string[],
+  maximumPricePerSpread?: number,
 }
 
 export const defaultSettings: Settings = {
-  callsEnabled: true,
-  putsEnabled: true,
-  closeExpiringPuts: false,
-  allocateUnutilizedCash: false,
-  defaultVolatility: 0.05, // A safety buffer to be used with stocks when calculating unutilized funds
-  reserve: 0, // Money that Penny shouldn't touch. BuyingPower - Reserve. For planned withdrawals.
-  profitTarget: 0.75, // Profit to set Buy-To-Close orders to
-  priorityList: [],
+  ironCondorsEnabled: true,
+  ironCondorSymbols: [],
+  maximumPricePerSpread: 0.20
 }
 
 export const getSettings = async () : Promise<Settings> => {
