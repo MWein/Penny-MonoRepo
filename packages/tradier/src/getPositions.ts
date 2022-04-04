@@ -1,5 +1,5 @@
 import { isOption, getType } from '@penny/option-symbol-parser'
-import * as network from './network'
+import { callTradierHelper } from './callTradierHelper'
 
 
 export type Position = {
@@ -23,13 +23,6 @@ export const filterForShortCallPositions = (positions: Position[]) : Position[] 
 
 export const getPositions = async () : Promise<Position[]> => {
   const url = `accounts/${process.env.ACCOUNTNUM}/positions`
-  const response = await network.get(url)
-  if (response.positions === 'null') {
-    return []
-  }
-  if (Array.isArray(response.positions.position)) {
-    return response.positions.position
-  } else {
-    return [ response.positions.position ]
-  }
+  const response = await callTradierHelper(url, 'positions', 'position', true)
+  return response as unknown as Position[]
 }

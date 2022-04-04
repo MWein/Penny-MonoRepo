@@ -1,4 +1,4 @@
-import * as network from './network'
+import { callTradierHelper } from './callTradierHelper'
 
 type TradierChainLink = {
   symbol: string,
@@ -37,13 +37,6 @@ export const formatChain = (chain: TradierChainLink[]) : OptionChainLink[] => ch
 
 export const getOptionChain = async (symbol: string, expiration: string) : Promise<OptionChainLink[]> => {
   const url = `markets/options/chains?symbol=${symbol}&expiration=${expiration}&greeks=true`
-  const response = await network.get(url)
-  if (response.options === 'null') {
-    return []
-  }
-  if (Array.isArray(response.options.option)) {
-    return formatChain(response.options.option)
-  } else {
-    return formatChain([ response.options.option ])
-  }
+  const response = await callTradierHelper(url, 'options', 'option', true)
+  return formatChain(response) as unknown as OptionChainLink[]
 }
