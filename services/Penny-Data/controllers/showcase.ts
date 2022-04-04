@@ -39,8 +39,7 @@ const showcaseController = async (req, res) => {
 
   const firstOfYear = `${today.getFullYear()}-01-01`
   const firstOfMonth = `${today.getFullYear()}-${monthNum < 10 ? `0${monthNum}` : monthNum}-01`
-  //const firstOfWeek = getSunday(today).toISOString().split('T')[0]
-  const firstOfWeek = '2022-03-27'
+  const firstOfWeek = getSunday(today).toISOString().split('T')[0]
 
   const monthResult = await useCache('monthEarnings', () => retrieveGainLoss(firstOfMonth), 0)
   const { gainLoss: monthEarnings, percReturn: monthPercReturn } = monthResult
