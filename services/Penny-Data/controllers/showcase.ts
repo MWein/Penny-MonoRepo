@@ -1,6 +1,7 @@
 import * as tradier from '@penny/tradier'
 import { useCache } from '../utils/cache'
 import { getICPositions } from '../services/getICPositions'
+import * as logger from '@penny/logger'
 
 const getSunday = (d) => {
   d = new Date(d);
@@ -61,6 +62,10 @@ const showcaseController = async (req, res) => {
 
   const weekEarnings = unrealizedWeekEarnings + realizedWeekEarnings
   const weekPercReturn = Number(((weekEarnings / (realizedWeekTotalRisked + unrealizedWeekTotalRisked)) * 100).toFixed(2))
+
+  logger.log({
+    message: `Week Earnings: $${weekEarnings} of $${(realizedWeekTotalRisked + unrealizedWeekTotalRisked)}`
+  })
 
   res.json({
     equity,
