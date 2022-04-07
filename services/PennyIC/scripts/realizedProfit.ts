@@ -8,7 +8,7 @@ import { uniq } from 'lodash'
 const realizedProfit = async () => {
   const gainLoss = await tradier.getGainLoss()
 
-  const startDate = new Date('2022-03-06')
+  const startDate = new Date('2022-04-03')
   const gainLossSinceStart = gainLoss.filter(x => {
     const openDate = new Date(x.open_date)
     return openDate > startDate
