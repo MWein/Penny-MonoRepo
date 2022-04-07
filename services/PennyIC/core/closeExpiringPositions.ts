@@ -1,19 +1,20 @@
 import * as tradier from '@penny/tradier'
-import { getExpiration } from '@penny/option-symbol-parser'
-import { closeSpreads } from '../common/closeSpreads'
+import * as logger from '@penny/logger'
+import { getExpiration, isOption } from '@penny/option-symbol-parser'
+import { closePositions } from '../common/closePositions'
 
 
 export const closeExpiringPositions = async () => {
-  // TODO Is market open
-
-  // TODO Cancel all orders that involve positions expiring today
+  logger.log('Closing expiring positions')
 
   const positions = await tradier.getPositions()
-  const spreads = tradier.groupOptionsIntoSpreads(positions)
-  const allSpreads = [ ...spreads.call.spreads, ...spreads.put.spreads ]
+  const optionPositions = positions.filter(pos => isOption(pos.symbol))
 
-  const today = new Date().toISOString().split('T')[0]
-  const expiringToday = allSpreads.filter(spread => getExpiration(spread.short) === today)
+  //const today = new Date().toISOString().split('T')[0]
+  const today = '2022-04-06'
+  const expiringToday = optionPositions.filter(pos => getExpiration(pos.symbol) === today)
 
-  await closeSpreads(expiringToday)
+  await closePositions(expiringToday)
+
+  logger.log('Finished closing expiring positions')
 }
