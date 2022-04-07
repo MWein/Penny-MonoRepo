@@ -9,25 +9,9 @@ import { log } from '@penny/logger'
 
 import { buyIronCondors } from './core/buyIronCondor'
 
-// import {
-//   wingAdjustment
-// } from './core/wingAdjustment'
-
 import {
   closeExpiringPositions
 } from './core/closeExpiringPositions'
-
-// import {
-//   takeProfits
-// } from './core/takeProfits'
-
-//const { sellCoveredCalls } = require('./core/coveredCall')
-//const { createGTCOrders } = require('./core/gtcOrders')
-//const { log, clearOldLogs } = require('./utils/log')
-//const { closeExpiringPuts } = require('./core/closeExpiringPuts')
-//const { sellCashSecuredPuts } = require('./core/cashSecuredPut')
-//const { allocateUnutilizedCash } = require('./core/allocateUnutilizedCash')
-//const { sellSpreads } = require('./core/sellSpreads')
 
 
 // const housekeeping = async () => {
@@ -80,28 +64,17 @@ const launchCrons = async () => {
     })
   }, null, true, 'America/New_York')
 
-  new CronJob('0 31 09 * * 1-6', () => {
-    //log('Creating GTC Orders')
-    //createGTCOrders()
-  }, null, true, 'America/New_York')
+  // new CronJob('0 31 09 * * 1-6', () => {
+  //   //log('Creating GTC Orders')
+  //   //createGTCOrders()
+  // }, null, true, 'America/New_York')
 
 
   new CronJob('0 0 10 * * 1-4', sellOptions, null, true, 'America/New_York')
-  //new CronJob('0 0 11 * * 1-5', sellOptions, null, true, 'America/New_York')
-  //new CronJob('0 0 12 * * 1-5', sellOptions, null, true, 'America/New_York')
   new CronJob('0 0 13 * * 1-4', sellOptions, null, true, 'America/New_York')
-  //new CronJob('0 0 14 * * 1-5', sellOptions, null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', closeExpiringPositions, null, true, 'America/New_York')
-
-  // Close expiring puts before options sales on fridays
-  // new CronJob('0 0 09 * * 5', closeExpiringPuts, null, true, 'America/New_York')
-  // new CronJob('0 0 11 * * 5', closeExpiringPuts, null, true, 'America/New_York')
-  // new CronJob('0 0 13 * * 5', closeExpiringPuts, null, true, 'America/New_York')
-
-  // Allocate unutilized money at the end of the day on fridays
-  //new CronJob('30 0 15 * * 5', allocateUnutilizedCash, null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
