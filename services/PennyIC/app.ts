@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob
 const mongoose = require('mongoose')
 
-import { log } from '@penny/logger'
+import { log, clearOldLogs } from '@penny/logger'
 
 // import {
 //   sellIronCondors
@@ -14,37 +14,10 @@ import {
 } from './core/closeExpiringPositions'
 
 
-// const housekeeping = async () => {
-//   try {
-//     log('Clearing Old Logs')
-//     await clearOldLogs()
-//   } catch (e) {
-//     log({
-//       type: 'ERROR housekeeping',
-//       message: e.toString()
-//     })
-//   }
-// }
-
-
 const sellOptions = async () => {
   try {
-
-    //await sellIronCondorBigThree()
     //await sellIronCondors()
     await buyIronCondors()
-
-    // Adjusting the wings may have actual cost more money than it saved
-    // Lets try just letting the positions do their thing instead for a bit
-    //await wingAdjustment()
-
-    //await sellSpreads()
-
-    // Commented out because this is not compatible with stuff (for now)
-    // log('Selling Covered Calls')
-    // await sellCoveredCalls()
-    // log('Selling Cash Secured Puts')
-    // await sellCashSecuredPuts()
   } catch (e) {
     log({
       type: 'error',
@@ -78,9 +51,7 @@ const launchCrons = async () => {
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
-  new CronJob('0 10 16 * * *', () => {
-    //housekeeping()
-  }, null, true, 'America/New_York')
+  new CronJob('0 10 16 * * *', clearOldLogs, null, true, 'America/New_York')
 
   console.log('Deployment successful')
 }
