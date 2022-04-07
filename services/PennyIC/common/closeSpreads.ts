@@ -2,6 +2,7 @@ import * as tradier from '@penny/tradier'
 import { getUnderlying } from '@penny/option-symbol-parser'
 import { MultilegOptionLeg, Spread } from '@penny/tradier'
 
+/*************** DEPRECATED ***************/
 
 export const closeSpreads = async (spreadsToClose: Spread[]) : Promise<void> => {
   for (let x = 0; x < spreadsToClose.length; x++) {

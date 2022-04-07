@@ -2,6 +2,9 @@ import { isOption, getType, getStrike, getUnderlying, getExpiration } from '@pen
 import { Position } from '.'
 
 
+/*************** DEPRECATED ***************/
+
+
 // If quantity (math.abs) is 2, there should be 2 of the same symbol
 const optionSymbolsSpreadOut = (options: Position[]) =>
   options.reduce((acc, opt) => [
