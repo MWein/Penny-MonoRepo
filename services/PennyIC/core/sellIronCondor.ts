@@ -183,30 +183,6 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
 
 
 
-
-export const sellIronCondorBigThree = async () => {
-  const bigThree = [ 'SPY', 'IWM', 'QQQ' ]
-
-  // TODO Is bigThree enabled?
-
-  // Is market open?
-  const isOpen = await tradier.isMarketOpen()
-  if (!isOpen) {
-    return
-  }
-
-  // TODO Get big three settings (individual)
-    // Enabled?
-    // Short delta
-    // maxStrikeWidth
-
-  for (let x = 0; x < bigThree.length; x++) {
-    console.log(bigThree[x])
-    await sellIronCondor(bigThree[x], 0.1, 1)
-  }
-}
-
-
 export const sellIronCondors = async () => {
   // TODO Is iron condor enabled?
 
