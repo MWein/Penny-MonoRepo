@@ -10,8 +10,7 @@ export const closeExpiringPositions = async () => {
   const positions = await tradier.getPositions()
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
 
-  //const today = new Date().toISOString().split('T')[0]
-  const today = '2022-04-06'
+  const today = new Date().toISOString().split('T')[0]
   const expiringToday = optionPositions.filter(pos => getExpiration(pos.symbol) === today)
 
   await closePositions(expiringToday)
