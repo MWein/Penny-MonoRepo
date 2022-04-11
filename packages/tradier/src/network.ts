@@ -42,7 +42,7 @@ export const get = async (path: string, throttle: boolean = true) => {
 export const post = async (path: string, body: object, throttle: boolean = true, retry: boolean = true) => {
   await wait(throttle)
 
-  const retryCount = retry ? 5 : 0
+  //const retryCount = retry ? 5 : 0
 
   const url = `${process.env.BASEPATH}${path}`
   const formString = createFormString(body)
@@ -54,7 +54,7 @@ export const post = async (path: string, body: object, throttle: boolean = true,
     .timeout({
       response: 10000
     })
-    .retry(retryCount)
+    //.retry(retryCount)
 
   return response.body
 }
