@@ -24,8 +24,21 @@ const getICPositions = async (): Promise<ICPosition[]> => {
   return tickers.map(ticker => {
     const positions = optionPositions.filter(pos => getUnderlying(pos.symbol) === ticker)
 
+    const numberOfCallSpreads = positions.reduce((acc, pos) => {
+      return getType(pos.symbol) !== 'call' || pos.quantity < 0 ? acc : acc + pos.quantity
+    }, 0)
+
+    const numberOfPutSpreads = positions.reduce((acc, pos) => {
+      return getType(pos.symbol) !== 'put' || pos.quantity < 0 ? acc : acc + pos.quantity
+    }, 0)
+
+    const numberOfPositions = Math.max(
+      numberOfCallSpreads,
+      numberOfPutSpreads,
+    )
+
     const maxLoss = positions.reduce((acc, pos) => acc + pos.cost_basis, 0) * -1
-    const maxGain = 100 + maxLoss // Assuming strikes are $1 apart on both sides
+    const maxGain = (100 * numberOfPositions) + maxLoss // Assuming strikes are $1 apart on both sides
 
     const gainLoss = positions.reduce((acc, pos) => {
       const price = prices.find(x => x.symbol === pos.symbol)?.price
@@ -33,10 +46,12 @@ const getICPositions = async (): Promise<ICPosition[]> => {
         return acc
       }
 
+      const quantity = Math.abs(pos.quantity)
+
       // Short position
       if (pos.quantity < 0) {
         const salePrice = Math.abs(pos.cost_basis)
-        const currentBuyBackPrice = Number((price * 100).toFixed(0))
+        const currentBuyBackPrice = Number((price * 100 * quantity).toFixed(0))
         const gainLoss = salePrice - currentBuyBackPrice
         return acc + gainLoss
         //return acc
@@ -45,7 +60,7 @@ const getICPositions = async (): Promise<ICPosition[]> => {
       // Long position
       if (pos.quantity > 0) {
         const buyPrice = pos.cost_basis
-        const currentSalePrice = Number((price * 100).toFixed(0))
+        const currentSalePrice = Number((price * 100 * quantity).toFixed(0))
         const gainLoss = currentSalePrice - buyPrice
         return acc + gainLoss
         //return acc
