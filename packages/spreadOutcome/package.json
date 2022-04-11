@@ -1,0 +1,13 @@
+{
+  "name": "@penny/spread-outcome",
+  "version": "1.0.0",
+  "description": "Package for determining possible outcomes of option spreads",
+  "scripts": {
+    "build": "tsc index.ts",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/option-symbol-parser": "1.0.0",
+    "@penny/test-helpers": "1.0.0"
+  }
+}

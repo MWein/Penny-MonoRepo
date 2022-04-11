@@ -10,9 +10,9 @@ const closeDupePositions = async () => {
     quantity: (Math.abs(x.quantity) - 1) * (x.quantity < 0 ? -1 : 1)
   }))
   
-  console.log(dupePositions)
+  // console.log(dupePositions)
 
-  return
+  // return
   const shortDupes = dupePositions.filter(x => x.quantity < 0)
   const longDupes = dupePositions.filter(x => x.quantity > 0)
 
