@@ -161,7 +161,6 @@ describe('post', () => {
   let set1
   let set2
   let send1
-  let retry
   let timeout
 
   beforeEach(() => {
@@ -170,14 +169,9 @@ describe('post', () => {
     process.env.BASEPATH = 'https://sandbox.example.com/'
     process.env.APIKEY = 'somekey'
 
-    // Retry
-    retry = jest.fn().mockReturnValue({
-      body: 'someresponse'
-    })
-
     // Timeout
     timeout = jest.fn().mockReturnValue({
-      retry,
+      body: 'someresponse',
     })
 
     // Send

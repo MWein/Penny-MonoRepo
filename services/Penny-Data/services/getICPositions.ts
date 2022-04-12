@@ -1,6 +1,7 @@
 import * as tradier from '@penny/tradier'
 import { getType, getUnderlying, isOption } from '@penny/option-symbol-parser'
 import { uniq } from 'lodash'
+import { getSpreadOutcome } from '@penny/spread-outcome'
 
 type ICPosition = {
   ticker: string,
@@ -24,21 +25,19 @@ const getICPositions = async (): Promise<ICPosition[]> => {
   return tickers.map(ticker => {
     const positions = optionPositions.filter(pos => getUnderlying(pos.symbol) === ticker)
 
-    const numberOfCallSpreads = positions.reduce((acc, pos) => {
-      return getType(pos.symbol) !== 'call' || pos.quantity < 0 ? acc : acc + pos.quantity
-    }, 0)
+    const { maxGain, maxLoss, fullyCovered } = getSpreadOutcome(ticker, positions)
 
-    const numberOfPutSpreads = positions.reduce((acc, pos) => {
-      return getType(pos.symbol) !== 'put' || pos.quantity < 0 ? acc : acc + pos.quantity
-    }, 0)
-
-    const numberOfPositions = Math.max(
-      numberOfCallSpreads,
-      numberOfPutSpreads,
-    )
-
-    const maxLoss = positions.reduce((acc, pos) => acc + pos.cost_basis, 0) * -1
-    const maxGain = (100 * numberOfPositions) + maxLoss // Assuming strikes are $1 apart on both sides
+    // TODO Remove once retry problem is solved
+    if (!fullyCovered) {
+      return {
+        ticker,
+        gainLoss: 0,
+        maxLoss: -1,
+        maxGain: 1,
+        hasPut: false,
+        hasCall: false,
+      }
+    }
 
     const gainLoss = positions.reduce((acc, pos) => {
       const price = prices.find(x => x.symbol === pos.symbol)?.price
