@@ -117,7 +117,7 @@ export const generatePositionObject = (
   id: number = 123456,
   customExp: string | null = null,
   customStrike: number | null = null
-) =>
+) : MockPositionObject =>
   ({
     cost_basis,
     date_acquired,
