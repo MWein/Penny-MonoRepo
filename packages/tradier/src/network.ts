@@ -39,7 +39,7 @@ export const get = async (path: string, throttle: boolean = true) => {
 }
 
 
-export const post = async (path: string, body: object, throttle: boolean = true, retry: boolean = true) => {
+export const post = async (path: string, body: object, throttle: boolean = true) => {
   await wait(throttle)
 
   const url = `${process.env.BASEPATH}${path}`
