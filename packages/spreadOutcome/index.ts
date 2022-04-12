@@ -1,6 +1,6 @@
 import { Position } from "@penny/tradier"
 import { getUnderlying, getType, getStrike, isOption } from "@penny/option-symbol-parser" 
-
+import { uniq } from 'lodash'
 
 type SpreadSide = 'long' | 'short' | 'indeterminate'
 
@@ -75,6 +75,7 @@ const determinePositionResultForStrike = (position: Position, strike: number): P
 export const getSpreadOutcome = (underlying: string, positions: Position[]): SpreadOutcome => {
   const onlyUnderlying = positions.filter(pos => getUnderlying(pos.symbol) === underlying && isOption(pos.symbol))
   const costBasis = positions.reduce((acc, pos) => acc + pos.cost_basis, 0)
+  const fullyCovered = onlyUnderlying.reduce((acc, pos) => acc + pos.quantity, 0) === 0
 
   const strikes = onlyUnderlying.map(pos => getStrike(pos.symbol)).sort((a, b) => a - b)
 
@@ -92,21 +93,37 @@ export const getSpreadOutcome = (underlying: string, positions: Position[]): Spr
       numInvoked: 0,
       total: 0,
     })
-  ).filter(result => result.numInvoked % 2 === 0).map(result => result.total - costBasis)
+  )
+  // If fully covered, do not return results where protective side not invoked
+  .filter(result => result.numInvoked % 2 === 0)
+  .map(result => result.total - costBasis)
 
   // For iron condors, there would be no strike between the spreads with the above, adding it manually
   // A lot less complex
   // Also theres a weird edge case where -0 is returned, using a ternary to just return 0
   resultAtEachStrike.push(costBasis === 0 ? 0 : costBasis * -1)
 
-  const maxLoss = Math.min(...resultAtEachStrike)
-  const maxGain = Math.max(...resultAtEachStrike)
+  let maxLoss = Math.min(...resultAtEachStrike)
+  let maxGain = Math.max(...resultAtEachStrike)
+
+  // Edge case for straddles and strangles
+  // Only one unique value is returned since resultAtEachStrike only contains values where number of legs invoked is even
+  const uniqResults = uniq(resultAtEachStrike)
+  if (uniqResults.length === 1) {
+    const result = uniqResults[0]
+    if (result < 0) {
+      maxGain = Infinity
+    }
+    if (result > 0) {
+      maxLoss = -Infinity
+    }
+  }
 
   return {
     ticker: underlying,
     side: determineSide(costBasis),
     maxLoss,
     maxGain,
-    fullyCovered: onlyUnderlying.reduce((acc, pos) => acc + pos.quantity, 0) === 0,
+    fullyCovered,
   }
 }
