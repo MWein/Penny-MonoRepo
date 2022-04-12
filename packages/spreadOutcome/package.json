@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@penny/option-symbol-parser": "1.0.0",
-    "@penny/test-helpers": "1.0.0"
+    "@penny/test-helpers": "1.0.0",
+    "@penny/tradier": "1.0.0"
   }
 }
