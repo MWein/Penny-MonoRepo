@@ -19,6 +19,10 @@ export const _sendOrder = async (body: object, successLog: string, failureLog: s
       type: 'error',
       message: failureLog,
     })
+    logUtil.log({
+      type: 'error',
+      message: e.message,
+    })
     return {
       status: 'not ok'
     }
