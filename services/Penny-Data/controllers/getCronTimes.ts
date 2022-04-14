@@ -5,9 +5,11 @@ const getCronTimesController = async (req, res) : Promise<void> => {
   try {
     const cronLogs = await logService.getCronLogs()
 
-    const lastCronRuns = uniq(cronLogs.map(log => log.cronName)).map(
-      name => cronLogs.find(log => log.cronName === name)
-    )
+    const lastCronRuns = uniq(cronLogs.map(log => log.cronName))
+      .sort() // Sort cron names alphabetically
+      .map(
+        name => cronLogs.find(log => log.cronName === name)
+      )
 
     res.json(lastCronRuns)
   } catch (e) {
