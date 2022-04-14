@@ -1,4 +1,4 @@
-import { logModel } from '@penny/db-models'
+import { logModel, cronModel } from '@penny/db-models'
 
 type LogType = 'info' | 'ping' | 'error'
 
@@ -57,6 +57,7 @@ export const clearOldLogs = async () => {
     const today = new Date()
     const priorDate = new Date().setDate(today.getDate() - DELETEOLDERTHANDAYS)
     await logModel.deleteMany({ date: { $lte: priorDate } })
+    await cronModel.deleteMany({ date: { $lte: priorDate } })
   } catch (e) {
     console.log('Error reaching database')
   }

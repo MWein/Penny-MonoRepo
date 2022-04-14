@@ -1,4 +1,4 @@
-import { logModel } from '@penny/db-models'
+import { logModel, cronModel } from '@penny/db-models'
 jest.mock('@penny/db-models')
 
 import {
@@ -159,6 +159,7 @@ describe('clearOldLogs', () => {
   beforeEach(() => {
     console.log = jest.fn()
     logModel.deleteMany = jest.fn()
+    cronModel.deleteMany = jest.fn()
   })
 
   afterEach(() => {
@@ -166,8 +167,16 @@ describe('clearOldLogs', () => {
     jest.useRealTimers()
   })
 
-  it('Console logs on failure', async () => {
+  it('Console logs on logModel failure', async () => {
     (logModel.deleteMany as unknown as jest.Mock).mockImplementation(() => {
+      throw new Error('Shit')
+    })
+    await clearOldLogs()
+    expect(console.log).toHaveBeenCalledWith('Error reaching database')
+  })
+
+  it('Console logs on cronModel failure', async () => {
+    (cronModel.deleteMany as unknown as jest.Mock).mockImplementation(() => {
       throw new Error('Shit')
     })
     await clearOldLogs()
@@ -178,5 +187,6 @@ describe('clearOldLogs', () => {
     jest.useFakeTimers().setSystemTime(new Date('2021-10-12').getTime())
     await clearOldLogs()
     expect(logModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1626220800000}})
+    expect(cronModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1626220800000}})
   })
 })
