@@ -1,5 +1,5 @@
 import AccountInfoPanel, { AccountInfoPanelProps } from './AccountInfoPanel'
-import CronTimesPanel from './CronTimesPanel'
+import CronTimesPanel, { CronTimesPanelProps } from './CronTimesPanel'
 import PennyStatus from './PennyStatus'
 import LoadingModal from './LoadingModal'
 import PositionChitsController, { PositionChitsControllerProps } from '../controllers/PositionChitsController'
@@ -9,7 +9,7 @@ type ShowcaseProps = {
   loading: boolean,
   checkingPenny: boolean,
   pennyHealthy: boolean,
-} & AccountInfoPanelProps & PositionChitsControllerProps
+} & AccountInfoPanelProps & PositionChitsControllerProps & CronTimesPanelProps
 
 
 const Showcase = ({
@@ -26,6 +26,8 @@ const Showcase = ({
   theft,
   lastYearTheft,
   positions,
+  crons,
+  checkingCrons,
 }: ShowcaseProps) => {
   return (
     <>
@@ -37,10 +39,8 @@ const Showcase = ({
           />
           <div style={{ height: '10px' }} />
           <CronTimesPanel
-            crons={[
-              { cronName: 'Something', success: false, date: '2022-04-01' },
-              { cronName: 'Something', success: true, date: '2022-04-01' }
-            ]}
+            crons={crons}
+            checkingCrons={checkingCrons}
           />
           <div style={{ height: '10px' }} />
           <AccountInfoPanel

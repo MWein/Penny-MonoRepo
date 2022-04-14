@@ -3,7 +3,7 @@ import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
 import { fetchPennyStatus } from '../network/checkPenny'
 import fetchShowcaseData from '../network/showcase'
-
+import { CronTime } from '../components/CronTimesPanel'
 
 // ****************** MOCK DATA *********************
 
@@ -78,6 +78,9 @@ const ShowcaseController = () => {
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
   const [ pennyHealthy, setPennyHealthy ] = useState<boolean>(false)
 
+  const [ checkingCrons, setCheckingCrons ] = useState<boolean>(true)
+  const [ crons, setCrons ] = useState<CronTime[]>([])
+
   const [ equity, setEquity ] = useState<number>(0)
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
   const [ weekPercReturn, setWeekPercReturn ] = useState<number>(0)
@@ -129,7 +132,9 @@ const ShowcaseController = () => {
     <Showcase
       loading={loading}
       checkingPenny={checkingPenny}
+      checkingCrons={checkingCrons}
       pennyHealthy={pennyHealthy}
+      crons={crons}
       equity={equity}
       weekEarnings={weekEarnings}
       weekPercReturn={weekPercReturn}

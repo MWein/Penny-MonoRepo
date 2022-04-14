@@ -1,5 +1,6 @@
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
+import CircularProgress from '@mui/material/CircularProgress'
 
 export type CronTime = {
   cronName: string,
@@ -10,10 +11,12 @@ export type CronTime = {
 
 export type CronTimesPanelProps = {
   crons: CronTime[]
+  checkingCrons: boolean,
 }
 
 const CronTimesPanel = ({
-  crons
+  crons,
+  checkingCrons,
 }: CronTimesPanelProps) => {
   const createCronRow = (cron: CronTime) => {
     const hoursSince = Number(
@@ -42,6 +45,20 @@ const CronTimesPanel = ({
           </Typography>
         </div>
       </>
+    )
+  }
+
+
+  if (checkingCrons) {
+    return (
+      <Paper style={{ height: 'fit-content', display: 'flex' }}>
+        <div style={{ paddingTop: '12px', paddingLeft: '10px', paddingRight: '9px' }}>
+          <CircularProgress size={25} />
+        </div>
+        <Typography variant='h6' style={{ padding: '10px', paddingLeft: '5px' }}>
+          Checking on Crons
+        </Typography>
+      </Paper>
     )
   }
 
