@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob
 const mongoose = require('mongoose')
 
-import { log, clearOldLogs } from '@penny/logger'
+import { log, logCron, clearOldLogs } from '@penny/logger'
 
 // import {
 //   sellIronCondors
@@ -14,37 +14,43 @@ import {
 } from './core/closeExpiringPositions'
 
 
+
 const openIronCondorsCron = async () => {
   try {
     await buyIronCondors()
+    logCron('OpenICs', true)
   } catch (e) {
     log({
       type: 'error',
       message: e.toString()
     })
+    logCron('OpenICs', false, e.toString())
   }
 }
 
 const closeExpiringPositionsCron = async () => {
   try {
-
     await closeExpiringPositions()
+    logCron('CloseExp', true)
   } catch (e) {
     log({
       type: 'error',
       message: e.toString()
     })
+    logCron('CloseExp', false, e.toString())
   }
 }
 
 const housekeepingCron = async () => {
   try {
-
+    await clearOldLogs()
+    logCron('Housekeeping', true)
   } catch (e) {
     log({
       type: 'error',
       message: e.toString()
     })
+    logCron('Housekeeping', false, e.toString())
   }
 }
 
