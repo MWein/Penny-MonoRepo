@@ -27,6 +27,8 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 
 
 const launchCrons = async () => {
+  console.log('TESTING TESTING')
+
   log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
