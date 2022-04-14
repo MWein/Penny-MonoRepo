@@ -123,6 +123,7 @@ const ShowcaseController = () => {
     fetchPennyCronTimes(setCheckingCrons, setCrons)
     const intervalId = setInterval(() => {
       fetchPennyStatus(setCheckingPenny, setPennyHealthy)
+      fetchPennyCronTimes(setCheckingCrons, setCrons)
     }, 60000)
     return () => clearInterval(intervalId)
   }, [])
