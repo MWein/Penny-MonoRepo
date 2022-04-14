@@ -9,7 +9,7 @@ const LogSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: [ 'info', 'ping', 'error', 'cron' ],
+    enum: [ 'info', 'ping', 'error' ],
     default: 'info',
   },
   message: {

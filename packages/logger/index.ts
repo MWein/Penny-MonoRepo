@@ -1,6 +1,6 @@
 import { logModel } from '@penny/db-models'
 
-type LogType = 'info' | 'ping' | 'error' | 'cron'
+type LogType = 'info' | 'ping' | 'error'
 
 type LogObject = {
   type?: LogType,
