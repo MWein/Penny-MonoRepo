@@ -6,6 +6,7 @@ import { pennyStatusController } from './controllers/pennyStatus'
 import { getLogsController } from './controllers/getLogs'
 import { getSettingsController, setSettingsController } from './controllers/settings'
 import { showcaseController } from './controllers/showcase'
+import { getCronTimesController } from './controllers/getCronTimes'
 
 const app = express()
 
@@ -21,6 +22,9 @@ app.get('/showcase', showcaseController)
 
 // Dump all logs from the database
 app.get('/logs', getLogsController)
+
+// Get the latest cron run times
+app.get('/cron-times', getCronTimesController)
 
 // Settings
 app.get('/settings', getSettingsController)

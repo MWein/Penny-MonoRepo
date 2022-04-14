@@ -1,10 +1,24 @@
-import { logModel } from '@penny/db-models'
+import { logModel, cronModel } from '@penny/db-models'
 
-type LogType = 'info' | 'ping' | 'error'
+export type LogType = 'info' | 'ping' | 'error'
+export type CronType = 'OpenICs' | 'CloseExp' | 'Housekeeping'
 
-type LogObject = {
+export type LogObject = {
   type?: LogType,
   message: string
+}
+
+// Return types for get functions
+type Log = {
+  date: string
+  type: LogType,
+  message: string,
+}
+type CronLog = {
+  date: string,
+  cronName: CronType,
+  success: boolean,
+  errorMessage?: string,
 }
 
 
@@ -45,8 +59,28 @@ export const log = async (logData : string | LogObject) => {
 }
 
 
-export const getLogs = async () : Promise<String[]> => {
+export const logCron = async (cronName: CronType, success: boolean, errorMessage?: string) => {
+  try {
+    if (errorMessage) {
+      const newLog = new cronModel({ cronName, success, errorMessage })
+      await newLog.save()
+      return
+    }
+
+    const newLog = new cronModel({ cronName, success })
+    await newLog.save()
+  } catch (e) {
+    console.log('Error reaching database')
+  }
+}
+
+export const getLogs = async () : Promise<Log[]> => {
   const logs = await logModel.find().sort({ date: -1 }).select('-_id -__v')
+  return logs
+}
+
+export const getCronLogs = async () : Promise<CronLog[]> => {
+  const logs = await cronModel.find().sort({ date: -1 }).select('-_id -__v')
   return logs
 }
 
@@ -57,6 +91,7 @@ export const clearOldLogs = async () => {
     const today = new Date()
     const priorDate = new Date().setDate(today.getDate() - DELETEOLDERTHANDAYS)
     await logModel.deleteMany({ date: { $lte: priorDate } })
+    await cronModel.deleteMany({ date: { $lte: priorDate } })
   } catch (e) {
     console.log('Error reaching database')
   }

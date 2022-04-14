@@ -1,11 +1,13 @@
-import { logModel } from '@penny/db-models'
+import { logModel, cronModel } from '@penny/db-models'
 jest.mock('@penny/db-models')
 
 import {
   _logWithObject,
   _logWithMessage,
   log,
+  logCron,
   getLogs,
+  getCronLogs,
   clearOldLogs
 } from './index'
 
@@ -129,6 +131,57 @@ describe('log', () => {
 })
 
 
+describe('logCron', () => {
+  const originalConsoleLog = console.log
+  let saveFunc
+
+  beforeEach(() => {
+    saveFunc = jest.fn()
+    // @ts-ignore
+    cronModel.mockReturnValue({
+      save: saveFunc,
+    })
+    console.log = jest.fn()
+  })
+
+  afterEach(() => {
+    console.log = originalConsoleLog
+  })
+
+  it('Saves the log with an error message', async () => {
+    await logCron('CloseExp', false, 'Something happened')
+    expect(saveFunc).toHaveBeenCalledTimes(1)
+    expect(cronModel).toHaveBeenCalledWith({
+      cronName: 'CloseExp',
+      success: false,
+      errorMessage: 'Something happened'
+    })
+  })
+
+  it('Saves the log without an error message', async () => {
+    await logCron('CloseExp', true)
+    expect(saveFunc).toHaveBeenCalledTimes(1)
+    expect(cronModel).toHaveBeenCalledWith({
+      cronName: 'CloseExp',
+      success: true,
+    })
+  })
+
+  it('On failure, console logs', async () => {
+    // @ts-ignore
+    cronModel.mockImplementation(() => {
+      throw new Error('Oh no!!!!!!')
+    })
+    await logCron('CloseExp', true)
+    expect(cronModel).toHaveBeenCalledWith({
+      cronName: 'CloseExp',
+      success: true,
+    })
+    expect(console.log).toHaveBeenCalledWith('Error reaching database')
+  })
+})
+
+
 describe('getLogs', () => {
   it('Gets the logs', async () => {
     const select = jest.fn()
@@ -153,12 +206,37 @@ describe('getLogs', () => {
 })
 
 
+describe('getCronLogs', () => {
+  it('Gets the cron logs', async () => {
+    const select = jest.fn()
+    const sort = jest.fn().mockReturnValue({
+      select,
+    })
+    cronModel.find = jest.fn().mockReturnValue({
+      sort,
+    })
+
+    select.mockReturnValue([
+      'some',
+      'logs'
+    ])
+
+    const result = await getCronLogs()
+    expect(result).toEqual([
+      'some',
+      'logs'
+    ])
+  })
+})
+
+
 describe('clearOldLogs', () => {
   const originalConsoleLog = console.log
 
   beforeEach(() => {
     console.log = jest.fn()
     logModel.deleteMany = jest.fn()
+    cronModel.deleteMany = jest.fn()
   })
 
   afterEach(() => {
@@ -166,8 +244,16 @@ describe('clearOldLogs', () => {
     jest.useRealTimers()
   })
 
-  it('Console logs on failure', async () => {
+  it('Console logs on logModel failure', async () => {
     (logModel.deleteMany as unknown as jest.Mock).mockImplementation(() => {
+      throw new Error('Shit')
+    })
+    await clearOldLogs()
+    expect(console.log).toHaveBeenCalledWith('Error reaching database')
+  })
+
+  it('Console logs on cronModel failure', async () => {
+    (cronModel.deleteMany as unknown as jest.Mock).mockImplementation(() => {
       throw new Error('Shit')
     })
     await clearOldLogs()
@@ -178,5 +264,6 @@ describe('clearOldLogs', () => {
     jest.useFakeTimers().setSystemTime(new Date('2021-10-12').getTime())
     await clearOldLogs()
     expect(logModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1626220800000}})
+    expect(cronModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1626220800000}})
   })
 })

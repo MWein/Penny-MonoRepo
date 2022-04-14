@@ -1,7 +1,7 @@
 import getPennyDataUrl from "./getPennyDataUrl"
 const superagent = require('superagent')
 
-const fetchPennyStatus = async (
+export const fetchPennyStatus = async (
   setLoadingCallback: Function,
   setStatusCallback: Function,
 ) => {
@@ -21,4 +21,22 @@ const fetchPennyStatus = async (
   }
 }
 
-export default fetchPennyStatus
+export const fetchPennyCronTimes = async (
+  setLoadingCallback: Function,
+  setCronsCallback: Function,
+) => {
+  const basePath = getPennyDataUrl()
+
+  setLoadingCallback(true)
+  const result = await superagent.get(`${basePath}/cron-times`).timeout({
+    deadline: 5000
+  }).retry(5).catch(() => {
+    setLoadingCallback(false)
+    setCronsCallback([])
+  })
+
+  if (result) {
+    setLoadingCallback(false)
+    setCronsCallback(result.body)
+  }
+}

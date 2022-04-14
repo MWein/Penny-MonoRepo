@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob
 const mongoose = require('mongoose')
 
-import { log, clearOldLogs } from '@penny/logger'
+import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
 // import {
 //   sellIronCondors
@@ -14,15 +14,14 @@ import {
 } from './core/closeExpiringPositions'
 
 
-const sellOptions = async () => {
-  try {
-    //await sellIronCondors()
-    await buyIronCondors()
-  } catch (e) {
-    log({
-      type: 'error',
-      message: e.toString()
-    })
+const cronFunc = async (func: Function, cronName: CronType) => {
+  return async () => {
+    try {
+      await func()
+      logCron(cronName, true)
+    } catch (e) {
+      logCron(cronName, false, e.toString())
+    }
   }
 }
 
@@ -43,15 +42,15 @@ const launchCrons = async () => {
   // }, null, true, 'America/New_York')
 
 
-  new CronJob('0 0 10 * * 1-4', sellOptions, null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-4', sellOptions, null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', cronFunc(buyIronCondors, 'OpenICs'), null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-4', cronFunc(buyIronCondors, 'OpenICs'), null, true, 'America/New_York')
 
   // One hour before Tradier does it
-  new CronJob('0 15 14 * * 1-5', closeExpiringPositions, null, true, 'America/New_York')
+  new CronJob('0 15 14 * * 1-5', cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
-  new CronJob('0 10 16 * * *', clearOldLogs, null, true, 'America/New_York')
+  new CronJob('0 10 16 * * *', cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
 
   console.log('Deployment successful')
 }
