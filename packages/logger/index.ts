@@ -8,6 +8,19 @@ export type LogObject = {
   message: string
 }
 
+// Return types for get functions
+type Log = {
+  date: string
+  type: LogType,
+  message: string,
+}
+type CronLog = {
+  date: string,
+  cronName: CronType,
+  success: boolean,
+  errorMessage?: string,
+}
+
 
 // Log data is the object that will go directly to Mongo
 export const _logWithObject = async (logData: LogObject) => {
@@ -61,13 +74,12 @@ export const logCron = async (cronName: CronType, success: boolean, errorMessage
   }
 }
 
-
-export const getLogs = async () : Promise<String[]> => {
+export const getLogs = async () : Promise<Log[]> => {
   const logs = await logModel.find().sort({ date: -1 }).select('-_id -__v')
   return logs
 }
 
-export const getCronLogs = async () : Promise<String[]> => {
+export const getCronLogs = async () : Promise<CronLog[]> => {
   const logs = await cronModel.find().sort({ date: -1 }).select('-_id -__v')
   return logs
 }
