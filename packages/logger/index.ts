@@ -1,9 +1,9 @@
 import { logModel, cronModel } from '@penny/db-models'
 
-type LogType = 'info' | 'ping' | 'error'
-type CronType = 'OpenICs' | 'CloseExp' | 'Housekeeping'
+export type LogType = 'info' | 'ping' | 'error'
+export type CronType = 'OpenICs' | 'CloseExp' | 'Housekeeping'
 
-type LogObject = {
+export type LogObject = {
   type?: LogType,
   message: string
 }
