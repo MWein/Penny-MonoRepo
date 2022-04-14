@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
-import { fetchPennyStatus } from '../network/checkPenny'
+import { fetchPennyStatus, fetchPennyCronTimes } from '../network/checkPenny'
 import fetchShowcaseData from '../network/showcase'
 import { CronTime } from '../components/CronTimesPanel'
 
@@ -76,9 +76,8 @@ const ShowcaseController = () => {
   const [ loading, setLoading ] = useState<boolean>(false)
 
   const [ checkingPenny, setCheckingPenny ] = useState<boolean>(false)
-  const [ pennyHealthy, setPennyHealthy ] = useState<boolean>(false)
-
   const [ checkingCrons, setCheckingCrons ] = useState<boolean>(true)
+  const [ pennyHealthy, setPennyHealthy ] = useState<boolean>(false)
   const [ crons, setCrons ] = useState<CronTime[]>([])
 
   const [ equity, setEquity ] = useState<number>(0)
@@ -121,6 +120,7 @@ const ShowcaseController = () => {
   // Check penny status every minute
   useEffect(() => {
     fetchPennyStatus(setCheckingPenny, setPennyHealthy)
+    fetchPennyCronTimes(setCheckingCrons, setCrons)
     const intervalId = setInterval(() => {
       fetchPennyStatus(setCheckingPenny, setPennyHealthy)
     }, 60000)

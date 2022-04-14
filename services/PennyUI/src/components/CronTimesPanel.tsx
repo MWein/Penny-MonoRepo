@@ -22,12 +22,12 @@ const CronTimesPanel = ({
     const hoursSince = Number(
       (Math.abs(new Date(cron.date).valueOf() - new Date().valueOf()) / 36e5).toFixed(0)
     )
-    const hoursSinceStr = hoursSince > 24 ? '>24 Hrs' : `${hoursSince} Hrs`
+    const hoursSinceStr = hoursSince > 24 ? '>24 Hrs' : `${hoursSince} Hr${hoursSince === 1 ? '' : 's'}`
 
     return (
       <>
         <div style={{ display: 'flex' }}>
-          <Typography style={{ display: 'inline-block', width: '90px' }}>
+          <Typography style={{ display: 'inline-block', width: '95px' }}>
             {cron.cronName}
           </Typography>
 
