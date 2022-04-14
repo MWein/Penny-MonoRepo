@@ -5,7 +5,9 @@ import {
   _logWithObject,
   _logWithMessage,
   log,
+  logCron,
   getLogs,
+  getCronLogs,
   clearOldLogs
 } from './index'
 
@@ -129,6 +131,57 @@ describe('log', () => {
 })
 
 
+describe('logCron', () => {
+  const originalConsoleLog = console.log
+  let saveFunc
+
+  beforeEach(() => {
+    saveFunc = jest.fn()
+    // @ts-ignore
+    cronModel.mockReturnValue({
+      save: saveFunc,
+    })
+    console.log = jest.fn()
+  })
+
+  afterEach(() => {
+    console.log = originalConsoleLog
+  })
+
+  it('Saves the log with an error message', async () => {
+    await logCron('someCron', false, 'Something happened')
+    expect(saveFunc).toHaveBeenCalledTimes(1)
+    expect(cronModel).toHaveBeenCalledWith({
+      cronName: 'someCron',
+      success: false,
+      errorMessage: 'Something happened'
+    })
+  })
+
+  it('Saves the log without an error message', async () => {
+    await logCron('someOtherCron', true)
+    expect(saveFunc).toHaveBeenCalledTimes(1)
+    expect(cronModel).toHaveBeenCalledWith({
+      cronName: 'someOtherCron',
+      success: true,
+    })
+  })
+
+  it('On failure, console logs', async () => {
+    // @ts-ignore
+    cronModel.mockImplementation(() => {
+      throw new Error('Oh no!!!!!!')
+    })
+    await logCron('someOtherCron', true)
+    expect(cronModel).toHaveBeenCalledWith({
+      cronName: 'someOtherCron',
+      success: true,
+    })
+    expect(console.log).toHaveBeenCalledWith('Error reaching database')
+  })
+})
+
+
 describe('getLogs', () => {
   it('Gets the logs', async () => {
     const select = jest.fn()
@@ -145,6 +198,30 @@ describe('getLogs', () => {
     ])
 
     const result = await getLogs()
+    expect(result).toEqual([
+      'some',
+      'logs'
+    ])
+  })
+})
+
+
+describe('getCronLogs', () => {
+  it('Gets the cron logs', async () => {
+    const select = jest.fn()
+    const sort = jest.fn().mockReturnValue({
+      select,
+    })
+    cronModel.find = jest.fn().mockReturnValue({
+      sort,
+    })
+
+    select.mockReturnValue([
+      'some',
+      'logs'
+    ])
+
+    const result = await getCronLogs()
     expect(result).toEqual([
       'some',
       'logs'

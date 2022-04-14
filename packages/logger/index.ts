@@ -45,8 +45,29 @@ export const log = async (logData : string | LogObject) => {
 }
 
 
+export const logCron = async (cronName: string, success: boolean, errorMessage?: string) => {
+  try {
+    if (errorMessage) {
+      const newLog = new cronModel({ cronName, success, errorMessage })
+      await newLog.save()
+      return
+    }
+
+    const newLog = new cronModel({ cronName, success })
+    await newLog.save()
+  } catch (e) {
+    console.log('Error reaching database')
+  }
+}
+
+
 export const getLogs = async () : Promise<String[]> => {
   const logs = await logModel.find().sort({ date: -1 }).select('-_id -__v')
+  return logs
+}
+
+export const getCronLogs = async () : Promise<String[]> => {
+  const logs = await cronModel.find().sort({ date: -1 }).select('-_id -__v')
   return logs
 }
 
