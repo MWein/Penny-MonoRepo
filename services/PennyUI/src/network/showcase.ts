@@ -1,7 +1,6 @@
 import getPennyDataUrl from "./getPennyDataUrl"
 const superagent = require('superagent')
 
-// TODO CHANGE URL
 const fetchShowcaseData = async (
   setLoading: Function,
   setEquity: Function,

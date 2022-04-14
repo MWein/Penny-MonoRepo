@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
-import fetchPennyStatus from '../network/checkPenny'
+import { fetchPennyStatus } from '../network/checkPenny'
 import fetchShowcaseData from '../network/showcase'
 
 

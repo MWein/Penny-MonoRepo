@@ -1,7 +1,7 @@
 import getPennyDataUrl from "./getPennyDataUrl"
 const superagent = require('superagent')
 
-const fetchPennyStatus = async (
+export const fetchPennyStatus = async (
   setLoadingCallback: Function,
   setStatusCallback: Function,
 ) => {
@@ -21,4 +21,8 @@ const fetchPennyStatus = async (
   }
 }
 
-export default fetchPennyStatus
+export const fetchPennyCronTimes = async (
+
+) => {
+
+}

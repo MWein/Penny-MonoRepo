@@ -1,4 +1,5 @@
 import AccountInfoPanel, { AccountInfoPanelProps } from './AccountInfoPanel'
+import CronTimesPanel from './CronTimesPanel'
 import PennyStatus from './PennyStatus'
 import LoadingModal from './LoadingModal'
 import PositionChitsController, { PositionChitsControllerProps } from '../controllers/PositionChitsController'
@@ -33,6 +34,13 @@ const Showcase = ({
           <PennyStatus
             loading={checkingPenny}
             healthy={pennyHealthy}
+          />
+          <div style={{ height: '10px' }} />
+          <CronTimesPanel
+            crons={[
+              { cronName: 'Something', success: false, date: '2022-04-01' },
+              { cronName: 'Something', success: true, date: '2022-04-01' }
+            ]}
           />
           <div style={{ height: '10px' }} />
           <AccountInfoPanel
