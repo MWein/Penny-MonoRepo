@@ -149,20 +149,20 @@ describe('logCron', () => {
   })
 
   it('Saves the log with an error message', async () => {
-    await logCron('someCron', false, 'Something happened')
+    await logCron('CloseExp', false, 'Something happened')
     expect(saveFunc).toHaveBeenCalledTimes(1)
     expect(cronModel).toHaveBeenCalledWith({
-      cronName: 'someCron',
+      cronName: 'CloseExp',
       success: false,
       errorMessage: 'Something happened'
     })
   })
 
   it('Saves the log without an error message', async () => {
-    await logCron('someOtherCron', true)
+    await logCron('CloseExp', true)
     expect(saveFunc).toHaveBeenCalledTimes(1)
     expect(cronModel).toHaveBeenCalledWith({
-      cronName: 'someOtherCron',
+      cronName: 'CloseExp',
       success: true,
     })
   })
@@ -172,9 +172,9 @@ describe('logCron', () => {
     cronModel.mockImplementation(() => {
       throw new Error('Oh no!!!!!!')
     })
-    await logCron('someOtherCron', true)
+    await logCron('CloseExp', true)
     expect(cronModel).toHaveBeenCalledWith({
-      cronName: 'someOtherCron',
+      cronName: 'CloseExp',
       success: true,
     })
     expect(console.log).toHaveBeenCalledWith('Error reaching database')

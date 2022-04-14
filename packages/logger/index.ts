@@ -1,6 +1,7 @@
 import { logModel, cronModel } from '@penny/db-models'
 
 type LogType = 'info' | 'ping' | 'error'
+type CronType = 'OpenICs' | 'CloseExp' | 'Housekeeping'
 
 type LogObject = {
   type?: LogType,
@@ -45,7 +46,7 @@ export const log = async (logData : string | LogObject) => {
 }
 
 
-export const logCron = async (cronName: string, success: boolean, errorMessage?: string) => {
+export const logCron = async (cronName: CronType, success: boolean, errorMessage?: string) => {
   try {
     if (errorMessage) {
       const newLog = new cronModel({ cronName, success, errorMessage })
