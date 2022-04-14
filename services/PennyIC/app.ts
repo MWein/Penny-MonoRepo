@@ -14,10 +14,32 @@ import {
 } from './core/closeExpiringPositions'
 
 
-const sellOptions = async () => {
+const openIronCondorsCron = async () => {
   try {
-    //await sellIronCondors()
     await buyIronCondors()
+  } catch (e) {
+    log({
+      type: 'error',
+      message: e.toString()
+    })
+  }
+}
+
+const closeExpiringPositionsCron = async () => {
+  try {
+
+    await closeExpiringPositions()
+  } catch (e) {
+    log({
+      type: 'error',
+      message: e.toString()
+    })
+  }
+}
+
+const housekeepingCron = async () => {
+  try {
+
   } catch (e) {
     log({
       type: 'error',
@@ -43,15 +65,15 @@ const launchCrons = async () => {
   // }, null, true, 'America/New_York')
 
 
-  new CronJob('0 0 10 * * 1-4', sellOptions, null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-4', sellOptions, null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', openIronCondorsCron, null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-4', openIronCondorsCron, null, true, 'America/New_York')
 
   // One hour before Tradier does it
-  new CronJob('0 15 14 * * 1-5', closeExpiringPositions, null, true, 'America/New_York')
+  new CronJob('0 15 14 * * 1-5', closeExpiringPositionsCron, null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
-  new CronJob('0 10 16 * * *', clearOldLogs, null, true, 'America/New_York')
+  new CronJob('0 10 16 * * *', housekeepingCron, null, true, 'America/New_York')
 
   console.log('Deployment successful')
 }
