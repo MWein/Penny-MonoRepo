@@ -1,5 +1,6 @@
 const CronJob = require('cron').CronJob
 const mongoose = require('mongoose')
+const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
@@ -27,8 +28,6 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 
 
 const launchCrons = async () => {
-  console.log('TESTING TESTING')
-
   log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
@@ -54,7 +53,9 @@ const launchCrons = async () => {
   // 10 mins after market close
   new CronJob('0 10 16 * * *', cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
 
+  // For deploy script checking
   console.log('Deployment successful')
+  console.log(packageJson.version)
 }
 
 
