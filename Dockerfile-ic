@@ -7,13 +7,13 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Install top level deps
-RUN yarn install
+RUN yarn install --production
 
 # Go to PennyIC directory
 WORKDIR /usr/src/app/services/PennyIC
 
 # Run install to grab monorepo dependencies
-RUN yarn install
+RUN yarn install --production
 
 # Run the transpiled version
 CMD [ "node", "dev.js" ]
