@@ -23,7 +23,11 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 
 
 const openICs = async () => {
-  await buyIronCondors()
+  // Only buy on mon,tues,wed
+  if ([ 1, 2, 3 ].includes(new Date().getDay())) {
+    await buyIronCondors()
+  }
+
   await sellIronCondors()
 }
 
