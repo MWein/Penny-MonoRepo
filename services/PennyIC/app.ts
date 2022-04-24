@@ -4,11 +4,8 @@ const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
-// import {
-//   sellIronCondors
-// } from './core/sellIronCondor'
-
 import { buyIronCondors } from './core/buyIronCondor'
+import { sellIronCondors } from './core/sellIronCondor'
 
 import {
   closeExpiringPositions
@@ -22,6 +19,12 @@ const cronFunc = async (func: Function, cronName: CronType) => {
     } catch (e) {
       logCron(cronName, false, e.toString())
     }
+}
+
+
+const openICs = async () => {
+  await buyIronCondors()
+  await sellIronCondors()
 }
 
 
@@ -41,8 +44,7 @@ const launchCrons = async () => {
   // }, null, true, 'America/New_York')
 
 
-  new CronJob('0 0 10 * * 1-4', () => cronFunc(buyIronCondors, 'OpenICs'), null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-4', () => cronFunc(buyIronCondors, 'OpenICs'), null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', () => cronFunc(openICs, 'OpenICs'), null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
