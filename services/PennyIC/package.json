@@ -4,7 +4,8 @@
   "description": "The part of Penny that will run iron condors",
   "scripts": {
     "dev": "ts-node dev.ts",
-    "build": "tsc app.ts"
+    "build": "tsc app.ts",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@penny/option-symbol-parser": "1.0.0",
