@@ -1,15 +1,33 @@
 import { settingsModel } from '@penny/db-models'
 
 type Settings = {
-  ironCondorsEnabled?: boolean,
-  ironCondorSymbols?: string[],
-  maximumPricePerSpread?: number,
+  longICEnabled?: boolean,
+  longICSymbols?: string[],
+  longTargetDelta?: number,
+  longTargetStrikeWidth?: number,
+
+  shortICEnabled?: boolean,
+  shortICSymbols?: string[],
+  shortProfitTarget?: number,
+  shortTargetDelta?: number,
+  shortMinDTE?: number,
+  shortPositionsPerDay?: number,
+  shortTargetStrikeWidth?: number,
 }
 
 export const defaultSettings: Settings = {
-  ironCondorsEnabled: true,
-  ironCondorSymbols: [],
-  maximumPricePerSpread: 0.20
+  longICEnabled: true,
+  longICSymbols: [],
+  longTargetDelta: 15,
+  longTargetStrikeWidth: 1,
+
+  shortICEnabled: false,
+  shortICSymbols: [],
+  shortProfitTarget: 50,
+  shortTargetDelta: 15,
+  shortMinDTE: 30,
+  shortPositionsPerDay: 2,
+  shortTargetStrikeWidth: 1,
 }
 
 export const getSettings = async () : Promise<Settings> => {

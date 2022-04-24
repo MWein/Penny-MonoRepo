@@ -2,10 +2,33 @@ import * as tradier from '@penny/tradier'
 import { getUnderlying, isOption } from '@penny/option-symbol-parser'
 import { uniq } from 'lodash'
 import { MultilegOptionLeg } from '@penny/tradier'
+import * as sleepUtil from '@penny/sleep'
 
 
 const closePositions = async positions => {
+  if (positions.length === 0) {
+    return
+  }
+
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
+
+
+  // Close any open orders
+  const orders = await tradier.getOrders()
+  const openOrders = orders.filter(ord => ord.status === 'open' && ord.class === 'multileg')
+  const expiringSymbols = optionPositions.map(pos => pos.symbol)
+  const ordersWithExpiringPositions = openOrders.filter(ord => {
+    const symbolKeys = Object.keys(ord).filter(key => key.includes('option_symbol['))
+    const symbols = symbolKeys.map(key => ord[key])
+    return symbols.some(symbol => expiringSymbols.includes(symbol))
+  }).map(ord => ord.id)
+
+  if (ordersWithExpiringPositions.length > 0) {
+    await tradier.cancelOrders(ordersWithExpiringPositions)
+    sleepUtil.sleep(10)
+  }
+
+
   const underlyingSymbols = uniq(optionPositions.map(pos => getUnderlying(pos.symbol)))
 
   for (let x = 0; x < underlyingSymbols.length; x++) {

@@ -32,8 +32,9 @@ const testForFailure = async (func: Function, funcArgs: Array<any>, failureMessa
   })
   const result = await func(...funcArgs)
   expect(result).toEqual({ status: 'not ok' })
-  expect(logUtil.log).toHaveBeenCalledTimes(1)
+  expect(logUtil.log).toHaveBeenCalledTimes(2)
   expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: failureMessage })
+  expect(logUtil.log).toHaveBeenCalledWith({ type: 'error', message: 'Ope' })
 }
 
 const testForHappyPathReturn = async (func: Function, funcArgs: Array<any>, successMessage: string) => {

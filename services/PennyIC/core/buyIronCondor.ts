@@ -1,8 +1,7 @@
 import * as tradier from '@penny/tradier'
 import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
-import { uniq } from 'lodash'
-
+import { getSpreadOutcomes } from '@penny/spread-outcome'
 
 
 // Modified function that goes for a premium spread rather than a delta target
@@ -69,7 +68,7 @@ export const buySpreadByPremium = async (chain: OptionChainLink[], symbol: strin
 
 
 
-export const buyIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true, minDTE = 30) => {
+export const buyIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true) => {
   try {
     if (!put && !call) {
       return
@@ -79,14 +78,6 @@ export const buyIronCondor = async (symbol: string, shortDelta: number, targetSt
     if (!expirations || expirations.length === 0) {
       return
     }
-
-
-    // At least 30 days out
-    // TODO Make this a setting
-    // const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
-    // const today = new Date().getTime()
-    // console.log(expirations)
-    // const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
 
     const expiration = expirations[0]
 
@@ -110,9 +101,15 @@ export const buyIronCondor = async (symbol: string, shortDelta: number, targetSt
 
 
 export const buyIronCondors = async () => {
-  // TODO Is iron condor enabled?
+  // TODO Make these settings
+  const buyICEnabled = true
+  const targetDelta = 15
+  const targetStrikeWidth = 1
 
-  // Is market open?
+  if (!buyICEnabled) {
+    return
+  }
+
   const isOpen = await tradier.isMarketOpen()
   if (!isOpen) {
     return
@@ -142,25 +139,21 @@ export const buyIronCondors = async () => {
 
   const positions = await tradier.getPositions()
   const openOptions = positions.filter(x => isOption(x.symbol))
-  const openOptionSymbols = openOptions.map(x => x.symbol)
 
-  const orders = await tradier.getOrders()
-  const multilegOrders = orders.filter(x => x.class === 'multileg' && (x.status === 'open' || x.status === 'pending'))
-  const legs = multilegOrders.reduce((acc, x) => [ ...acc, ...x.leg ], [])
-  const openOrderSymbols = legs.map(x => x.option_symbol)
+  const openSpreads = getSpreadOutcomes(openOptions)
+  const longSpreads = openSpreads.filter(spread => spread.side === 'long')
+  const openOptionSymbols = longSpreads.reduce((acc, spread) => [ ...acc, ...spread.positions.map(pos => pos.symbol) ], [])
 
-  const openSymbols = uniq([ ...openOptionSymbols, ...openOrderSymbols ])
-
-  // Map out what symbols have open positions or orders for calls/puts
+  // Map out what symbols have open positions
   const openPositionTypes = symbols.map(symbol => ({
     symbol,
-    hasCall: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
-    hasPut: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
+    hasCall: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
+    hasPut: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
   }))
 
 
   for (let x = 0; x < openPositionTypes.length; x++) {
     const position = openPositionTypes[x]
-    await buyIronCondor(position.symbol, 15, 1, !position.hasPut, !position.hasCall)
+    await buyIronCondor(position.symbol, targetDelta, targetStrikeWidth, !position.hasPut, !position.hasCall)
   }
 }
