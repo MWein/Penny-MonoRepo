@@ -67,9 +67,20 @@ const showcaseController = async (req, res) => {
     message: `Week Earnings: $${weekEarnings} of $${(realizedWeekTotalRisked + unrealizedWeekTotalRisked)}`
   })
 
+
+  // Long and Short Values
+
+  const currentValueLong = 110
+  const currentValueShort = 120
+
+  // Long and Short Values
+
+
   res.json({
     equity,
     weekEarnings,
+    currentValueLong,
+    currentValueShort,
     weekPercReturn: isNaN(weekPercReturn) ? 0 : weekPercReturn,
     monthEarnings,
     monthPercReturn: isNaN(monthPercReturn) ? 0 : monthPercReturn,

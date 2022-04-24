@@ -87,6 +87,9 @@ const ShowcaseController = () => {
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
   const [ weekPercReturn, setWeekPercReturn ] = useState<number>(0)
 
+  const [ currentValueLong, setCurrentValueLong ] = useState<number>(0)
+  const [ currentValueShort, setCurrentValueShort ] = useState<number>(0)
+
   const [ monthEarnings, setMonthEarnings ] = useState<number>(0)
   const [ monthPercReturn, setMonthPercReturn ] = useState<number>(0)
 
@@ -98,6 +101,7 @@ const ShowcaseController = () => {
   const [ positions, setPositions ] = useState<PositionChitProps[]>([])
 
   // Refresh every 15 minutes
+  // TODO Replace with useReducer
   useEffect(() => {
     const fetchShorthand = () => fetchShowcaseData(
       setLoading,
@@ -111,6 +115,8 @@ const ShowcaseController = () => {
       setTheft,
       setLastYearTheft,
       setPositions,
+      setCurrentValueLong,
+      setCurrentValueShort,
     )
     fetchShorthand()
     const intervalId = setInterval(() => {
@@ -141,6 +147,8 @@ const ShowcaseController = () => {
       crons={crons}
       equity={equity}
       weekEarnings={weekEarnings}
+      currentValueLong={currentValueLong}
+      currentValueShort={currentValueShort}
       weekPercReturn={weekPercReturn}
       monthEarnings={monthEarnings}
       monthPercReturn={monthPercReturn}
