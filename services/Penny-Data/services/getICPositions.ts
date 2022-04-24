@@ -41,7 +41,6 @@ const getICPositions = async (): Promise<ICPosition[]> => {
         const currentBuyBackPrice = Number((price * 100 * quantity).toFixed(0))
         const gainLoss = salePrice - currentBuyBackPrice
         return acc + gainLoss
-        //return acc
       }
 
       // Long position
@@ -50,7 +49,6 @@ const getICPositions = async (): Promise<ICPosition[]> => {
         const currentSalePrice = Number((price * 100 * quantity).toFixed(0))
         const gainLoss = currentSalePrice - buyPrice
         return acc + gainLoss
-        //return acc
       }
     }, 0)
 
