@@ -1,8 +1,7 @@
 import * as tradier from '@penny/tradier'
 import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
-import { uniq } from 'lodash'
-
+import { getSpreadOutcomes } from '@penny/spread-outcome'
 
 
 // Modified function that goes for a premium spread rather than a delta target
@@ -143,12 +142,9 @@ export const buyIronCondors = async () => {
   const positions = await tradier.getPositions()
   const openOptions = positions.filter(x => isOption(x.symbol))
 
-  // TODO GET LONG SPREADS ONLY
-
-  const openOptionSymbols = openOptions.map(x => x.symbol)
-
-  // TODO GET LONG SPREADS ONLY
-
+  const openSpreads = getSpreadOutcomes(openOptions)
+  const longSpreads = openSpreads.filter(spread => spread.side === 'long')
+  const openOptionSymbols = longSpreads.reduce((acc, spread) => [ ...acc, ...spread.positions.map(pos => pos.symbol) ], [])
 
   // Map out what symbols have open positions
   const openPositionTypes = symbols.map(symbol => ({
