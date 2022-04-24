@@ -22,6 +22,8 @@ const getICPositions = async (): Promise<ICPosition[]> => {
   const tickers = uniq(optionPositions.map(x => getUnderlying(x.symbol)))
   const prices = await tradier.getPrices(optionTickers)
 
+
+  // TODO REWRITE!!
   return tickers.map(ticker => {
     const positions = optionPositions.filter(pos => getUnderlying(pos.symbol) === ticker)
 
