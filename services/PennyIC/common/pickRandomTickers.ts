@@ -19,6 +19,7 @@ const pickRandomTickersHelper = async (
   const newCandidates = candidates.filter(x => x !== candidate)
 
   if (evaluation.valid) {
+    console.log('SELECTION', candidate)
     const newSelectedTickers = [ ...selectedTickers, candidate ]
     if (newSelectedTickers.length === sellPerDay) {
       return newSelectedTickers
@@ -26,6 +27,7 @@ const pickRandomTickersHelper = async (
     return pickRandomTickersHelper(newCandidates, sellPerDay, maxStrikeWidth, expiration, newSelectedTickers)
   }
 
+  console.log('FAILURE', candidate)
   return pickRandomTickersHelper(newCandidates, sellPerDay, maxStrikeWidth, expiration, selectedTickers)  
 }
 

@@ -36,8 +36,15 @@ const closeICs = async () => {
   await cronFunc(closeOldShortPositions, 'CloseShort')
 }
 
+const { pickRandomTickers } = require('./common/pickRandomTickers')
+const symbols = require('./core/weeklyTickers.json')
 
 const launchCrons = async () => {
+
+  const tickersToSell = await pickRandomTickers(symbols, 200, 1, '2022-06-03')
+  console.log(tickersToSell)
+
+  return
   log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
