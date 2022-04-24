@@ -47,7 +47,7 @@ const launchCrons = async () => {
   // }, null, true, 'America/New_York')
 
 
-  new CronJob('0 0 10 * * 1-4', () => cronFunc(openICs, 'OpenICs'), null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', () => openICs, null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
