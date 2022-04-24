@@ -1,7 +1,7 @@
 import * as tradier from '@penny/tradier'
 import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
-import { uniq } from 'lodash'
+import { getSpreadOutcomes } from '@penny/spread-outcome'
 
 
 type ChainLinkWithDeltaDist = OptionChainLink & {
@@ -214,20 +214,16 @@ export const sellIronCondors = async () => {
 
   const positions = await tradier.getPositions()
   const openOptions = positions.filter(x => isOption(x.symbol))
-  const openOptionSymbols = openOptions.map(x => x.symbol)
 
-  const orders = await tradier.getOrders()
-  const multilegOrders = orders.filter(x => x.class === 'multileg' && (x.status === 'open' || x.status === 'pending'))
-  const legs = multilegOrders.reduce((acc, x) => [ ...acc, ...x.leg ], [])
-  const openOrderSymbols = legs.map(x => x.option_symbol)
+  const openSpreads = getSpreadOutcomes(openOptions)
+  const longSpreads = openSpreads.filter(spread => spread.side === 'short')
+  const openOptionSymbols = longSpreads.reduce((acc, spread) => [ ...acc, ...spread.positions.map(pos => pos.symbol) ], [])
 
-  const openSymbols = uniq([ ...openOptionSymbols, ...openOrderSymbols ])
-
-  // Map out what symbols have open positions or orders for calls/puts
+  // Map out what symbols have open positions
   const openPositionTypes = symbols.map(symbol => ({
     symbol,
-    hasCall: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
-    hasPut: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
+    hasCall: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
+    hasPut: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
   }))
 
 
