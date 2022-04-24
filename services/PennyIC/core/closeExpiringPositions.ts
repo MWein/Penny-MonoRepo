@@ -10,5 +10,9 @@ export const closeExpiringPositions = async () => {
   const today = new Date().toISOString().split('T')[0]
   const expiringToday = optionPositions.filter(pos => getExpiration(pos.symbol) === today)
 
+  if (expiringToday.length === 0) {
+    return
+  }
+
   await closePositions(expiringToday)
 }
