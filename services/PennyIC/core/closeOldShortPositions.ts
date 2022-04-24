@@ -17,7 +17,7 @@ export const closeOldShortPositions = async () => {
   const oldShortPositions = shortPositions.filter(pos => {
     const expiration = getExpiration(pos.symbol)
     const timeUntil = new Date(expiration).valueOf() - today.valueOf()
-    return timeUntil <= 8.64e+7 * 8 // 8 days
+    return timeUntil <= 8.64e+7 * 9 // 9 days
   })
 
   if (oldShortPositions.length === 0) {

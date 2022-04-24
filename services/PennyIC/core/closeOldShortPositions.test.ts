@@ -40,8 +40,8 @@ describe('closeOldShortPositions', () => {
     jest.useFakeTimers().setSystemTime(new Date('2022-10-12').getTime())
     // @ts-ignore
     tradier.getPositions.mockReturnValue([
-      generatePositionObject('AAPL', 1, 'call', 8, '2021-01-01', 1234, '2022-10-21', 175),
-      generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-21', 172.5),
+      generatePositionObject('AAPL', 1, 'call', 8, '2021-01-01', 1234, '2022-10-22', 175),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-22', 172.5),
     ])
     await closeOldShortPositions()
     expect(closePositionsUtil.closePositions).not.toHaveBeenCalled()
