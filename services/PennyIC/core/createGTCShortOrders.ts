@@ -10,17 +10,28 @@ export const createGTCShortOrders = async () => {
 
 
   const positions = await tradier.getPositions()
+  if (positions.length === 0) {
+    return
+  }
+
   const openOptions = positions.filter(x => isOption(x.symbol))
 
   const today = new Date().toISOString().split('T')[0]
   const optionsToCheck = openOptions.filter(opt => opt.date_acquired !== today)
+  const shortSpreads = getSpreadOutcomes(optionsToCheck).filter(outcome => outcome.side === 'short')
+
+  if (shortSpreads.length === 0) {
+    return
+  }
 
   const orders = await tradier.getOrders()
   const openOrders = orders.filter(ord => ord.status === 'open' && ord.class === 'multileg')
-  const orderLegs = openOrders.reduce((acc, ord) => ord.leg ? [ ...acc, ...ord.leg ] : acc, [])
-  const orderSymbols = orderLegs.map(leg => leg.option_symbol)
 
-  const shortSpreads = getSpreadOutcomes(optionsToCheck).filter(outcome => outcome.side === 'short')
+  const orderSymbols = openOrders.reduce((acc, ord) => {
+    const symbolKeys = Object.keys(ord).filter(key => key.includes('option_symbol['))
+    const symbols = symbolKeys.map(key => ord[key])
+    return [ ...acc, ...symbols ]
+  }, [])
 
   const spreadsWithoutOrders = shortSpreads.filter(spread =>
     !spread.positions.some(pos => orderSymbols.includes(pos.symbol))
