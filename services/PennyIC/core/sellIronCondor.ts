@@ -185,7 +185,6 @@ export const sellIronCondors = async () => {
     return
   }
 
-  // Is market open?
   const isOpen = await tradier.isMarketOpen()
   if (!isOpen) {
     return

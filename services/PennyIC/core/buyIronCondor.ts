@@ -68,7 +68,7 @@ export const buySpreadByPremium = async (chain: OptionChainLink[], symbol: strin
 
 
 
-export const buyIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true, minDTE = 30) => {
+export const buyIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true) => {
   try {
     if (!put && !call) {
       return
@@ -78,14 +78,6 @@ export const buyIronCondor = async (symbol: string, shortDelta: number, targetSt
     if (!expirations || expirations.length === 0) {
       return
     }
-
-
-    // At least 30 days out
-    // TODO Make this a setting
-    // const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
-    // const today = new Date().getTime()
-    // console.log(expirations)
-    // const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
 
     const expiration = expirations[0]
 
@@ -109,9 +101,15 @@ export const buyIronCondor = async (symbol: string, shortDelta: number, targetSt
 
 
 export const buyIronCondors = async () => {
-  // TODO Is iron condor enabled?
+  // TODO Make these settings
+  const buyICEnabled = true
+  const targetDelta = 15
+  const targetStrikeWidth = 1
 
-  // Is market open?
+  if (!buyICEnabled) {
+    return
+  }
+
   const isOpen = await tradier.isMarketOpen()
   if (!isOpen) {
     return
@@ -156,6 +154,6 @@ export const buyIronCondors = async () => {
 
   for (let x = 0; x < openPositionTypes.length; x++) {
     const position = openPositionTypes[x]
-    await buyIronCondor(position.symbol, 15, 1, !position.hasPut, !position.hasCall)
+    await buyIronCondor(position.symbol, targetDelta, targetStrikeWidth, !position.hasPut, !position.hasCall)
   }
 }
