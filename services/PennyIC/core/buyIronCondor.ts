@@ -142,20 +142,19 @@ export const buyIronCondors = async () => {
 
   const positions = await tradier.getPositions()
   const openOptions = positions.filter(x => isOption(x.symbol))
+
+  // TODO GET LONG SPREADS ONLY
+
   const openOptionSymbols = openOptions.map(x => x.symbol)
 
-  const orders = await tradier.getOrders()
-  const multilegOrders = orders.filter(x => x.class === 'multileg' && (x.status === 'open' || x.status === 'pending'))
-  const legs = multilegOrders.reduce((acc, x) => [ ...acc, ...x.leg ], [])
-  const openOrderSymbols = legs.map(x => x.option_symbol)
+  // TODO GET LONG SPREADS ONLY
 
-  const openSymbols = uniq([ ...openOptionSymbols, ...openOrderSymbols ])
 
-  // Map out what symbols have open positions or orders for calls/puts
+  // Map out what symbols have open positions
   const openPositionTypes = symbols.map(symbol => ({
     symbol,
-    hasCall: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
-    hasPut: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
+    hasCall: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
+    hasPut: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
   }))
 
 
