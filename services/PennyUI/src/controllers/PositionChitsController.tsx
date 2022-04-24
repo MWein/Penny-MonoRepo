@@ -28,13 +28,20 @@ const PositionChitsController = ({
     )
   }
 
+  // Sorts alphabetically, then separates by long and short positions
+  const alphabeticallySorted = positions.sort((a, b) => a.ticker.localeCompare(b.ticker))
+  const shortPositions = alphabeticallySorted.filter(pos => pos.side === 'short')
+  const longPositions = alphabeticallySorted.filter(pos => pos.side === 'long')
+  const sortedPositions = [ ...longPositions, ...shortPositions ]
+
   return (
     <div style={{ display: 'inline-block', marginTop: '7px' }}>
       {
-        positions.map(pos =>
+        sortedPositions.map(pos =>
           <PositionChit
             key={pos.ticker}
             ticker={pos.ticker}
+            side={pos.side}
             gainLoss={pos.gainLoss}
             maxLoss={pos.maxLoss}
             maxGain={pos.maxGain}
