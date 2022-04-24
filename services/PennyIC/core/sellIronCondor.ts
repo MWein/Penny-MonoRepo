@@ -174,7 +174,16 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
 
 
 export const sellIronCondors = async () => {
-  // TODO Is iron condor enabled?
+  // TODO Make these settings
+  const sellICEnabled = true
+  const targetDelta = 15
+  const minDTE = 30
+  const sellPerDay = 10
+  const targetStrikeWidth = 1
+
+  if (!sellICEnabled) {
+    return
+  }
 
   // Is market open?
   const isOpen = await tradier.isMarketOpen()
@@ -222,17 +231,15 @@ export const sellIronCondors = async () => {
   if (!expirations || expirations.length === 0) {
     return
   }
-  // At least 30 days out
-  // TODO Make this a setting
-  const minDiff = (8.64e+7 * 30) // 8.64e+7 is how many milliseconds there are in a day
+  const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
   const today = new Date().getTime()
   const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
   // TODO Should be in its own function since this is repeated
 
-  const tickersToSell = await pickRandomTickers(tickersToChooseFrom, 10, 1, expiration)
+  const tickersToSell = await pickRandomTickers(tickersToChooseFrom, sellPerDay, targetStrikeWidth, expiration)
 
   for (let x = 0; x < tickersToSell.length; x++) {
     const position = tickersToSell[x]
-    await sellIronCondor(position, 15, 1, 30)
+    await sellIronCondor(position, targetDelta, targetStrikeWidth, minDTE)
   }
 }
