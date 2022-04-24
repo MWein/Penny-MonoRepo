@@ -1,4 +1,4 @@
-import { getSpreadOutcome } from './index'
+import { getSpreadOutcome, getSpreadOutcomes } from './index'
 import { generatePositionObject } from '@penny/test-helpers'
 
 describe('getSpreadOutcome', () => {
@@ -9,6 +9,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: 0,
       maxGain: 0,
       fullyCovered: true,
+      positions: [],
     })
   })
 
@@ -67,6 +68,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -32,
       maxGain: 218,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -82,6 +84,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -45,
       maxGain: 205,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -97,6 +100,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -238,
       maxGain: 12,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -112,6 +116,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -205,
       maxGain: 45,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -132,6 +137,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -77,
       maxGain: 173,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -149,6 +155,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -193,
       maxGain: 57,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -166,6 +173,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -101,
       maxGain: 399,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -184,6 +192,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -399,
       maxGain: 101,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -206,6 +215,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -361,
       maxGain: 389,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -224,6 +234,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -389,
       maxGain: 361,
       fullyCovered: true,
+      positions,
     })
   })
 
@@ -242,6 +253,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -439,
       maxGain: Infinity,
       fullyCovered: false,
+      positions,
     })
   })
 
@@ -257,6 +269,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -Infinity,
       maxGain: 439,
       fullyCovered: false,
+      positions,
     })
   })
 
@@ -272,6 +285,7 @@ describe('getSpreadOutcome', () => {
       maxLoss: -309,
       maxGain: Infinity,
       fullyCovered: false,
+      positions,
     })
   })
 
@@ -287,6 +301,92 @@ describe('getSpreadOutcome', () => {
       maxLoss: -Infinity,
       maxGain: 309,
       fullyCovered: false,
+      positions,
     })
   })
+})
+
+
+
+describe('getSpreadOutcomes', () => {
+  it('Returns empty array if given empty array', () => {
+    const result = getSpreadOutcomes([])
+    expect(result).toEqual([])
+  })
+
+  it('Returns spread outcome with a single ticker/position with position objects', () => {
+    const positions = [
+      generatePositionObject('AAPL', 1, 'call', 52, '2021-01-01', 1234, '2021-01-01', 170),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2021-01-01', 172.5),
+    ]
+    const result = getSpreadOutcomes(positions)
+    expect(result).toEqual([
+      {
+        ticker: 'AAPL',
+        side: 'long',
+        maxLoss: -32,
+        maxGain: 218,
+        fullyCovered: true,
+        positions: positions
+      }
+    ])
+  })
+
+  it('Returns multiple spread outcome on the same tickers, different expiration dates', () => {
+    const positions1 = [
+      generatePositionObject('AAPL', 1, 'call', 52, '2021-01-01', 1234, '2021-01-01', 170),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2021-01-01', 172.5),
+    ]
+    const positions2 = [
+      generatePositionObject('AAPL', 1, 'call', 8, '2021-01-01', 1234, '2021-01-02', 175),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2021-01-02', 172.5),
+    ]
+    const positions3 = [
+      generatePositionObject('TSLA', 1, 'call', 52, '2021-01-01', 1234, '2021-01-01', 170),
+      generatePositionObject('TSLA', -1, 'call', -20, '2021-01-01', 1234, '2021-01-01', 172.5),
+    ]
+    const positions4 = [
+      generatePositionObject('TSLA', 1, 'call', 8, '2021-01-01', 1234, '2021-01-02', 175),
+      generatePositionObject('TSLA', -1, 'call', -20, '2021-01-01', 1234, '2021-01-02', 172.5),
+    ]
+
+    const positions = [ ...positions1, ...positions2, ...positions3, ...positions4 ]
+
+    const result = getSpreadOutcomes(positions)
+    expect(result).toEqual([
+      {
+        ticker: 'AAPL',
+        side: 'long',
+        maxLoss: -32,
+        maxGain: 218,
+        fullyCovered: true,
+        positions: positions1
+      },
+      {
+        ticker: 'AAPL',
+        side: 'short',
+        maxLoss: -238,
+        maxGain: 12,
+        fullyCovered: true,
+        positions: positions2
+      },
+      {
+        ticker: 'TSLA',
+        side: 'long',
+        maxLoss: -32,
+        maxGain: 218,
+        fullyCovered: true,
+        positions: positions3
+      },
+      {
+        ticker: 'TSLA',
+        side: 'short',
+        maxLoss: -238,
+        maxGain: 12,
+        fullyCovered: true,
+        positions: positions4
+      },
+    ])
+  })
+
 })

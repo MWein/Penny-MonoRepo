@@ -1,5 +1,5 @@
 import { Position } from "@penny/tradier"
-import { getUnderlying, getType, getStrike, isOption } from "@penny/option-symbol-parser" 
+import { getUnderlying, getType, getStrike, isOption, getExpiration } from "@penny/option-symbol-parser" 
 import { uniq } from 'lodash'
 
 type SpreadSide = 'long' | 'short' | 'indeterminate'
@@ -10,7 +10,9 @@ export type SpreadOutcome = {
   maxLoss: number,
   maxGain: number,
   fullyCovered: boolean,
+  positions: Position[]
 }
+
 
 type PositionResult = {
   invoked: boolean,
@@ -32,16 +34,6 @@ const determinePositionResultForStrike = (position: Position, strike: number): P
   const posType = getType(position.symbol)
   const posStrike = getStrike(position.symbol)
 
-  // const invoked = posType === 'call' ? strike >= posStrike : strike <= posStrike
-  // const value = (posType === 'call' ? posStrike * -100 : posStrike * 100) * position.quantity
-  // const returnValue = invoked ? value : 0
-
-  // return {
-  //   invoked,
-  //   value: returnValue,
-  // }
-
-  // TODO Refactor
   if (posType === 'call') {
     if (strike >= posStrike) {
       const purchaseValue = posStrike * -100
@@ -125,5 +117,23 @@ export const getSpreadOutcome = (underlying: string, positions: Position[]): Spr
     maxLoss,
     maxGain,
     fullyCovered,
+    positions,
   }
 }
+
+
+
+export const getSpreadOutcomes = (positions: Position[]): SpreadOutcome[] =>
+  uniq(positions.map(pos => getUnderlying(pos.symbol))).reduce((acc, underlying) => {
+    const positionsWithUnderlying = positions.filter(pos => getUnderlying(pos.symbol) === underlying)
+    const expirations = uniq(positionsWithUnderlying.map(pos => getExpiration(pos.symbol)))
+
+    const spreadResults = expirations.map(exp =>
+      getSpreadOutcome(underlying, positionsWithUnderlying.filter(pos => getExpiration(pos.symbol) === exp))
+    )
+
+    return [
+      ...acc,
+      ...spreadResults,
+    ]
+  }, [])
