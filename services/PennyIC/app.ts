@@ -8,9 +8,8 @@ import { buyIronCondors } from './core/buyIronCondor'
 import { sellIronCondors } from './core/sellIronCondor'
 import { createGTCShortOrders } from './core/createGTCShortOrders'
 
-import {
-  closeExpiringPositions
-} from './core/closeExpiringPositions'
+import { closeExpiringPositions } from './core/closeExpiringPositions'
+import { closeOldShortPositions } from './core/closeOldShortPositions'
 
 
 const cronFunc = async (func: Function, cronName: CronType) => {
@@ -30,6 +29,11 @@ const openICs = async () => {
   }
   await cronFunc(sellIronCondors, 'ShortIC')
   await cronFunc(createGTCShortOrders, 'ShortGTC')
+}
+
+const closeICs = async () => {
+  await cronFunc(closeExpiringPositions, 'CloseExp')
+  await cronFunc(closeOldShortPositions, 'CloseShort')
 }
 
 
@@ -52,7 +56,7 @@ const launchCrons = async () => {
   new CronJob('0 0 10 * * 1-4', () => openICs, null, true, 'America/New_York')
 
   // One hour before Tradier does it
-  new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
+  new CronJob('0 15 14 * * 1-5', () => closeICs, null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
