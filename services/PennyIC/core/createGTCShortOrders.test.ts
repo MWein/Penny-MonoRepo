@@ -1,6 +1,6 @@
 import * as tradier from '@penny/tradier'
 import { createGTCShortOrders } from './createGTCShortOrders'
-import { generateOrderObject, generatePositionObject } from '@penny/test-helpers'
+import { generatePositionObject } from '@penny/test-helpers'
 jest.mock('@penny/tradier')
 
 

@@ -5,6 +5,10 @@ import { MultilegOptionLeg } from '@penny/tradier'
 
 
 const closePositions = async positions => {
+  if (positions.length === 0) {
+    return
+  }
+
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
 
 
