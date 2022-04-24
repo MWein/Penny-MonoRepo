@@ -69,10 +69,14 @@ const showcaseController = async (req, res) => {
 
 
   // Long and Short Values
-
-  const currentValueLong = 110
-  const currentValueShort = 120
-
+  const currentValueLong = positions.filter(pos => pos.side === 'long').reduce((acc, pos) => {
+    const gl = pos.gainLoss
+    return gl > pos.maxGain || gl < pos.maxLoss ? acc : acc + gl
+  }, 0)
+  const currentValueShort = positions.filter(pos => pos.side === 'short').reduce((acc, pos) => {
+    const gl = pos.gainLoss
+    return gl > pos.maxGain || gl < pos.maxLoss ? acc : acc + gl
+  }, 0)
   // Long and Short Values
 
 
