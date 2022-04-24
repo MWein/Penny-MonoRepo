@@ -6,6 +6,7 @@ import './PositionChit.css'
 
 export type PositionChitProps = {
   ticker: string,
+  side: 'long' | 'short',
   gainLoss: number,
   maxLoss: number,
   maxGain: number,
@@ -15,6 +16,7 @@ export type PositionChitProps = {
 
 const PositionChit = ({
   ticker,
+  side,
   gainLoss,
   maxLoss,
   maxGain,
@@ -28,7 +30,7 @@ const PositionChit = ({
   )
 
   return (
-    <Paper className='position-chit'>
+    <Paper className='position-chit' style={{ background: side === 'long' ? 'white' : '#ffe6e5' }}>
       <Typography variant='h6' className='vertical-center'>
         {ticker}
       </Typography>

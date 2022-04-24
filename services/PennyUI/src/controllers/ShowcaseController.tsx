@@ -9,6 +9,7 @@ import { CronTime } from '../components/CronTimesPanel'
 
 // const generateMockPosition = (
 //   ticker: string,
+//   side: 'long' | 'short',
 //   gainLoss: number,
 //   maxLoss: number,
 //   maxGain: number,
@@ -16,6 +17,7 @@ import { CronTime } from '../components/CronTimesPanel'
 //   hasCall: boolean,
 // ) => ({
 //   ticker,
+//   side,
 //   gainLoss,
 //   maxLoss,
 //   maxGain,
@@ -24,6 +26,7 @@ import { CronTime } from '../components/CronTimesPanel'
 // })
 
 // const randomMockPosition = (ticker: string) => {
+//   const side = Math.random().toFixed(0) === '1' ? 'short' : 'long'
 //   const hasPut = Math.random().toFixed(0) === '1'
 //   const hasCall = hasPut ? Math.random().toFixed(0) === '1' : true
 
@@ -38,7 +41,7 @@ import { CronTime } from '../components/CronTimesPanel'
 //   const maxGain = 100 + maxLoss
 //   const gainLoss = Number((maxLoss + (Math.random() * 100)).toFixed(0))
 
-//   return generateMockPosition(ticker, gainLoss, maxLoss, maxGain, hasPut, hasCall)
+//   return generateMockPosition(ticker, side, gainLoss, maxLoss, maxGain, hasPut, hasCall)
 // }
 
 // const symbols = [
@@ -60,8 +63,8 @@ import { CronTime } from '../components/CronTimesPanel'
 
 // const mockPositions = symbols.map(symbol => randomMockPosition(symbol))
 
-// mockPositions.push(generateMockPosition('FAKE', 40000, -20, 35, true, true))
-// mockPositions.push(generateMockPosition('FAKE2', -50000, -20, 50, true, true))
+// mockPositions.push(generateMockPosition('FAKE', 'short', 40000, -20, 35, true, true))
+// mockPositions.push(generateMockPosition('FAKE2', 'long', -50000, -20, 50, true, true))
 
 //const mockEquity = 20000 + (Math.random() * 40000)
 //const mockMonthEarnings = -500 + (Math.random() * 1000)
@@ -84,6 +87,9 @@ const ShowcaseController = () => {
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
   const [ weekPercReturn, setWeekPercReturn ] = useState<number>(0)
 
+  const [ currentValueLong, setCurrentValueLong ] = useState<number>(0)
+  const [ currentValueShort, setCurrentValueShort ] = useState<number>(0)
+
   const [ monthEarnings, setMonthEarnings ] = useState<number>(0)
   const [ monthPercReturn, setMonthPercReturn ] = useState<number>(0)
 
@@ -95,6 +101,7 @@ const ShowcaseController = () => {
   const [ positions, setPositions ] = useState<PositionChitProps[]>([])
 
   // Refresh every 15 minutes
+  // TODO Replace with useReducer
   useEffect(() => {
     const fetchShorthand = () => fetchShowcaseData(
       setLoading,
@@ -108,6 +115,8 @@ const ShowcaseController = () => {
       setTheft,
       setLastYearTheft,
       setPositions,
+      setCurrentValueLong,
+      setCurrentValueShort,
     )
     fetchShorthand()
     const intervalId = setInterval(() => {
@@ -138,6 +147,8 @@ const ShowcaseController = () => {
       crons={crons}
       equity={equity}
       weekEarnings={weekEarnings}
+      currentValueLong={currentValueLong}
+      currentValueShort={currentValueShort}
       weekPercReturn={weekPercReturn}
       monthEarnings={monthEarnings}
       monthPercReturn={monthPercReturn}

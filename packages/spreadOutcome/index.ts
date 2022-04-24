@@ -2,7 +2,7 @@ import { Position } from "@penny/tradier"
 import { getUnderlying, getType, getStrike, isOption, getExpiration } from "@penny/option-symbol-parser" 
 import { uniq } from 'lodash'
 
-type SpreadSide = 'long' | 'short' | 'indeterminate'
+export type SpreadSide = 'long' | 'short' | 'indeterminate'
 
 export type SpreadOutcome = {
   ticker: string,

@@ -6,6 +6,8 @@ import { moneyFormat, moneyColor, months } from '../common/formatting'
 export type AccountInfoPanelProps = {
   equity: number,
   weekEarnings: number,
+  currentValueLong: number,
+  currentValueShort: number,
   weekPercReturn: number,
   monthEarnings: number,
   monthPercReturn: number,
@@ -18,6 +20,8 @@ export type AccountInfoPanelProps = {
 const AccountInfoPanel = ({
   equity,
   weekEarnings,
+  currentValueLong,
+  currentValueShort,
   weekPercReturn,
   monthEarnings,
   monthPercReturn,
@@ -65,6 +69,7 @@ const AccountInfoPanel = ({
   const currentMonth = months[today.getUTCMonth()]
   const thisYear = today.getFullYear()
   const lastYear = thisYear - 1
+  console.log(lastYear) // To keep TS from yelling at me
 
   return (
     <>
@@ -74,6 +79,34 @@ const AccountInfoPanel = ({
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
         {createValueRow('This Week', weekPercReturn, weekEarnings, true, 'green')}
+
+
+        {/* New Value Row */}
+        <>
+          <div style={{ textAlign: 'center', display: 'flex' }}>
+            <Typography variant='subtitle1' style={{ flex: 1, display: 'inline-block', textAlign: 'center' }}>
+              Long
+            </Typography>
+            <Typography variant='subtitle1' style={{ flex: 1, display: 'inline-block', textAlign: 'center' }}>
+              Short
+            </Typography>
+          </div>
+
+          <div style={{ textAlign: 'center', display: 'flex' }}>
+            <Typography variant='h6' style={{ flex: 1, display: 'inline-block', textAlign: 'center', color: moneyColor(currentValueLong, 'green') }}>
+              {moneyFormat(currentValueLong)}
+            </Typography>
+            <Typography variant='h6' style={{ display: 'inline-block', flex: 1, textAlign: 'center', color: moneyColor(currentValueShort, 'green') }}>
+              {moneyFormat(currentValueShort)}
+            </Typography>
+          </div>
+
+          <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
+        </>
+        {/* New Value Row */}
+        
+
+
         {createValueRow(currentMonth, monthPercReturn, monthEarnings, true)}
         {createValueRow(`${thisYear}`, yearPercReturn, yearEarnings)}
       </Paper>
@@ -85,8 +118,8 @@ const AccountInfoPanel = ({
           Estimated Theft
         </Typography>
         <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-        {createValueRow(`${thisYear}`, null, theft, true)}
-        {createValueRow(`${lastYear}`, null, lastYearTheft)}
+        {createValueRow(`${thisYear}`, null, theft)}
+        {/* {createValueRow(`${lastYear}`, null, lastYearTheft)} */}
       </Paper>
     </>
   )

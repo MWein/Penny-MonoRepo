@@ -67,9 +67,24 @@ const showcaseController = async (req, res) => {
     message: `Week Earnings: $${weekEarnings} of $${(realizedWeekTotalRisked + unrealizedWeekTotalRisked)}`
   })
 
+
+  // Long and Short Values
+  const currentValueLong = positions.filter(pos => pos.side === 'long').reduce((acc, pos) => {
+    const gl = pos.gainLoss
+    return gl > pos.maxGain || gl < pos.maxLoss ? acc : acc + gl
+  }, 0)
+  const currentValueShort = positions.filter(pos => pos.side === 'short').reduce((acc, pos) => {
+    const gl = pos.gainLoss
+    return gl > pos.maxGain || gl < pos.maxLoss ? acc : acc + gl
+  }, 0)
+  // Long and Short Values
+
+
   res.json({
     equity,
     weekEarnings,
+    currentValueLong,
+    currentValueShort,
     weekPercReturn: isNaN(weekPercReturn) ? 0 : weekPercReturn,
     monthEarnings,
     monthPercReturn: isNaN(monthPercReturn) ? 0 : monthPercReturn,

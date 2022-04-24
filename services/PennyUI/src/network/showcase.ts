@@ -13,6 +13,8 @@ const fetchShowcaseData = async (
   setTheft: Function,
   setLastYearTheft: Function,
   setPositions: Function,
+  setCurrentValueLong: Function,
+  setCurrentValueShort: Function,
 ) => {
   const basePath = getPennyDataUrl()
 
@@ -29,6 +31,8 @@ const fetchShowcaseData = async (
     setTheft(0)
     setLastYearTheft(0)
     setPositions([])
+    setCurrentValueLong(0)
+    setCurrentValueShort(0)
   })
 
   if (result.body) {
@@ -44,6 +48,8 @@ const fetchShowcaseData = async (
     setTheft(result.body.theft)
     setLastYearTheft(result.body.lastYearTheft)
     setPositions(result.body.positions)
+    setCurrentValueLong(result.body.currentValueLong)
+    setCurrentValueShort(result.body.currentValueShort)
   }
 }
 

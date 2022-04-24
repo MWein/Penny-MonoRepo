@@ -1,10 +1,10 @@
 import * as tradier from '@penny/tradier'
-import { getType, getUnderlying, isOption } from '@penny/option-symbol-parser'
-import { uniq } from 'lodash'
-import { getSpreadOutcome } from '@penny/spread-outcome'
+import { getType, isOption } from '@penny/option-symbol-parser'
+import { getSpreadOutcomes, SpreadSide } from '@penny/spread-outcome'
 
 type ICPosition = {
   ticker: string,
+  side: SpreadSide,
   gainLoss: number,
   maxLoss: number,
   maxGain: number,
@@ -19,15 +19,12 @@ const getICPositions = async (): Promise<ICPosition[]> => {
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
 
   const optionTickers = optionPositions.map(x => x.symbol)
-  const tickers = uniq(optionPositions.map(x => getUnderlying(x.symbol)))
   const prices = await tradier.getPrices(optionTickers)
 
+  const spreads = getSpreadOutcomes(optionPositions)
 
-  // TODO REWRITE!!
-  return tickers.map(ticker => {
-    const positions = optionPositions.filter(pos => getUnderlying(pos.symbol) === ticker)
-
-    const { maxGain, maxLoss, side } = getSpreadOutcome(ticker, positions)
+  return spreads.map(spread => {
+    const positions = spread.positions
 
     const gainLoss = positions.reduce((acc, pos) => {
       const price = prices.find(x => x.symbol === pos.symbol)?.price
@@ -58,11 +55,11 @@ const getICPositions = async (): Promise<ICPosition[]> => {
     const hasPut = positions.some(pos => getType(pos.symbol) === 'put')
 
     return {
-      ticker,
-      side,
+      ticker: spread.ticker,
+      side: spread.side,
       gainLoss: roundedNumber(gainLoss),
-      maxLoss: roundedNumber(maxLoss),
-      maxGain: roundedNumber(maxGain),
+      maxLoss: roundedNumber(spread.maxLoss),
+      maxGain: roundedNumber(spread.maxGain),
       hasPut,
       hasCall,
     }
