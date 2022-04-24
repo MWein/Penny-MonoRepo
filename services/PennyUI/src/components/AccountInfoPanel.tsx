@@ -83,22 +83,20 @@ const AccountInfoPanel = ({
 
         {/* New Value Row */}
         <>
-          <div style={{ textAlign: 'center' }}>
-            <Typography variant='subtitle1' style={{ display: 'inline-block', textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', display: 'flex' }}>
+            <Typography variant='subtitle1' style={{ flex: 1, display: 'inline-block', textAlign: 'center' }}>
               Long
             </Typography>
-            <div style={{ width: '50px', display: 'inline-block' }} />
-            <Typography variant='subtitle1' style={{ display: 'inline-block', textAlign: 'center' }}>
+            <Typography variant='subtitle1' style={{ flex: 1, display: 'inline-block', textAlign: 'center' }}>
               Short
             </Typography>
           </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <Typography variant='h6' style={{ display: 'inline-block', textAlign: 'center', color: moneyColor(currentValueLong, 'green') }}>
+          <div style={{ textAlign: 'center', display: 'flex' }}>
+            <Typography variant='h6' style={{ flex: 1, display: 'inline-block', textAlign: 'center', color: moneyColor(currentValueLong, 'green') }}>
               {moneyFormat(currentValueLong)}
             </Typography>
-            <div style={{ width: '10px', display: 'inline-block' }} />
-            <Typography variant='h6' style={{ display: 'inline-block', textAlign: 'center', color: moneyColor(currentValueShort, 'green') }}>
+            <Typography variant='h6' style={{ display: 'inline-block', flex: 1, textAlign: 'center', color: moneyColor(currentValueShort, 'green') }}>
               {moneyFormat(currentValueShort)}
             </Typography>
           </div>
