@@ -8,6 +8,7 @@ type Settings = {
 
   shortICEnabled?: boolean,
   shortICSymbols?: string[],
+  shortProfitTarget?: number,
   shortTargetDelta?: number,
   shortMinDTE?: number,
   shortPositionsPerDay?: number,
@@ -22,6 +23,7 @@ export const defaultSettings: Settings = {
 
   shortICEnabled: false,
   shortICSymbols: [],
+  shortProfitTarget: 50,
   shortTargetDelta: 15,
   shortMinDTE: 30,
   shortPositionsPerDay: 2,
