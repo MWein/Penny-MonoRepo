@@ -106,4 +106,76 @@ describe('createGTCShortOrders', () => {
     expect(tradier.getOrders).toHaveBeenCalled()
     expect(tradier.multilegOptionOrder).not.toHaveBeenCalled()
   })
+
+
+  it('All conditions, multiple orders', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2021-10-15').getTime())
+    // @ts-ignore
+    tradier.getPositions.mockReturnValue([
+      // Short aquired today
+      generatePositionObject('AAPL', 1, 'call', 8, '2021-10-15', 1234, '2021-01-01', 175),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-10-15', 1234, '2021-01-01', 172.5),
+
+      // Long
+      generatePositionObject('AAPL', 1, 'call', 52, '2021-01-01', 1234, '2021-01-01', 170),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2021-01-01', 172.5),
+
+      // Short
+      generatePositionObject('AAPL', 1, 'call', 8, '2021-10-12', 1234, '2021-01-01', 175),
+      generatePositionObject('AAPL', -1, 'call', -20, '2021-10-12', 1234, '2021-01-01', 172.5),
+
+      // Another Short
+      generatePositionObject('TSLA', 1, 'call', 8, '2021-10-12', 1234, '2021-01-01', 175),
+      generatePositionObject('TSLA', -1, 'call', -20, '2021-10-12', 1234, '2021-01-01', 172.5),
+
+      // Yes another Short
+      generatePositionObject('BAC', 1, 'call', 8, '2021-10-12', 1234, '2021-01-01', 175),
+      generatePositionObject('BAC', -1, 'call', -20, '2021-10-12', 1234, '2021-01-01', 172.5),
+    ])
+
+    const order = {
+      class: 'multileg',
+      status: 'open',
+      symbol: 'AAPL',
+      type: 'debit',
+      duration: 'day',
+      price: 7,
+      'option_symbol[0]': 'AAPL210101C00175000',
+      'option_symbol[1]': 'AAPL210101C00172500',
+    }
+
+    // @ts-ignore
+    tradier.getOrders.mockReturnValue([
+      order
+    ])
+    await createGTCShortOrders()
+    expect(tradier.getPositions).toHaveBeenCalled()
+    expect(tradier.getOrders).toHaveBeenCalled()
+    expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(2)
+    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('TSLA', 'debit', [
+      {
+        symbol: 'TSLA210101C00175000',
+        quantity: 1,
+        side: 'sell_to_close',
+      },
+      {
+        symbol: 'TSLA210101C00172500',
+        quantity: 1,
+        side: 'buy_to_close',
+      },
+    ], 6)
+    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('BAC', 'debit', [
+      {
+        symbol: 'BAC210101C00175000',
+        quantity: 1,
+        side: 'sell_to_close',
+      },
+      {
+        symbol: 'BAC210101C00172500',
+        quantity: 1,
+        side: 'buy_to_close',
+      },
+    ], 6)
+    jest.useRealTimers()
+  })
 })
