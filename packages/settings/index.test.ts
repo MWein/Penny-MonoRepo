@@ -14,7 +14,8 @@ describe('getSettings', () => {
   })
 
   it('Returns all default settings if an error is thrown', async () => {
-    (settingsModel.find as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    settingsModel.find.mockImplementation(() => {
       throw new Error('Damn')
     })
     const settings = await getSettings()
@@ -22,13 +23,15 @@ describe('getSettings', () => {
   })
 
   it('Returns all default settings if find returns nothing', async () => {
-    (settingsModel.find as unknown as jest.Mock).mockReturnValue([])
+    // @ts-ignore
+    settingsModel.find.mockReturnValue([])
     const settings = await getSettings()
     expect(settings).toEqual(defaultSettings)
   })
 
   it('Returns settings intermixed with default settings', async () => {
-    (settingsModel.find as unknown as jest.Mock).mockReturnValue([
+    // @ts-ignore
+    settingsModel.find.mockReturnValue([
       {
         key: 'putsEnabled',
         value: false
@@ -54,22 +57,25 @@ describe('getSetting', () => {
   })
 
   it('Returns a default setting if findOne throws', async () => {
-    (settingsModel.findOne as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    settingsModel.findOne.mockImplementation(() => {
       throw new Error('Damn')
     })
-    const result = await getSetting('maximumPricePerSpread')
-    expect(result).toEqual(defaultSettings.maximumPricePerSpread)
+    const result = await getSetting('longTargetDelta')
+    expect(result).toEqual(defaultSettings.longTargetDelta)
   })
 
   it('Returns a default setting if Mongo doesnt have it', async () => {
-    (settingsModel.findOne as unknown as jest.Mock).mockReturnValue(null)
-    const result = await getSetting('maximumPricePerSpread')
-    expect(result).toEqual(defaultSettings.maximumPricePerSpread)
+    // @ts-ignore
+    settingsModel.findOne.mockReturnValue(null)
+    const result = await getSetting('longTargetDelta')
+    expect(result).toEqual(defaultSettings.longTargetDelta)
   })
 
   it('Returns setting from mongo', async () => {
-    (settingsModel.findOne as unknown as jest.Mock).mockReturnValue({ key: 'maximumPricePerSpread', value: 20 })
-    const result = await getSetting('maximumPricePerSpread')
+    // @ts-ignore
+    settingsModel.findOne.mockReturnValue({ key: 'longTargetDelta', value: 20 })
+    const result = await getSetting('longTargetDelta')
     expect(result).toEqual(20)
   })
 })
@@ -82,35 +88,37 @@ describe('setSettings', () => {
   })
 
   it('If empty object, just returns default settings', async () => {
-    (settingsModel.find as unknown as jest.Mock).mockReturnValue([])
+    // @ts-ignore
+    settingsModel.find.mockReturnValue([])
     const newSettings = await setSettings({})
     expect(newSettings).toEqual(defaultSettings)
     expect(settingsModel.findOneAndUpdate).not.toHaveBeenCalled()
   })
 
   it('Updates for each setting updated', async () => {
-    (settingsModel.find as unknown as jest.Mock).mockReturnValue([])
+    // @ts-ignore
+    settingsModel.find.mockReturnValue([])
     const newSettings = await setSettings({
-      ironCondorsEnabled: false,
-      ironCondorSymbols: [ 'SPY', 'IWM' ],
-      maximumPricePerSpread: 0.50
+      longICEnabled: false,
+      longICSymbols: [ 'SPY', 'IWM' ],
+      longTargetStrikeWidth: 0.50
     })
     expect(newSettings).toEqual(defaultSettings)
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledTimes(3)
 
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { key: 'ironCondorsEnabled' },
-      { key: 'ironCondorsEnabled', value: false },
+      { key: 'longICEnabled' },
+      { key: 'longICEnabled', value: false },
       { upsert: true }
     )
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { key: 'ironCondorSymbols' },
-      { key: 'ironCondorSymbols', value: [ 'SPY', 'IWM' ] },
+      { key: 'longICSymbols' },
+      { key: 'longICSymbols', value: [ 'SPY', 'IWM' ] },
       { upsert: true }
     )
     expect(settingsModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { key: 'maximumPricePerSpread' },
-      { key: 'maximumPricePerSpread', value: 0.50 },
+      { key: 'longTargetStrikeWidth' },
+      { key: 'longTargetStrikeWidth', value: 0.50 },
       { upsert: true }
     )
   })
