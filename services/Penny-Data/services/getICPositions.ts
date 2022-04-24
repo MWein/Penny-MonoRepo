@@ -25,19 +25,7 @@ const getICPositions = async (): Promise<ICPosition[]> => {
   return tickers.map(ticker => {
     const positions = optionPositions.filter(pos => getUnderlying(pos.symbol) === ticker)
 
-    const { maxGain, maxLoss, fullyCovered } = getSpreadOutcome(ticker, positions)
-
-    // TODO Remove once retry problem is solved
-    if (!fullyCovered) {
-      return {
-        ticker,
-        gainLoss: 0,
-        maxLoss: -1,
-        maxGain: 1,
-        hasPut: false,
-        hasCall: false,
-      }
-    }
+    const { maxGain, maxLoss, side } = getSpreadOutcome(ticker, positions)
 
     const gainLoss = positions.reduce((acc, pos) => {
       const price = prices.find(x => x.symbol === pos.symbol)?.price
@@ -71,6 +59,7 @@ const getICPositions = async (): Promise<ICPosition[]> => {
 
     return {
       ticker,
+      side,
       gainLoss: roundedNumber(gainLoss),
       maxLoss: roundedNumber(maxLoss),
       maxGain: roundedNumber(maxGain),
