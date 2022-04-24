@@ -1,9 +1,10 @@
 import * as tradier from '@penny/tradier'
 import { getType, isOption } from '@penny/option-symbol-parser'
-import { getSpreadOutcomes } from '@penny/spread-outcome'
+import { getSpreadOutcomes, SpreadSide } from '@penny/spread-outcome'
 
 type ICPosition = {
   ticker: string,
+  side: SpreadSide,
   gainLoss: number,
   maxLoss: number,
   maxGain: number,
