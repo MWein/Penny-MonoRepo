@@ -1,5 +1,5 @@
 import * as tradier from '@penny/tradier'
-import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
+import { isOption } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
 import { getSpreadOutcomes } from '@penny/spread-outcome'
 import { pickRandomTickers } from '../common/pickRandomTickers'

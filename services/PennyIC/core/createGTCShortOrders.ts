@@ -5,6 +5,10 @@ import { MultilegOptionLeg } from '@penny/tradier'
 
 
 export const createGTCShortOrders = async () => {
+  // TODO Make setting
+  const shortProfitTarget = 50
+
+
   const positions = await tradier.getPositions()
   const openOptions = positions.filter(x => isOption(x.symbol))
 
@@ -24,6 +28,7 @@ export const createGTCShortOrders = async () => {
 
   for (let x = 0; x < spreadsWithoutOrders.length; x++) {
     const spread = spreadsWithoutOrders[x]
+    const profitTarget = spread.maxGain - (spread.maxGain * (shortProfitTarget / 100))
     const underlying = spread.ticker
     const positions = spread.positions
 
@@ -36,6 +41,6 @@ export const createGTCShortOrders = async () => {
       }
     })
 
-    await tradier.multilegOptionOrder(underlying, 'debit', legs, spread.maxGain / 2)
+    await tradier.multilegOptionOrder(underlying, 'debit', legs, profitTarget)
   }
 }
