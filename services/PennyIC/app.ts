@@ -6,6 +6,7 @@ import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
 import { buyIronCondors } from './core/buyIronCondor'
 import { sellIronCondors } from './core/sellIronCondor'
+import { createGTCShortOrders } from './core/createGTCShortOrders'
 
 import {
   closeExpiringPositions
@@ -28,6 +29,7 @@ const openICs = async () => {
     await cronFunc(buyIronCondors, 'LongIC')
   }
   await cronFunc(sellIronCondors, 'ShortIC')
+  await cronFunc(createGTCShortOrders, 'ShortGTC')
 }
 
 
