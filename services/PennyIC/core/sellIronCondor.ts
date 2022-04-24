@@ -154,15 +154,13 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
       return
     }
 
-
     // At least 30 days out
     // TODO Make this a setting
-    // const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
-    // const today = new Date().getTime()
-    // console.log(expirations)
-    // const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
+    const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
+    const today = new Date().getTime()
+    console.log(expirations)
+    const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
 
-    const expiration = expirations[0]
 
     if (!expiration) {
       return
