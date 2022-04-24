@@ -12,9 +12,15 @@ type EvaluateResult = {
 }
 
 
-export const evaluateTickerHelper = async (ticker, maxStrikeWidth, expiration): Promise<EvaluateResult> => {
+const evaluateTickerHelper = async (ticker, maxStrikeWidth, expiration): Promise<EvaluateResult> => {
   try {
     const optionChain = await getOptionChain(ticker, expiration)
+    if (optionChain.length === 0) {
+      return {
+        valid: false,
+        reason: 'Invalid'
+      }
+    }
 
     // Only check near the money
     const strikes = uniq(optionChain.filter(link => link.delta >= 0.15 && link.delta <= 0.5).map(link => link.strike))
