@@ -2,6 +2,7 @@ import * as tradier from '@penny/tradier'
 import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
 import { getSpreadOutcomes } from '@penny/spread-outcome'
+import { pickRandomTickers } from '../common/pickRandomTickers'
 
 
 type ChainLinkWithDeltaDist = OptionChainLink & {
@@ -143,12 +144,8 @@ export const sellSpread = async (chain: OptionChainLink[], symbol: string, type:
 
 
 
-export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true, minDTE = 30) => {
+export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, minDTE = 30) => {
   try {
-    if (!put && !call) {
-      return
-    }
-
     const expirations = await tradier.getExpirations(symbol, 100)
     if (!expirations || expirations.length === 0) {
       return
@@ -158,7 +155,6 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
     // TODO Make this a setting
     const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
     const today = new Date().getTime()
-    console.log(expirations)
     const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
 
 
@@ -168,12 +164,8 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
 
     const chain = await tradier.getOptionChain(symbol, expiration)
 
-    if (put) {
-      await sellSpreadByPremium(chain, symbol, 'put', shortDelta, targetStrikeWidth)
-    }
-    if (call) {
-      await sellSpreadByPremium(chain, symbol, 'call', shortDelta, targetStrikeWidth)
-    }
+    await sellSpreadByPremium(chain, symbol, 'put', shortDelta, targetStrikeWidth)
+    await sellSpreadByPremium(chain, symbol, 'call', shortDelta, targetStrikeWidth)
   } catch (e) {
     // TODO Log error
   }
@@ -185,10 +177,10 @@ export const sellIronCondors = async () => {
   // TODO Is iron condor enabled?
 
   // Is market open?
-  const isOpen = await tradier.isMarketOpen()
-  if (!isOpen) {
-    return
-  }
+  // const isOpen = await tradier.isMarketOpen()
+  // if (!isOpen) {
+  //   return
+  // }
 
   // TODO get stocks from DB
   const symbols = [
@@ -216,19 +208,31 @@ export const sellIronCondors = async () => {
   const openOptions = positions.filter(x => isOption(x.symbol))
 
   const openSpreads = getSpreadOutcomes(openOptions)
-  const longSpreads = openSpreads.filter(spread => spread.side === 'short')
-  const openOptionSymbols = longSpreads.reduce((acc, spread) => [ ...acc, ...spread.positions.map(pos => pos.symbol) ], [])
+  const shortSpreads = openSpreads.filter(spread => spread.side === 'short')
+  const tickersToIgnore = shortSpreads.map(spread => spread.ticker)  
+  const tickersToChooseFrom = symbols.filter(symbol => !tickersToIgnore.includes(symbol))
 
-  // Map out what symbols have open positions
-  const openPositionTypes = symbols.map(symbol => ({
-    symbol,
-    hasCall: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
-    hasPut: openOptionSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
-  }))
+  if (tickersToChooseFrom.length === 0) {
+    return
+  }
 
+  // Hacky... get a 30 day out expiration date for AAPL
+  // TODO Should be in its own function since this is repeated
+  const expirations = await tradier.getExpirations('AAPL', 100)
+  if (!expirations || expirations.length === 0) {
+    return
+  }
+  // At least 30 days out
+  // TODO Make this a setting
+  const minDiff = (8.64e+7 * 30) // 8.64e+7 is how many milliseconds there are in a day
+  const today = new Date().getTime()
+  const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
+  // TODO Should be in its own function since this is repeated
 
-  for (let x = 0; x < openPositionTypes.length; x++) {
-    const position = openPositionTypes[x]
-    await sellIronCondor(position.symbol, 15, 1, !position.hasPut, !position.hasCall)
+  const tickersToSell = await pickRandomTickers(tickersToChooseFrom, 10, 1, expiration)
+
+  for (let x = 0; x < tickersToSell.length; x++) {
+    const position = tickersToSell[x]
+    await sellIronCondor(position, 15, 1, 30)
   }
 }
