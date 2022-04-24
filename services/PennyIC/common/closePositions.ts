@@ -2,6 +2,7 @@ import * as tradier from '@penny/tradier'
 import { getUnderlying, isOption } from '@penny/option-symbol-parser'
 import { uniq } from 'lodash'
 import { MultilegOptionLeg } from '@penny/tradier'
+import * as sleepUtil from '@penny/sleep'
 
 
 const closePositions = async positions => {
@@ -24,6 +25,7 @@ const closePositions = async positions => {
 
   if (ordersWithExpiringPositions.length > 0) {
     await tradier.cancelOrders(ordersWithExpiringPositions)
+    sleepUtil.sleep(10)
   }
 
 

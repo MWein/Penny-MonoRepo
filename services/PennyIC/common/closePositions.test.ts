@@ -1,4 +1,5 @@
 import * as tradier from '@penny/tradier'
+import * as sleepUtil from '@penny/sleep'
 import { closePositions } from './closePositions'
 import { generatePositionObject } from '@penny/test-helpers'
 jest.mock('@penny/tradier')
@@ -12,6 +13,8 @@ describe('closePositions', () => {
     tradier.multilegOptionOrder = jest.fn()
     // @ts-ignore
     tradier.cancelOrders = jest.fn()
+    // @ts-ignore
+    sleepUtil.sleep = jest.fn()
   })
 
 
@@ -19,6 +22,7 @@ describe('closePositions', () => {
     await closePositions([])
     expect(tradier.getOrders).not.toHaveBeenCalled()
     expect(tradier.cancelOrders).not.toHaveBeenCalled()
+    expect(sleepUtil.sleep).not.toHaveBeenCalled()
     expect(tradier.multilegOptionOrder).not.toHaveBeenCalled()
   })
 
@@ -34,6 +38,7 @@ describe('closePositions', () => {
 
     expect(tradier.getOrders).toHaveBeenCalled()
     expect(tradier.cancelOrders).not.toHaveBeenCalled()
+    expect(sleepUtil.sleep).not.toHaveBeenCalled()
     expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(1)
     expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
       {
@@ -63,6 +68,7 @@ describe('closePositions', () => {
 
     expect(tradier.getOrders).toHaveBeenCalled()
     expect(tradier.cancelOrders).not.toHaveBeenCalled()
+    expect(sleepUtil.sleep).not.toHaveBeenCalled()
     expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(2)
     expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
       {
@@ -138,6 +144,7 @@ describe('closePositions', () => {
 
     expect(tradier.getOrders).toHaveBeenCalled()
     expect(tradier.cancelOrders).toHaveBeenCalledWith([ 1234, 4321 ])
+    expect(sleepUtil.sleep).toHaveBeenCalledWith(10)
     expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(2)
     expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
       {
