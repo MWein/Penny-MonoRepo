@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
 import { fetchPennyStatus, fetchPennyCronTimes } from '../network/checkPenny'
-import fetchShowcaseData from '../network/showcase'
+import fetchShowcaseData, { ShowcaseProps, defaultShowcaseProps } from '../network/showcase'
 import { CronTime } from '../components/CronTimesPanel'
+
 
 // ****************** MOCK DATA *********************
 
@@ -82,6 +83,8 @@ const ShowcaseController = () => {
   const [ checkingCrons, setCheckingCrons ] = useState<boolean>(true)
   const [ pennyHealthy, setPennyHealthy ] = useState<boolean>(false)
   const [ crons, setCrons ] = useState<CronTime[]>([])
+
+  const [ showcaseProps, setShowcaseProps ] = useState<ShowcaseProps>(defaultShowcaseProps)
 
   const [ equity, setEquity ] = useState<number>(0)
   const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
