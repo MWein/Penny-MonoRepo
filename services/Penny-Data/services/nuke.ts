@@ -4,14 +4,9 @@ import { isOption } from '@penny/option-symbol-parser'
 
 type SidesToClose = 'long' | 'short' | 'all'
 
-const getSpreadsToClose = (spreads: SpreadOutcome[], type: SidesToClose) => {
-  if (type === 'long') {
-    return spreads.filter(spread => spread.side === 'long')
-  } else if (type === 'short') {
-    return spreads.filter(spread => spread.side === 'short')
-  }
-  return spreads
-}
+
+const getSpreadsToClose = (spreads: SpreadOutcome[], type: SidesToClose) =>
+  type === 'all' ? spreads : spreads.filter(spread => spread.side === type)
 
 
 export const nuke = async (sideToClose: SidesToClose) => {
@@ -24,7 +19,6 @@ export const nuke = async (sideToClose: SidesToClose) => {
 
   const spreads = getSpreadOutcomes(optionPositions)
   const spreadsToClose = getSpreadsToClose(spreads, sideToClose)
-
   const positionsToClose = spreadsToClose.reduce((acc, spread) => [ ...acc, ...spread.positions ], [])
 
   await tradier.closePositions(positionsToClose)
