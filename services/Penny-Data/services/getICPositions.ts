@@ -43,12 +43,12 @@ const getICPositions = async (): Promise<ICPosition[]> => {
       }
 
       // Long position
-      if (pos.quantity > 0) {
-        const buyPrice = pos.cost_basis
-        const currentSalePrice = Number((price * 100 * quantity).toFixed(0))
-        const gainLoss = currentSalePrice - buyPrice
-        return acc + gainLoss
-      }
+      //if (pos.quantity > 0) {
+      const buyPrice = pos.cost_basis
+      const currentSalePrice = Number((price * 100 * quantity).toFixed(0))
+      const gainLoss = currentSalePrice - buyPrice
+      return acc + gainLoss
+      //}
     }, 0)
 
     const hasCall = positions.some(pos => getType(pos.symbol) === 'call')
