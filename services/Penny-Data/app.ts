@@ -7,6 +7,7 @@ import { getLogsController } from './controllers/getLogs'
 import { getSettingsController, setSettingsController } from './controllers/settings'
 import { showcaseController } from './controllers/showcase'
 import { getCronTimesController } from './controllers/getCronTimes'
+import { nukeController } from './controllers/nukeController'
 
 const app = express()
 
@@ -29,6 +30,9 @@ app.get('/cron-times', getCronTimesController)
 // Settings
 app.get('/settings', getSettingsController)
 app.put('/settings', setSettingsController)
+
+// Nuke
+app.post('/nuke', nukeController)
 
 
 // Income target endpoints
