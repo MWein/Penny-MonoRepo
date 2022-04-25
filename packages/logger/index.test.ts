@@ -245,7 +245,8 @@ describe('clearOldLogs', () => {
   })
 
   it('Console logs on logModel failure', async () => {
-    (logModel.deleteMany as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    logModel.deleteMany.mockImplementation(() => {
       throw new Error('Shit')
     })
     await clearOldLogs()
@@ -253,7 +254,8 @@ describe('clearOldLogs', () => {
   })
 
   it('Console logs on cronModel failure', async () => {
-    (cronModel.deleteMany as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    cronModel.deleteMany.mockImplementation(() => {
       throw new Error('Shit')
     })
     await clearOldLogs()
