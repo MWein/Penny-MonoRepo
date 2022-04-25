@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { PositionChitProps } from '../components/PositionChit'
 import Showcase from '../components/Showcase'
 import { fetchPennyStatus, fetchPennyCronTimes } from '../network/checkPenny'
 import fetchShowcaseData, { ShowcaseProps, defaultShowcaseProps } from '../network/showcase'
@@ -87,7 +86,6 @@ const ShowcaseController = () => {
   const [ showcaseProps, setShowcaseProps ] = useState<ShowcaseProps>(defaultShowcaseProps)
 
   // Refresh every 15 minutes
-  // TODO Replace with useReducer
   useEffect(() => {
     const fetchShorthand = () => fetchShowcaseData(
       setLoading,
