@@ -51,11 +51,10 @@ const launchCrons = async () => {
   //   //createGTCOrders()
   // }, null, true, 'America/New_York')
 
-
-  new CronJob('0 0 10 * * 1-4', () => openICs, null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', openICs, null, true, 'America/New_York')
 
   // One hour before Tradier does it
-  new CronJob('0 15 14 * * 1-5', () => closeICs, null, true, 'America/New_York')
+  new CronJob('0 15 14 * * 1-5', closeICs, null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
