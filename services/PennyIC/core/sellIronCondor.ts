@@ -212,7 +212,7 @@ export const sellIronCondors = async () => {
   //   'AGNC', 'AHT', 'AIG', 'AKAM', 'ALGN', 'AMAT', 'AMBA', 'AMGN', 'AMRN', 'ANET', 'ANF'
   // ]
 
-  const symbols = require('weeklyTickers.json')
+  const symbols = require('./weeklyTickers.json')
 
   // TODO Filter for enabled
     // Map out just symbols
