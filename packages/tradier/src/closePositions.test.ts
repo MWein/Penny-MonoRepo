@@ -1,18 +1,17 @@
-import * as tradier from '@penny/tradier'
+import * as getOrdersUtil from './getOrders'
+import * as sendOrderUtil from './sendOrder'
 import * as sleepUtil from '@penny/sleep'
 import { closePositions } from './closePositions'
 import { generatePositionObject } from '@penny/test-helpers'
-jest.mock('@penny/tradier')
-
 
 describe('closePositions', () => {
   beforeEach(() => {
     // @ts-ignore
-    tradier.getOrders = jest.fn()
+    getOrdersUtil.getOrders = jest.fn()
     // @ts-ignore
-    tradier.multilegOptionOrder = jest.fn()
+    sendOrderUtil.multilegOptionOrder = jest.fn()
     // @ts-ignore
-    tradier.cancelOrders = jest.fn()
+    sendOrderUtil.cancelOrders = jest.fn()
     // @ts-ignore
     sleepUtil.sleep = jest.fn()
   })
@@ -20,27 +19,27 @@ describe('closePositions', () => {
 
   it('Does nothing if given empty position array', async () => {
     await closePositions([])
-    expect(tradier.getOrders).not.toHaveBeenCalled()
-    expect(tradier.cancelOrders).not.toHaveBeenCalled()
+    expect(getOrdersUtil.getOrders).not.toHaveBeenCalled()
+    expect(sendOrderUtil.cancelOrders).not.toHaveBeenCalled()
     expect(sleepUtil.sleep).not.toHaveBeenCalled()
-    expect(tradier.multilegOptionOrder).not.toHaveBeenCalled()
+    expect(sendOrderUtil.multilegOptionOrder).not.toHaveBeenCalled()
   })
 
 
   it('Creates close orders if there arent any existing orders', async () => {
     // @ts-ignore
-    tradier.getOrders.mockReturnValue([])
+    getOrdersUtil.getOrders.mockReturnValue([])
 
     await closePositions([
       generatePositionObject('AAPL', 1, 'call', 8, '2021-10-12', 1234, '2021-01-01', 175),
       generatePositionObject('AAPL', -1, 'call', -20, '2021-10-12', 1234, '2021-01-01', 172.5),
     ])
 
-    expect(tradier.getOrders).toHaveBeenCalled()
-    expect(tradier.cancelOrders).not.toHaveBeenCalled()
+    expect(getOrdersUtil.getOrders).toHaveBeenCalled()
+    expect(sendOrderUtil.cancelOrders).not.toHaveBeenCalled()
     expect(sleepUtil.sleep).not.toHaveBeenCalled()
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(1)
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledTimes(1)
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
       {
         symbol: 'AAPL210101C00175000',
         side: 'sell_to_close',
@@ -57,7 +56,7 @@ describe('closePositions', () => {
 
   it('Creates close orders for each symbol if there arent any existing orders', async () => {
     // @ts-ignore
-    tradier.getOrders.mockReturnValue([])
+    getOrdersUtil.getOrders.mockReturnValue([])
 
     await closePositions([
       generatePositionObject('AAPL', 1, 'call', 8, '2021-10-12', 1234, '2021-01-01', 175),
@@ -66,11 +65,11 @@ describe('closePositions', () => {
       generatePositionObject('TSLA', -1, 'call', -20, '2021-10-12', 1234, '2021-01-01', 172.5),
     ])
 
-    expect(tradier.getOrders).toHaveBeenCalled()
-    expect(tradier.cancelOrders).not.toHaveBeenCalled()
+    expect(getOrdersUtil.getOrders).toHaveBeenCalled()
+    expect(sendOrderUtil.cancelOrders).not.toHaveBeenCalled()
     expect(sleepUtil.sleep).not.toHaveBeenCalled()
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(2)
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledTimes(2)
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
       {
         symbol: 'AAPL210101C00175000',
         side: 'sell_to_close',
@@ -82,7 +81,7 @@ describe('closePositions', () => {
         quantity: 1
       },
     ])
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('TSLA', 'market', [
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledWith('TSLA', 'market', [
       {
         symbol: 'TSLA210101C00175000',
         side: 'sell_to_close',
@@ -99,7 +98,7 @@ describe('closePositions', () => {
 
   it('Closes any existing orders that contain doomed symbols, ignores orders without doomed symbols', async () => {
     // @ts-ignore
-    tradier.getOrders.mockReturnValue([
+    getOrdersUtil.getOrders.mockReturnValue([
       {
         id: 1234,
         class: 'multileg',
@@ -142,11 +141,11 @@ describe('closePositions', () => {
       generatePositionObject('TSLA', -1, 'call', -20, '2021-10-12', 1234, '2021-01-01', 172.5),
     ])
 
-    expect(tradier.getOrders).toHaveBeenCalled()
-    expect(tradier.cancelOrders).toHaveBeenCalledWith([ 1234, 4321 ])
+    expect(getOrdersUtil.getOrders).toHaveBeenCalled()
+    expect(sendOrderUtil.cancelOrders).toHaveBeenCalledWith([ 1234, 4321 ])
     expect(sleepUtil.sleep).toHaveBeenCalledWith(10)
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledTimes(2)
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledTimes(2)
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledWith('AAPL', 'market', [
       {
         symbol: 'AAPL210101C00175000',
         side: 'sell_to_close',
@@ -158,7 +157,7 @@ describe('closePositions', () => {
         quantity: 1
       },
     ])
-    expect(tradier.multilegOptionOrder).toHaveBeenCalledWith('TSLA', 'market', [
+    expect(sendOrderUtil.multilegOptionOrder).toHaveBeenCalledWith('TSLA', 'market', [
       {
         symbol: 'TSLA210101C00175000',
         side: 'sell_to_close',

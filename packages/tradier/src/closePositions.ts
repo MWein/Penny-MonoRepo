@@ -1,4 +1,6 @@
-import * as tradier from '@penny/tradier'
+import { getOrders } from './getOrders'
+import { cancelOrders, multilegOptionOrder } from './sendOrder'
+
 import { getUnderlying, isOption } from '@penny/option-symbol-parser'
 import { uniq } from 'lodash'
 import { MultilegOptionLeg } from '@penny/tradier'
@@ -14,7 +16,7 @@ const closePositions = async positions => {
 
 
   // Close any open orders
-  const orders = await tradier.getOrders()
+  const orders = await getOrders()
   const openOrders = orders.filter(ord => ord.status === 'open' && ord.class === 'multileg')
   const expiringSymbols = optionPositions.map(pos => pos.symbol)
   const ordersWithExpiringPositions = openOrders.filter(ord => {
@@ -24,7 +26,7 @@ const closePositions = async positions => {
   }).map(ord => ord.id)
 
   if (ordersWithExpiringPositions.length > 0) {
-    await tradier.cancelOrders(ordersWithExpiringPositions)
+    await cancelOrders(ordersWithExpiringPositions)
     sleepUtil.sleep(10)
   }
 
@@ -44,7 +46,7 @@ const closePositions = async positions => {
       }
     })
 
-    await tradier.multilegOptionOrder(underlying, 'market', legs)
+    await multilegOptionOrder(underlying, 'market', legs)
   }
 }
 
