@@ -1,7 +1,6 @@
 import * as tradier from '@penny/tradier'
 import { getExpiration, isOption } from '@penny/option-symbol-parser'
 import { getSpreadOutcomes } from '@penny/spread-outcome'
-import { closePositions } from '../common/closePositions'
 
 export const closeOldShortPositions = async () => {
   const positions = await tradier.getPositions()
@@ -24,5 +23,5 @@ export const closeOldShortPositions = async () => {
     return
   }
 
-  await closePositions(oldShortPositions)
+  await tradier.closePositions(oldShortPositions)
 }

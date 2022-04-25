@@ -1,5 +1,4 @@
 import * as tradier from '@penny/tradier'
-import * as closePositionsUtil from '../common/closePositions'
 import { closeOldShortPositions } from './closeOldShortPositions'
 import { generatePositionObject } from '@penny/test-helpers'
 jest.mock('@penny/tradier')
@@ -9,7 +8,7 @@ describe('closeOldShortPositions', () => {
     // @ts-ignore
     tradier.getPositions = jest.fn()
     // @ts-ignore
-    closePositionsUtil.closePositions = jest.fn()
+    tradier.closePositions = jest.fn()
   })
 
   afterEach(() => {
@@ -20,7 +19,7 @@ describe('closeOldShortPositions', () => {
     // @ts-ignore
     tradier.getPositions.mockReturnValue([])
     await closeOldShortPositions()
-    expect(closePositionsUtil.closePositions).not.toHaveBeenCalled()
+    expect(tradier.closePositions).not.toHaveBeenCalled()
   })
 
 
@@ -32,7 +31,7 @@ describe('closeOldShortPositions', () => {
       generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-14', 172.5),
     ])
     await closeOldShortPositions()
-    expect(closePositionsUtil.closePositions).not.toHaveBeenCalled()
+    expect(tradier.closePositions).not.toHaveBeenCalled()
   })
 
 
@@ -44,7 +43,7 @@ describe('closeOldShortPositions', () => {
       generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-22', 172.5),
     ])
     await closeOldShortPositions()
-    expect(closePositionsUtil.closePositions).not.toHaveBeenCalled()
+    expect(tradier.closePositions).not.toHaveBeenCalled()
   })
 
 
@@ -56,7 +55,7 @@ describe('closeOldShortPositions', () => {
       generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-19', 172.5),
     ])
     await closeOldShortPositions()
-    expect(closePositionsUtil.closePositions).toHaveBeenCalledWith([
+    expect(tradier.closePositions).toHaveBeenCalledWith([
       {
         cost_basis: 8,
         date_acquired: '2021-01-01',
