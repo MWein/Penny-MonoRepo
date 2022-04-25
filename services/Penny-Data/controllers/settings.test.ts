@@ -11,14 +11,16 @@ describe('getSettingsController', () => {
   let res
   
   beforeEach(async () => {
-    (settingsService.getSettings as unknown as jest.Mock) = jest.fn()
+    // @ts-ignore
+    settingsService.getSettings = jest.fn()
     const mockRes = getMockRes()
     req = getMockReq()
     res = mockRes.res
   })
 
   it('Returns 500 error if something fails', async () => {
-    (settingsService.getSettings as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    settingsService.getSettings.mockImplementation(() => {
       throw new Error('OH NOOOOO!!!')
     })
     await getSettingsController(req, res)
@@ -27,7 +29,8 @@ describe('getSettingsController', () => {
   })
 
   it('Happy path', async () => {
-    (settingsService.getSettings as unknown as jest.Mock).mockReturnValue({
+    // @ts-ignore
+    settingsService.getSettings.mockReturnValue({
       something: 'whatever'
     })
     await getSettingsController(req, res)
@@ -43,14 +46,16 @@ describe('setSettingsController', () => {
   let res
   
   beforeEach(async () => {
-    (settingsService.setSettings as unknown as jest.Mock) = jest.fn()
+    // @ts-ignore
+    settingsService.setSettings = jest.fn()
     const mockRes = getMockRes()
     req = getMockReq({ body: { some: 'newSetting' } })
     res = mockRes.res
   })
 
   it('Returns 500 error if something fails', async () => {
-    (settingsService.setSettings as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    settingsService.setSettings.mockImplementation(() => {
       throw new Error('OH NOOOOO!!!')
     })
     await setSettingsController(req, res)
@@ -59,7 +64,8 @@ describe('setSettingsController', () => {
   })
 
   it('Happy path, edits setting from request body', async () => {
-    (settingsService.setSettings as unknown as jest.Mock).mockReturnValue({
+    // @ts-ignore
+    settingsService.setSettings.mockReturnValue({
       thisIs: 'whatgetssenttotheuser'
     })
     await setSettingsController(req, res)

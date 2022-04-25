@@ -8,14 +8,16 @@ describe('pennyStatusController', () => {
   let res
   
   beforeEach(async () => {
-    (pennyStatusUtil.getLastLogDate as unknown as jest.Mock) = jest.fn()
+    // @ts-ignore
+    pennyStatusUtil.getLastLogDate = jest.fn()
     const mockRes = getMockRes()
     req = getMockReq()
     res = mockRes.res
   })
 
   it('Returns 500 error if something fails', async () => {
-    (pennyStatusUtil.getLastLogDate as unknown as jest.Mock).mockImplementation(() => {
+    // @ts-ignore
+    pennyStatusUtil.getLastLogDate.mockImplementation(() => {
       throw new Error('OH NOOOOO!!!')
     })
     await pennyStatusController(req, res)
@@ -24,7 +26,8 @@ describe('pennyStatusController', () => {
   })
 
   it('Returns unhealthy', async () => {
-    (pennyStatusUtil.getLastLogDate as unknown as jest.Mock).mockReturnValue('2020-01-01')
+    // @ts-ignore
+    pennyStatusUtil.getLastLogDate.mockReturnValue('2020-01-01')
     await pennyStatusController(req, res)
     expect(res.json).toHaveBeenCalledWith({
       healthy: false,
@@ -33,7 +36,8 @@ describe('pennyStatusController', () => {
 
   it('Happy path', async () => {
     jest.useFakeTimers().setSystemTime(new Date('2020-01-01').getTime());
-    (pennyStatusUtil.getLastLogDate as unknown as jest.Mock).mockReturnValue('2020-01-01')
+    // @ts-ignore
+    pennyStatusUtil.getLastLogDate.mockReturnValue('2020-01-01')
     await pennyStatusController(req, res)
     expect(res.json).toHaveBeenCalledWith({
       healthy: true,
