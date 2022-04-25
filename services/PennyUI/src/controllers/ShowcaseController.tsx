@@ -86,40 +86,12 @@ const ShowcaseController = () => {
 
   const [ showcaseProps, setShowcaseProps ] = useState<ShowcaseProps>(defaultShowcaseProps)
 
-  const [ equity, setEquity ] = useState<number>(0)
-  const [ weekEarnings, setWeekEarnings ] = useState<number>(0)
-  const [ weekPercReturn, setWeekPercReturn ] = useState<number>(0)
-
-  const [ currentValueLong, setCurrentValueLong ] = useState<number>(0)
-  const [ currentValueShort, setCurrentValueShort ] = useState<number>(0)
-
-  const [ monthEarnings, setMonthEarnings ] = useState<number>(0)
-  const [ monthPercReturn, setMonthPercReturn ] = useState<number>(0)
-
-  const [ yearEarnings, setYearEarnings ] = useState<number>(0)
-  const [ yearPercReturn, setYearPercReturn ] = useState<number>(0)
-
-  const [ theft, setTheft ] = useState<number>(0)
-  const [ lastYearTheft, setLastYearTheft ] = useState<number>(0)
-  const [ positions, setPositions ] = useState<PositionChitProps[]>([])
-
   // Refresh every 15 minutes
   // TODO Replace with useReducer
   useEffect(() => {
     const fetchShorthand = () => fetchShowcaseData(
       setLoading,
-      setEquity,
-      setWeekEarnings,
-      setWeekPercReturn,
-      setMonthEarnings,
-      setMonthPercReturn,
-      setYearEarnings,
-      setYearPercReturn,
-      setTheft,
-      setLastYearTheft,
-      setPositions,
-      setCurrentValueLong,
-      setCurrentValueShort,
+      setShowcaseProps,
     )
     fetchShorthand()
     const intervalId = setInterval(() => {
@@ -148,18 +120,18 @@ const ShowcaseController = () => {
       checkingCrons={checkingCrons}
       pennyHealthy={pennyHealthy}
       crons={crons}
-      equity={equity}
-      weekEarnings={weekEarnings}
-      currentValueLong={currentValueLong}
-      currentValueShort={currentValueShort}
-      weekPercReturn={weekPercReturn}
-      monthEarnings={monthEarnings}
-      monthPercReturn={monthPercReturn}
-      yearEarnings={yearEarnings}
-      yearPercReturn={yearPercReturn}
-      theft={theft}
-      lastYearTheft={lastYearTheft}
-      positions={positions}
+      equity={showcaseProps.equity}
+      weekEarnings={showcaseProps.weekEarnings}
+      currentValueLong={showcaseProps.currentValueLong}
+      currentValueShort={showcaseProps.currentValueShort}
+      weekPercReturn={showcaseProps.weekPercReturn}
+      monthEarnings={showcaseProps.monthEarnings}
+      monthPercReturn={showcaseProps.monthPercReturn}
+      yearEarnings={showcaseProps.yearEarnings}
+      yearPercReturn={showcaseProps.yearPercReturn}
+      theft={showcaseProps.theft}
+      lastYearTheft={showcaseProps.lastYearTheft}
+      positions={showcaseProps.positions}
     />
   )
 }
