@@ -73,6 +73,9 @@ const getICPositions = async (optionPositions: Position[]): Promise<ICPosition[]
 
 export const saveSnapshot = async () => {
   const positions = await positionSnapshotModel.find()
+  if (positions.length === 0) {
+    return
+  }
   const ICPositions = await getICPositions(positions)
 
   const newSnapshot = new ICSnapshotModel({
