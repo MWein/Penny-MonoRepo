@@ -30,7 +30,7 @@ const openICs = async () => {
     await cronFunc(buyIronCondors, 'LongIC')
   }
   await cronFunc(sellIronCondors, 'ShortIC')
-  await cronFunc(createGTCShortOrders, 'ShortGTC')
+  //await cronFunc(createGTCShortOrders, 'ShortGTC')
 }
 
 const closeICs = async () => {
