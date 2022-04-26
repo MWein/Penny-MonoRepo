@@ -13,6 +13,7 @@
     "@penny/settings": "1.0.0",
     "@penny/logger": "1.0.0",
     "@penny/tradier": "1.0.0",
-    "@penny/test-helpers": "1.0.0"
+    "@penny/test-helpers": "1.0.0",
+    "@penny/scribe": "1.0.0"
   }
 }

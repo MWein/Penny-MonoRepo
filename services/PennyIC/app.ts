@@ -4,6 +4,8 @@ const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
+import { saveAllData } from '../../packages/scribe'
+
 import { buyIronCondors } from './core/buyIronCondor'
 import { sellIronCondors } from './core/sellIronCondor'
 import { createGTCShortOrders } from './core/createGTCShortOrders'
@@ -46,10 +48,7 @@ const launchCrons = async () => {
     })
   }, null, true, 'America/New_York')
 
-  // new CronJob('0 31 09 * * 1-6', () => {
-  //   //log('Creating GTC Orders')
-  //   //createGTCOrders()
-  // }, null, true, 'America/New_York')
+  new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
 
   new CronJob('0 0 10 * * 1-4', openICs, null, true, 'America/New_York')
   new CronJob('0 0 13 * * 1-3', () => cronFunc(buyIronCondors, 'LongIC'), null, true, 'America/New_York')
