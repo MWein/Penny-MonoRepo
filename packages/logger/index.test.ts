@@ -262,10 +262,10 @@ describe('clearOldLogs', () => {
     expect(console.log).toHaveBeenCalledWith('Error reaching database')
   })
 
-  it('Calls clear logs query 90 days ago', async () => {
+  it('Calls clear logs query 30 days ago', async () => {
     jest.useFakeTimers().setSystemTime(new Date('2021-10-12').getTime())
     await clearOldLogs()
-    expect(logModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1626220800000}})
-    expect(cronModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1626220800000}})
+    expect(logModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1631404800000}})
+    expect(cronModel.deleteMany).toHaveBeenCalledWith({ date: { $lte: 1631404800000}})
   })
 })

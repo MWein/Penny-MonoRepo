@@ -87,7 +87,7 @@ export const getCronLogs = async () : Promise<CronLog[]> => {
 
 export const clearOldLogs = async () => {
   try {
-    const DELETEOLDERTHANDAYS = 90
+    const DELETEOLDERTHANDAYS = 30
     const today = new Date()
     const priorDate = new Date().setDate(today.getDate() - DELETEOLDERTHANDAYS)
     await logModel.deleteMany({ date: { $lte: priorDate } })
