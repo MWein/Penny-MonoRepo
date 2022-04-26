@@ -1,4 +1,3 @@
-import * as tradier from '@penny/tradier'
 import { positionSnapshotModel } from '@penny/db-models'
 import { getExpiration } from '@penny/option-symbol-parser'
 
@@ -12,5 +11,8 @@ export const clearExpiredPositions = async () => {
     const expiration = new Date(getExpiration(pos.symbol))
     return today > expiration ? [ ...acc, pos._id ] : acc
   }, [])
-  await positionSnapshotModel.deleteMany({ _id: { $in: idsToDelete } })
+
+  if (idsToDelete.length > 0) {
+    await positionSnapshotModel.deleteMany({ _id: { $in: idsToDelete } })
+  }
 }
