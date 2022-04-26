@@ -6,6 +6,11 @@ import { clearExpiredPositions } from "./clearExpiredPositions"
 
 
 export const saveAllData = async () => {
+  // Do not run in prod
+  if (!process.env.BASEPATH.includes('sandbox')) {
+    return
+  }
+
   const isMarketOpen = await tradier.isMarketOpen()
   if (!isMarketOpen) {
     return
