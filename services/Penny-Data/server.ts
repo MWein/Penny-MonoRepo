@@ -3,7 +3,6 @@ import * as mongoose from 'mongoose'
 
 const port = 3001
 
-
 // Recursively continuously try until the damn thing decides to work
 const connectToDB = () => {
   console.log('Connecting to Database')

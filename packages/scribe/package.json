@@ -1,0 +1,17 @@
+{
+  "name": "@penny/scribe",
+  "version": "1.0.0",
+  "description": "Package that saves snapshots of portfolio for later data mining",
+  "scripts": {
+    "build": "yarn install && tsc index.ts",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/db-models": "1.0.0",
+    "@penny/tradier": "1.0.0",
+    "@penny/option-symbol-parser": "1.0.0",
+    "@penny/spread-outcome": "1.0.0",
+    "@penny/logger": "1.0.0",
+    "@penny/test-helpers": "1.0.0"
+  }
+}
