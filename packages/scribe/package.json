@@ -11,6 +11,7 @@
     "@penny/tradier": "1.0.0",
     "@penny/option-symbol-parser": "1.0.0",
     "@penny/spread-outcome": "1.0.0",
-    "@penny/logger": "1.0.0"
+    "@penny/logger": "1.0.0",
+    "@penny/test-helpers": "1.0.0"
   }
 }
