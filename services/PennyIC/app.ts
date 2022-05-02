@@ -35,7 +35,7 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 
 const closeICs = async () => {
   await cronFunc(closeExpiringPositions, 'CloseExp')
-  await cronFunc(closeOldShortPositions, 'CloseShort')
+  //await cronFunc(closeOldShortPositions, 'CloseShort')
 }
 
 const launchCrons = async () => {
