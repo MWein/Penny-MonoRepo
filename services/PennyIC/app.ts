@@ -7,8 +7,8 @@ import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 import { saveAllData } from '../../packages/scribe'
 
 import { buyIronCondors } from './core/buyIronCondor'
-import { sellIronCondors } from './core/sellIronCondor'
-import { createGTCShortOrders } from './core/createGTCShortOrders'
+//import { sellIronCondors } from './core/sellIronCondor'
+//import { createGTCShortOrders } from './core/createGTCShortOrders'
 
 import { closeExpiringPositions } from './core/closeExpiringPositions'
 import { closeOldShortPositions } from './core/closeOldShortPositions'
@@ -24,14 +24,14 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 }
 
 
-const openICs = async () => {
-  // Only buy on mon,tues,wed
-  if ([ 1, 2, 3 ].includes(new Date().getDay())) {
-    await cronFunc(buyIronCondors, 'LongIC')
-  }
-  await cronFunc(sellIronCondors, 'ShortIC')
-  //await cronFunc(createGTCShortOrders, 'ShortGTC')
-}
+// const openICs = async () => {
+//   // Only buy on mon,tues,wed
+//   if ([ 1, 2, 3, 4 ].includes(new Date().getDay())) {
+//     await cronFunc(buyIronCondors, 'LongIC')
+//   }
+//   //await cronFunc(sellIronCondors, 'ShortIC')
+//   //await cronFunc(createGTCShortOrders, 'ShortGTC')
+// }
 
 const closeICs = async () => {
   await cronFunc(closeExpiringPositions, 'CloseExp')
@@ -50,8 +50,8 @@ const launchCrons = async () => {
 
   new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
 
-  new CronJob('0 0 10 * * 1-4', openICs, null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-3', () => cronFunc(buyIronCondors, 'LongIC'), null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', () => cronFunc(buyIronCondors, 'LongIC'), null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-4', () => cronFunc(buyIronCondors, 'LongIC'), null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', closeICs, null, true, 'America/New_York')
