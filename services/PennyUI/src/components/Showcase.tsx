@@ -18,8 +18,6 @@ const Showcase = ({
   pennyHealthy,
   equity,
   weekEarnings,
-  currentValueLong,
-  currentValueShort,
   weekPercReturn,
   monthEarnings,
   monthPercReturn,
@@ -48,8 +46,6 @@ const Showcase = ({
           <AccountInfoPanel
               equity={equity}
               weekEarnings={weekEarnings}
-              currentValueLong={currentValueLong}
-              currentValueShort={currentValueShort}
               weekPercReturn={weekPercReturn}
               monthEarnings={monthEarnings}
               monthPercReturn={monthPercReturn}

@@ -22,6 +22,7 @@ export const saveAllData = async () => {
     await saveSnapshot()
     await logger.logCron('Snapshot', true)
   } catch (e) {
+    console.log(e)
     await logger.logCron('Snapshot', false)
   }
 }

@@ -1,3 +1,6 @@
+// TODO Possible Removal
+// May actually want to keep around but modified
+
 import * as tradier from '@penny/tradier'
 import { isOption } from '@penny/option-symbol-parser'
 import { getSpreadOutcomes } from '@penny/spread-outcome'

@@ -1,8 +1,7 @@
 import * as tradier from '@penny/tradier'
-import { isOption } from '@penny/option-symbol-parser'
+import { isOption, getUnderlying, getType } from '@penny/option-symbol-parser'
 import { OptionChainLink, MultilegOptionLeg } from '@penny/tradier'
-import { getSpreadOutcomes } from '@penny/spread-outcome'
-import { pickRandomTickers } from '../common/pickRandomTickers'
+import { uniq } from 'lodash'
 
 
 type ChainLinkWithDeltaDist = OptionChainLink & {
@@ -144,19 +143,18 @@ export const sellSpread = async (chain: OptionChainLink[], symbol: string, type:
 
 
 
-export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, minDTE = 30) => {
+export const sellIronCondor = async (symbol: string, shortDelta: number, targetStrikeWidth: number, put: boolean = true, call: boolean = true, minDTE = 30) => {
   try {
+    if (!put && !call) {
+      return
+    }
+
     const expirations = await tradier.getExpirations(symbol, 100)
     if (!expirations || expirations.length === 0) {
       return
     }
 
-    // At least 30 days out
-    // TODO Make this a setting
-    const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
-    const today = new Date().getTime()
-    const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
-
+    const expiration = expirations[0]
 
     if (!expiration) {
       return
@@ -164,8 +162,12 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
 
     const chain = await tradier.getOptionChain(symbol, expiration)
 
-    await sellSpreadByPremium(chain, symbol, 'put', shortDelta, targetStrikeWidth)
-    await sellSpreadByPremium(chain, symbol, 'call', shortDelta, targetStrikeWidth)
+    if (put) {
+      await sellSpreadByPremium(chain, symbol, 'put', shortDelta, targetStrikeWidth)
+    }
+    if (call) {
+      await sellSpreadByPremium(chain, symbol, 'call', shortDelta, targetStrikeWidth)
+    }
   } catch (e) {
     // TODO Log error
   }
@@ -173,46 +175,56 @@ export const sellIronCondor = async (symbol: string, shortDelta: number, targetS
 
 
 
-export const sellIronCondors = async () => {
-  // TODO Make these settings
-  const sellICEnabled = true
-  const targetDelta = 15
-  const minDTE = 30
-  const sellPerDay = 10
-  const targetStrikeWidth = 1
 
-  if (!sellICEnabled) {
+export const sellIronCondorBigThree = async () => {
+  const bigThree = [ 'SPY', 'IWM', 'QQQ' ]
+
+  // TODO Is bigThree enabled?
+
+  // Is market open?
+  const isOpen = await tradier.isMarketOpen()
+  if (!isOpen) {
     return
   }
 
+  // TODO Get big three settings (individual)
+    // Enabled?
+    // Short delta
+    // maxStrikeWidth
+
+  for (let x = 0; x < bigThree.length; x++) {
+    console.log(bigThree[x])
+    await sellIronCondor(bigThree[x], 0.1, 1)
+  }
+}
+
+
+export const sellIronCondors = async () => {
+  // TODO Is iron condor enabled?
+
+  // Is market open?
   const isOpen = await tradier.isMarketOpen()
   if (!isOpen) {
     return
   }
 
   // TODO get stocks from DB
-  // const symbols = [
-  //   'DIA', 'AAPL', 'TSLA', 'MSFT', 'BAC', 'WFC', 'FB', 'PTON', 'AMC', 'F',
-  //   'SNDL', 'AMZN', 'DIS', 'NIO', 'LCID', 'NFLX', 'PFE', 'NVDA', 'AAL', 'SNAP', 'PLUG', 'HOOD',
-  //   'GPRO', 'BABA', 'CCL', 'ACB', 'NOK', 'DAL', 'UAL', 'PLTR', 'GME', 'SBUX', 'AMD',
-  //   'COIN', 'TLRY', 'TWTR', 'RIVN', 'T', 'KO', 'CGC', 'GOOG', 'MRNA', 'SPCE', 'BB', 'PYPL', 'UBER',
-  //   'GM', 'ZNGA', 'NCLH', 'WKHS', 'SQ', 'DKNG', 'ABNB', 'BA', 'WMT',
-  //   'JNJ', 'CHPT', 'LUV', 'MRO', 'ARKK', 'RIOT', 'XOM', 'SOFI', 'WISH', 'SONY',
-  //   'PENN', 'COST', 'ZM', 'JPM',
-  //   'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA',
-  //   'XLB', 'XLC', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XLY',
+  const symbols = [
+    'DIA', 'AAPL', 'TSLA', 'MSFT', 'BAC', 'WFC', 'FB', 'PTON', 'AMC', 'F',
+    'SNDL', 'AMZN', 'DIS', 'NIO', 'LCID', 'NFLX', 'PFE', 'NVDA', 'AAL', 'SNAP', 'PLUG', 'HOOD',
+    'GPRO', 'BABA', 'CCL', 'ACB', 'NOK', 'DAL', 'UAL', 'PLTR', 'GME', 'SBUX', 'AMD',
+    'COIN', 'TLRY', 'TWTR', 'RIVN', 'T', 'KO', 'CGC', 'GOOG', 'MRNA', 'SPCE', 'BB', 'PYPL', 'UBER',
+    'GM', 'ZNGA', 'NCLH', 'WKHS', 'SQ', 'DKNG', 'ABNB', 'BA', 'WMT',
+    'JNJ', 'CHPT', 'LUV', 'MRO', 'ARKK', 'RIOT', 'XOM', 'SOFI', 'WISH', 'SONY',
+    'PENN', 'COST', 'ZM', 'JPM',
+    'RCL', 'CLOV', 'ET', 'INTC', 'V', 'TSM', 'FUBO', 'MA',
+    'XLB', 'XLC', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XLY',
 
-  //   'SPY', 'IWM', 'QQQ',
+    'SPY', 'IWM', 'QQQ',
 
-  //   // Leveraged
-  //   'TQQQ', 'SOXL', 'DUST', 'ERX', 'FAS', 'FAZ', 'JNUG', 'LABD', 'LABU', 'NUGT', 'SDS', 'TNA', 'UPRO', 'YINN',
-
-  //   // Additional weeklies
-  //   'AA', 'AAOI', 'ABBV', 'ABV', 'ABNB', 'ABT', 'ACAD', 'ACB', 'ACN', 'ADBE', 'ADI', 'ADM', 'ADP', 'ADSK', 'AEO', 'AFL', 'AFRM', 'AG',
-  //   'AGNC', 'AHT', 'AIG', 'AKAM', 'ALGN', 'AMAT', 'AMBA', 'AMGN', 'AMRN', 'ANET', 'ANF'
-  // ]
-
-  const symbols = require('./weeklyTickers.json')
+    // Leveraged
+    'TQQQ', 'SOXL', 'DUST', 'ERX', 'FAS', 'FAZ', 'JNUG', 'LABD', 'LABU', 'NUGT', 'SDS', 'TNA', 'UPRO', 'YINN'
+  ]
 
   // TODO Filter for enabled
     // Map out just symbols
@@ -220,31 +232,25 @@ export const sellIronCondors = async () => {
 
   const positions = await tradier.getPositions()
   const openOptions = positions.filter(x => isOption(x.symbol))
+  const openOptionSymbols = openOptions.map(x => x.symbol)
 
-  const openSpreads = getSpreadOutcomes(openOptions)
-  const shortSpreads = openSpreads.filter(spread => spread.side === 'short')
-  const tickersToIgnore = shortSpreads.map(spread => spread.ticker)  
-  const tickersToChooseFrom = symbols.filter(symbol => !tickersToIgnore.includes(symbol))
+  const orders = await tradier.getOrders()
+  const multilegOrders = orders.filter(x => x.class === 'multileg' && (x.status === 'open' || x.status === 'pending'))
+  const legs = multilegOrders.reduce((acc, x) => [ ...acc, ...x.leg ], [])
+  const openOrderSymbols = legs.map(x => x.option_symbol)
 
-  if (tickersToChooseFrom.length === 0) {
-    return
-  }
+  const openSymbols = uniq([ ...openOptionSymbols, ...openOrderSymbols ])
 
-  // Hacky... get a 30 day out expiration date for AAPL
-  // TODO Should be in its own function since this is repeated
-  const expirations = await tradier.getExpirations('AAPL', 100)
-  if (!expirations || expirations.length === 0) {
-    return
-  }
-  const minDiff = (8.64e+7 * minDTE) // 8.64e+7 is how many milliseconds there are in a day
-  const today = new Date().getTime()
-  const expiration = expirations.find(x => (new Date(x).getTime() - today) >= minDiff)
-  // TODO Should be in its own function since this is repeated
+  // Map out what symbols have open positions or orders for calls/puts
+  const openPositionTypes = symbols.map(symbol => ({
+    symbol,
+    hasCall: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'call'),
+    hasPut: openSymbols.some(openSymbol => getUnderlying(openSymbol) === symbol && getType(openSymbol) === 'put'),
+  }))
 
-  const tickersToSell = await pickRandomTickers(tickersToChooseFrom, sellPerDay, targetStrikeWidth, expiration)
 
-  for (let x = 0; x < tickersToSell.length; x++) {
-    const position = tickersToSell[x]
-    await sellIronCondor(position, targetDelta, targetStrikeWidth, minDTE)
+  for (let x = 0; x < openPositionTypes.length; x++) {
+    const position = openPositionTypes[x]
+    await sellIronCondor(position.symbol, 15, 1, !position.hasPut, !position.hasCall)
   }
 }
