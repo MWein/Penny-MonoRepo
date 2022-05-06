@@ -6,12 +6,15 @@ import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
 import { saveAllData } from '../../packages/scribe'
 
-import { buyIronCondors } from './core/buyIronCondor'
-//import { sellIronCondors } from './core/sellIronCondor'
-//import { createGTCShortOrders } from './core/createGTCShortOrders'
 
+// Possible removal
+//import { buyIronCondors } from './core/buyIronCondor'
+//import { createGTCShortOrders } from './core/createGTCShortOrders'
+//import { closeOldShortPositions } from './core/closeOldShortPositions'
+
+
+import { sellIronCondors } from './core/sellIronCondor'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
-import { closeOldShortPositions } from './core/closeOldShortPositions'
 
 
 const cronFunc = async (func: Function, cronName: CronType) => {
@@ -33,10 +36,11 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 //   //await cronFunc(createGTCShortOrders, 'ShortGTC')
 // }
 
-const closeICs = async () => {
-  await cronFunc(closeExpiringPositions, 'CloseExp')
-  //await cronFunc(closeOldShortPositions, 'CloseShort')
-}
+// const closeICs = async () => {
+//   await cronFunc(closeExpiringPositions, 'CloseExp')
+//   //await cronFunc(closeOldShortPositions, 'CloseShort')
+// }
+
 
 const launchCrons = async () => {
   log('Starting Crons')
@@ -50,11 +54,11 @@ const launchCrons = async () => {
 
   new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
 
-  new CronJob('0 0 10 * * 1-4', () => cronFunc(buyIronCondors, 'LongIC'), null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-4', () => cronFunc(buyIronCondors, 'LongIC'), null, true, 'America/New_York')
+  new CronJob('0 0 10 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
 
   // One hour before Tradier does it
-  new CronJob('0 15 14 * * 1-5', closeICs, null, true, 'America/New_York')
+  new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
