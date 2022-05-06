@@ -1,6 +1,7 @@
 # Custom Dictionary Words
 ABNB
 ARKK
+BASEPATH
 CHPT
 CLOV
 DKNG
