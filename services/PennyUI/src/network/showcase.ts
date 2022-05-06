@@ -8,8 +8,6 @@ export type ShowcaseProps = AccountInfoPanelProps & PositionChitsControllerProps
 export const defaultShowcaseProps: ShowcaseProps = {
   equity: 0,
   weekEarnings: 0,
-  currentValueLong: 0,
-  currentValueShort: 0,
   weekPercReturn: 0,
   monthEarnings: 0,
   monthPercReturn: 0,

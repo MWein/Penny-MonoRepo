@@ -120,8 +120,6 @@ const ShowcaseController = () => {
       crons={crons}
       equity={showcaseProps.equity}
       weekEarnings={showcaseProps.weekEarnings}
-      currentValueLong={showcaseProps.currentValueLong}
-      currentValueShort={showcaseProps.currentValueShort}
       weekPercReturn={showcaseProps.weekPercReturn}
       monthEarnings={showcaseProps.monthEarnings}
       monthPercReturn={showcaseProps.monthPercReturn}
