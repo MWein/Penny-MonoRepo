@@ -4,7 +4,7 @@ const ICPosition = new Schema({
   ticker: String,
   side: {
     type: String,
-    enum: [ 'long', 'short' ],
+    enum: [ 'long', 'short', 'indeterminate' ],
   },
   gainLoss: Number,
   maxLoss: Number,
