@@ -23,13 +23,15 @@ export const getATMPut = async (symbol: string, prices: tradier.TradierPrice[]) 
     const putChain = chain.filter(link => link.type === 'put')
   
     const atmLink = putChain.filter(link => link.strike < currentPrice).reverse()[0]
-    if (!atmLink) {
+    const nextLinkAbove = putChain.filter(link => link.strike >= currentPrice)[0]
+    if (!atmLink || !nextLinkAbove) {
       return null
     }
 
     return {
       ...atmLink,
       price: currentPrice,
+      strikeAbovePremium: nextLinkAbove.premium,
       perc: Number((atmLink.premium / atmLink.strike).toFixed(2))
     }
   } catch (e) {
@@ -70,6 +72,8 @@ export const selectPuts = async () => {
   const sortedPuts = selectedPuts.sort((a, b) => b.perc - a.perc)
 
   console.log(sortedPuts)
+
+
 
 
 }
