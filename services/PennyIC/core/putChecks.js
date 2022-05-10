@@ -964,3 +964,16 @@ const primarySelections = [
     perc: 0
   }
 ]
+
+
+const puts = primarySelections.filter(x => x.perc > 4)
+const totalPrice = puts.reduce((acc, x) => acc + x.premium, 0)
+const totalPotential = puts.reduce((acc, x) => acc + x.strikeAbovePremium, 0)
+const profit = totalPotential - totalPrice
+const percReturn = ((profit / totalPrice) * 100).toFixed(2)
+
+console.log(puts)
+console.log(totalPrice)
+console.log(totalPotential)
+console.log(profit)
+console.log(percReturn)
