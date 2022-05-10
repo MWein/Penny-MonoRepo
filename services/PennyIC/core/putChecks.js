@@ -1,6 +1,7 @@
 // DELETE LATER
 // This is for keeping track of what was selected
 
+// Selections made on 9 May at 11pm
 const selection = [
   {
     symbol: 'CLOV220513P00002500',
@@ -10,6 +11,7 @@ const selection = [
     premium: 30,
     expiration: '2022-05-13',
     delta: 0.4571380020886217,
+    price: 2.77,
     perc: 12
   },
   {
@@ -20,6 +22,7 @@ const selection = [
     premium: 910,
     expiration: '2022-05-13',
     delta: 0.3361041888672646,
+    price: 83.45,
     perc: 10.96
   },
   {
@@ -30,6 +33,7 @@ const selection = [
     premium: 146,
     expiration: '2022-05-13',
     delta: 0.330317909104236,
+    price: 13.78,
     perc: 10.81
   },
   {
@@ -40,6 +44,7 @@ const selection = [
     premium: 214,
     expiration: '2022-05-13',
     delta: 0.3434483505310779,
+    price: 23.04,
     perc: 9.3
   },
   {
@@ -50,6 +55,7 @@ const selection = [
     premium: 112,
     expiration: '2022-05-13',
     delta: 0.3645305265405014,
+    price: 12.84,
     perc: 8.96
   },
   {
@@ -60,6 +66,7 @@ const selection = [
     premium: 64,
     expiration: '2022-05-13',
     delta: 0.2924190707717839,
+    price: 7.69,
     perc: 8.53
   },
   {
@@ -70,6 +77,7 @@ const selection = [
     premium: 715,
     expiration: '2022-05-13',
     delta: 0.4271828592138787,
+    price: 102,
     perc: 7.08
   },
   {
@@ -80,6 +88,7 @@ const selection = [
     premium: 435,
     expiration: '2022-05-13',
     delta: 0.5165348440541148,
+    price: 65.25,
     perc: 6.69
   },
   {
@@ -90,6 +99,7 @@ const selection = [
     premium: 16,
     expiration: '2022-05-13',
     delta: 0.4015426301006673,
+    price: 2.74,
     perc: 6.4
   },
   {
@@ -100,6 +110,7 @@ const selection = [
     premium: 70,
     expiration: '2022-05-13',
     delta: 0.3400343274171729,
+    price: 11.25,
     perc: 6.36
   },
   {
@@ -110,6 +121,7 @@ const selection = [
     premium: 14,
     expiration: '2022-05-13',
     delta: 0.3621508128092853,
+    price: 2.56,
     perc: 5.6
   },
   {
@@ -120,6 +132,7 @@ const selection = [
     premium: 400,
     expiration: '2022-05-13',
     delta: 0.4003885919799295,
+    price: 83.6,
     perc: 4.82
   },
   {
@@ -130,6 +143,7 @@ const selection = [
     premium: 194,
     expiration: '2022-05-13',
     delta: 0.3495644199749648,
+    price: 41.47,
     perc: 4.73
   },
   {
@@ -140,6 +154,7 @@ const selection = [
     premium: 25,
     expiration: '2022-05-13',
     delta: 0.3626319566531169,
+    price: 5.58,
     perc: 4.55
   },
   {
@@ -150,6 +165,7 @@ const selection = [
     premium: 27,
     expiration: '2022-05-13',
     delta: 0.3458142441574985,
+    price: 6.02,
     perc: 4.5
   },
   {
@@ -160,6 +176,7 @@ const selection = [
     premium: 47,
     expiration: '2022-05-13',
     delta: 0.3915907125432319,
+    price: 10.81,
     perc: 4.48
   },
   {
@@ -170,6 +187,7 @@ const selection = [
     premium: 410,
     expiration: '2022-05-13',
     delta: 0.3984170678498103,
+    price: 93.3,
     perc: 4.41
   },
   {
@@ -180,6 +198,7 @@ const selection = [
     premium: 28,
     expiration: '2022-05-13',
     delta: 0.4238512549157134,
+    price: 6.57,
     perc: 4.31
   },
   {
@@ -190,6 +209,7 @@ const selection = [
     premium: 455,
     expiration: '2022-05-13',
     delta: 0.4364321826914598,
+    price: 107.45,
     perc: 4.25
   },
   {
@@ -200,6 +220,7 @@ const selection = [
     premium: 55,
     expiration: '2022-05-13',
     delta: 0.3053708470500978,
+    price: 13.4,
     perc: 4.23
   },
   {
@@ -210,6 +231,7 @@ const selection = [
     premium: 565,
     expiration: '2022-05-13',
     delta: 0.4144003781672978,
+    price: 136.8,
     perc: 4.15
   },
   {
@@ -220,6 +242,7 @@ const selection = [
     premium: 93,
     expiration: '2022-05-13',
     delta: 0.2824483291679035,
+    price: 23.5,
     perc: 4.04
   },
   {
@@ -230,6 +253,7 @@ const selection = [
     premium: 465,
     expiration: '2022-05-13',
     delta: 0.3145625320492563,
+    price: 119.8,
     perc: 3.91
   },
   {
@@ -240,6 +264,7 @@ const selection = [
     premium: 89,
     expiration: '2022-05-13',
     delta: 0.3184059273798396,
+    price: 23.46,
     perc: 3.87
   },
   {
@@ -250,6 +275,7 @@ const selection = [
     premium: 58,
     expiration: '2022-05-13',
     delta: 0.2151278106762659,
+    price: 15.01,
     perc: 3.87
   },
   {
@@ -260,6 +286,7 @@ const selection = [
     premium: 52,
     expiration: '2022-05-13',
     delta: 0.3064018913231683,
+    price: 14.16,
     perc: 3.71
   },
   {
@@ -270,6 +297,7 @@ const selection = [
     premium: 310,
     expiration: '2022-05-13',
     delta: 0.4191954666532598,
+    price: 84.8,
     perc: 3.69
   },
   {
@@ -280,6 +308,7 @@ const selection = [
     premium: 2890,
     expiration: '2022-05-13',
     delta: 0.3364390516592257,
+    price: 787,
     perc: 3.68
   },
   {
@@ -290,6 +319,7 @@ const selection = [
     premium: 305,
     expiration: '2022-05-13',
     delta: 0.3622251259453267,
+    price: 86.19,
     perc: 3.55
   },
   {
@@ -300,6 +330,7 @@ const selection = [
     premium: 580,
     expiration: '2022-05-13',
     delta: 0.3350394964631366,
+    price: 169.75,
     perc: 3.46
   },
   {
@@ -310,6 +341,7 @@ const selection = [
     premium: 53,
     expiration: '2022-05-13',
     delta: 0.2333108413909912,
+    price: 15.95,
     perc: 3.42
   },
   {
@@ -320,6 +352,7 @@ const selection = [
     premium: 146,
     expiration: '2022-05-13',
     delta: 0.3574713434050883,
+    price: 43.55,
     perc: 3.36
   },
   {
@@ -330,6 +363,7 @@ const selection = [
     premium: 570,
     expiration: '2022-05-13',
     delta: 0.3717694686597022,
+    price: 173.05,
     perc: 3.3
   },
   {
@@ -340,6 +374,7 @@ const selection = [
     premium: 8,
     expiration: '2022-05-13',
     delta: 0.199879026364059,
+    price: 2.99,
     perc: 3.2
   },
   {
@@ -350,6 +385,7 @@ const selection = [
     premium: 76,
     expiration: '2022-05-13',
     delta: 0.2414698942073954,
+    price: 24.3,
     perc: 3.17
   },
   {
@@ -360,6 +396,7 @@ const selection = [
     premium: 400,
     expiration: '2022-05-13',
     delta: 0.2902214101754804,
+    price: 133.99,
     perc: 3.01
   },
   {
@@ -370,6 +407,7 @@ const selection = [
     premium: 21,
     expiration: '2022-05-13',
     delta: 0.271078099937214,
+    price: 7.28,
     perc: 3
   },
   {
@@ -380,6 +418,7 @@ const selection = [
     premium: 115,
     expiration: '2022-05-13',
     delta: 0.4628375607484314,
+    price: 38.6,
     perc: 2.99
   },
   {
@@ -390,6 +429,7 @@ const selection = [
     premium: 46,
     expiration: '2022-05-13',
     delta: 0.2821210390770784,
+    price: 16.39,
     perc: 2.88
   },
   {
@@ -400,6 +440,7 @@ const selection = [
     premium: 950,
     expiration: '2022-05-13',
     delta: 0.5429385453863527,
+    price: 333.25,
     perc: 2.86
   },
   {
@@ -410,6 +451,7 @@ const selection = [
     premium: 14,
     expiration: '2022-05-13',
     delta: 0.178776539349293,
+    price: 5.48,
     perc: 2.8
   },
   {
@@ -420,6 +462,7 @@ const selection = [
     premium: 24,
     expiration: '2022-05-13',
     delta: 0.2477017762332913,
+    price: 9.5,
     perc: 2.67
   },
   {
@@ -430,6 +473,7 @@ const selection = [
     premium: 515,
     expiration: '2022-05-13',
     delta: 0.3869273827509117,
+    price: 197.49,
     perc: 2.64
   },
   {
@@ -440,6 +484,7 @@ const selection = [
     premium: 6000,
     expiration: '2022-05-13',
     delta: 0.4862988869578109,
+    price: 2289,
     perc: 2.63
   },
   {
@@ -450,6 +495,7 @@ const selection = [
     premium: 221,
     expiration: '2022-05-13',
     delta: 0.2991379898977344,
+    price: 84.58,
     perc: 2.63
   },
   {
@@ -460,6 +506,7 @@ const selection = [
     premium: 12,
     expiration: '2022-05-13',
     delta: 0.288651194425536,
+    price: 5.19,
     perc: 2.4
   },
   {
@@ -470,6 +517,7 @@ const selection = [
     premium: 185,
     expiration: '2022-05-13',
     delta: 0.3448762691611165,
+    price: 80,
     perc: 2.34
   },
   {
@@ -480,6 +528,7 @@ const selection = [
     premium: 350,
     expiration: '2022-05-13',
     delta: 0.498339606447436,
+    price: 152.75,
     perc: 2.3
   },
   {
@@ -490,6 +539,7 @@ const selection = [
     premium: 87,
     expiration: '2022-05-13',
     delta: 0.2868969617516173,
+    price: 38.4,
     perc: 2.29
   },
   {
@@ -500,6 +550,7 @@ const selection = [
     premium: 163,
     expiration: '2022-05-13',
     delta: 0.3532101675232694,
+    price: 73.98,
     perc: 2.22
   },
   {
@@ -510,6 +561,7 @@ const selection = [
     premium: 16,
     expiration: '2022-05-13',
     delta: 0.2731182073561066,
+    price: 7.74,
     perc: 2.13
   },
   {
@@ -520,6 +572,7 @@ const selection = [
     premium: 91,
     expiration: '2022-05-13',
     delta: 0.5571552826076863,
+    price: 44.13,
     perc: 2.07
   },
   {
@@ -530,6 +583,7 @@ const selection = [
     premium: 395,
     expiration: '2022-05-13',
     delta: 0.4019469035728741,
+    price: 193.88,
     perc: 2.05
   },
   {
@@ -540,6 +594,7 @@ const selection = [
     premium: 85,
     expiration: '2022-05-13',
     delta: 0.3268117782711423,
+    price: 43.89,
     perc: 1.95
   },
   {
@@ -550,6 +605,7 @@ const selection = [
     premium: 940,
     expiration: '2022-05-13',
     delta: 0.4182849123827765,
+    price: 501.4,
     perc: 1.88
   },
   {
@@ -560,6 +616,7 @@ const selection = [
     premium: 24,
     expiration: '2022-05-13',
     delta: 0.2615879108264276,
+    price: 13.4,
     perc: 1.85
   },
   {
@@ -570,6 +627,7 @@ const selection = [
     premium: 140,
     expiration: '2022-05-13',
     delta: 0.3092793027031048,
+    price: 76.15,
     perc: 1.84
   },
   {
@@ -580,6 +638,7 @@ const selection = [
     premium: 88,
     expiration: '2022-05-13',
     delta: 0.5454269102570597,
+    price: 48.56,
     perc: 1.81
   },
   {
@@ -590,6 +649,7 @@ const selection = [
     premium: 325,
     expiration: '2022-05-13',
     delta: 0.7798997198952573,
+    price: 182.5,
     perc: 1.81
   },
   {
@@ -600,6 +660,7 @@ const selection = [
     premium: 78,
     expiration: '2022-05-13',
     delta: 0.4128623440342338,
+    price: 43.35,
     perc: 1.81
   },
   {
@@ -610,6 +671,7 @@ const selection = [
     premium: 218,
     expiration: '2022-05-13',
     delta: 0.5123610970975185,
+    price: 122.38,
     perc: 1.79
   },
   {
@@ -620,6 +682,7 @@ const selection = [
     premium: 61,
     expiration: '2022-05-13',
     delta: 0.4157556407101478,
+    price: 36.49,
     perc: 1.69
   },
   {
@@ -630,6 +693,7 @@ const selection = [
     premium: 257,
     expiration: '2022-05-13',
     delta: 0.5700919306427888,
+    price: 152.94,
     perc: 1.69
   },
   {
@@ -640,6 +704,7 @@ const selection = [
     premium: 479,
     expiration: '2022-05-11',
     delta: 0.4300567239106422,
+    price: 298.19,
     perc: 1.61
   },
   {
@@ -650,6 +715,7 @@ const selection = [
     premium: 238,
     expiration: '2022-05-11',
     delta: 0.3592210676615234,
+    price: 175.79,
     perc: 1.36
   },
   {
@@ -660,6 +726,7 @@ const selection = [
     premium: 180,
     expiration: '2022-05-13',
     delta: 0.4342501890071591,
+    price: 135.65,
     perc: 1.33
   },
   {
@@ -670,6 +737,7 @@ const selection = [
     premium: 25,
     expiration: '2022-05-13',
     delta: 0.4185009056089191,
+    price: 19.54,
     perc: 1.28
   },
   {
@@ -680,6 +748,7 @@ const selection = [
     premium: 400,
     expiration: '2022-05-13',
     delta: 0.4571100672162047,
+    price: 323.65,
     perc: 1.24
   },
   {
@@ -690,6 +759,7 @@ const selection = [
     premium: 475,
     expiration: '2022-05-11',
     delta: 0.4157207738815479,
+    price: 399.47,
     perc: 1.19
   },
   {
@@ -700,6 +770,7 @@ const selection = [
     premium: 54,
     expiration: '2022-05-13',
     delta: 0.2683299783092568,
+    price: 47.66,
     perc: 1.14
   },
   {
@@ -710,6 +781,7 @@ const selection = [
     premium: 12,
     expiration: '2022-05-13',
     delta: 0.2193712934752159,
+    price: 10.79,
     perc: 1.14
   },
   {
@@ -720,6 +792,7 @@ const selection = [
     premium: 35,
     expiration: '2022-05-13',
     delta: 0.3577643613826579,
+    price: 33.98,
     perc: 1.04
   },
   {
@@ -730,6 +803,7 @@ const selection = [
     premium: 4,
     expiration: '2022-05-13',
     delta: 0.1021767156895078,
+    price: 4.46,
     perc: 1
   },
   {
@@ -740,6 +814,7 @@ const selection = [
     premium: 56,
     expiration: '2022-05-13',
     delta: 0.3775290658413144,
+    price: 64.99,
     perc: 0.88
   },
   {
@@ -750,6 +825,7 @@ const selection = [
     premium: 38,
     expiration: '2022-05-13',
     delta: 0.4344396568846742,
+    price: 71.9,
     perc: 0.53
   },
   {
@@ -760,6 +836,7 @@ const selection = [
     premium: 62,
     expiration: '2022-05-13',
     delta: 0.3847446216477428,
+    price: 126.59,
     perc: 0.49
   },
   {
@@ -770,6 +847,7 @@ const selection = [
     premium: 2,
     expiration: '2022-05-13',
     delta: 0.1184383271521116,
+    price: 4.79,
     perc: 0.44
   },
   {
@@ -780,6 +858,7 @@ const selection = [
     premium: 50,
     expiration: '2022-05-13',
     delta: 0.3688530511272782,
+    price: 151.8,
     perc: 0.33
   },
   {
@@ -790,6 +869,7 @@ const selection = [
     premium: 20,
     expiration: '2022-05-13',
     delta: 0.5241226347411507,
+    price: 77.42,
     perc: 0.26
   },
   {
@@ -800,6 +880,7 @@ const selection = [
     premium: 18,
     expiration: '2022-05-13',
     delta: 0.0589713093334223,
+    price: 87.5,
     perc: 0.23
   },
   {
@@ -810,6 +891,7 @@ const selection = [
     premium: 20,
     expiration: '2022-05-13',
     delta: 0.4082970730068533,
+    price: 93.44,
     perc: 0.22
   },
   {
@@ -820,6 +902,7 @@ const selection = [
     premium: 0,
     expiration: '2022-05-13',
     delta: 1e-16,
+    price: 265.65,
     perc: 0
   },
   {
@@ -830,6 +913,7 @@ const selection = [
     premium: 0,
     expiration: '2022-05-13',
     delta: 7e-16,
+    price: 16.41,
     perc: 0
   },
   {
@@ -840,6 +924,7 @@ const selection = [
     premium: 0,
     expiration: '2022-05-13',
     delta: 0.004589758489157,
+    price: 1.44,
     perc: 0
   }
 ]

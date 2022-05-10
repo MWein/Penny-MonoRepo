@@ -29,6 +29,7 @@ export const getATMPut = async (symbol: string, prices: tradier.TradierPrice[]) 
 
     return {
       ...atmLink,
+      price: currentPrice,
       perc: Number((atmLink.premium / atmLink.strike).toFixed(2))
     }
   } catch (e) {
