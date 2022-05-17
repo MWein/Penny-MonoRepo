@@ -112,7 +112,30 @@ export const checkThemTest = async () => {
 
   console.log(optionsWithProfit)
 
-  // Monday Night Run: $2110
+  // [X]  "Bought" on Monday
+    // Sold on Monday: $2110
+    // Sold on Tuesday: 
+    // Sold on Wednesday:
+    // Sold on Thursday:
+    // Sold on Friday:
+
+  // [ ] "Bought" on Tuesday
+    // Sold on Tuesday: 
+    // Sold on Wednesday:
+    // Sold on Thursday:
+    // Sold on Friday:
+
+  // [ ] "Bought" on Wednesday
+    // Sold on Wednesday:
+    // Sold on Thursday:
+    // Sold on Friday:
+
+  // [ ] "Bought" on Thursday
+    // Sold on Thursday:
+    // Sold on Friday:
+
+  // [ ]  "Bought" on Friday
+    // Sold on Friday:
 
   console.log(`Premium $${optionsWithProfit.reduce((acc, x) => acc + x.premium, 0)}`)
   console.log(`Profit: $${optionsWithProfit.reduce((acc, x) => acc + x.profit, 0)}`)
