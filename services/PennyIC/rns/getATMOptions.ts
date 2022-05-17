@@ -92,7 +92,8 @@ export const checkThemTest = async () => {
     perc: { $gte: 5 },
     price: { $gte: 10 },
     type: 'put',
-    premium: { $lte: 1000 }
+    premium: { $lte: 1000 },
+    date: '2022-05-16'
   }
 
   const matchingOptions = await RNSModel.find(filter).sort({ perc: -1 }).lean()
