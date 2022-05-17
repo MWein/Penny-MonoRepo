@@ -58,12 +58,11 @@ const symbols = require('../core/weeklyTickers.json')
 export const selectThemTest = async () => {
   const start = new Date()
 
-  const prices = await tradier.getPrices(symbols)
-
   const selectedOptions = []
   for (let x = 0; x < symbols.length; x++) {
     const symbol = symbols[x]
     console.log(symbol)
+    const prices = await tradier.getPrices([symbol])
     const atmOpts = await getATMOptions(symbol, prices)
     if (atmOpts) {
       selectedOptions.push(atmOpts.put)
@@ -93,7 +92,7 @@ export const checkThemTest = async () => {
     price: { $gte: 10 },
     type: 'put',
     premium: { $lte: 1000 },
-    date: '2022-05-16'
+    date: '2022-05-17'
   }
 
   const matchingOptions = await RNSModel.find(filter).sort({ perc: -1 }).lean()
@@ -113,15 +112,15 @@ export const checkThemTest = async () => {
 
   console.log(optionsWithProfit)
 
-  // [X]  "Bought" on Monday
+  // [X]  "Bought" on Monday. $5755 spent on premium
     // Sold on Monday: $2110
-    // Sold on Tuesday: 
+    // Sold on Tuesday: $-932
     // Sold on Wednesday:
     // Sold on Thursday:
     // Sold on Friday:
 
-  // [ ] "Bought" on Tuesday
-    // Sold on Tuesday: 
+  // [X] "Bought" on Tuesday. $2593 spent on premium
+    // Sold on Tuesday: $-5 (was around $400 midday)
     // Sold on Wednesday:
     // Sold on Thursday:
     // Sold on Friday:
