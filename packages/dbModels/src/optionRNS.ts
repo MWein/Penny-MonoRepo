@@ -14,6 +14,16 @@ const RNSSchema = new Schema({
   date: {
     type: String,
     default: new Date().toISOString().split('T')[0]
+  },
+
+  history: {
+    type: [
+      {
+        date: Date,
+        price: Number,
+      }
+    ],
+    default: []
   }
 })
 
