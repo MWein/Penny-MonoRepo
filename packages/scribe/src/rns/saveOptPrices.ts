@@ -1,5 +1,5 @@
 import * as tradier from '@penny/tradier'
-import { RNSModel, PriceHistoryModel } from '@penny/db-models'
+import { RNSModel } from '@penny/db-models'
 import { uniq } from 'lodash'
 
 const saveOptPricesBatch = async (limit, offset) => {
