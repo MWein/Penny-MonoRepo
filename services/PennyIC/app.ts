@@ -4,7 +4,7 @@ const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
-import { saveAllData } from '../../packages/scribe'
+import { saveAllData, saveAllSelections } from '../../packages/scribe'
 
 
 // Possible removal
@@ -54,7 +54,8 @@ const launchCrons = async () => {
 
   new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
 
-  new CronJob('0 0 10 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
+  new CronJob('0 31 9 * * 1-5', () => cronFunc(saveAllSelections, 'RNS Init'), null, true, 'America/New_York')
+  new CronJob('0 0 11 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
   new CronJob('0 0 13 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
 
   // One hour before Tradier does it

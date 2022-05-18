@@ -3,6 +3,7 @@ import * as logger from '@penny/logger'
 import * as savePositionsUtil from "./savePositions"
 import * as saveSnapshotUtil from "./saveSnapshot"
 import * as clearExpiredUtil from "./clearExpiredPositions"
+import * as saveOptPricesUtil from './rns/saveOptPrices'
 import { saveAllData } from './saveAllData'
 jest.mock('@penny/tradier')
 
@@ -20,6 +21,8 @@ describe('saveAllData', () => {
     saveSnapshotUtil.saveSnapshot = jest.fn()
     // @ts-ignore
     clearExpiredUtil.clearExpiredPositions = jest.fn()
+    // @ts-ignore
+    saveOptPricesUtil.saveOptPrices = jest.fn()
   })
 
   it('Does nothing if in prod', async () => {
@@ -29,6 +32,7 @@ describe('saveAllData', () => {
     expect(savePositionsUtil.savePositions).not.toHaveBeenCalled()
     expect(saveSnapshotUtil.saveSnapshot).not.toHaveBeenCalled()
     expect(clearExpiredUtil.clearExpiredPositions).not.toHaveBeenCalled()
+    expect(saveOptPricesUtil.saveOptPrices).not.toHaveBeenCalled()
     expect(logger.logCron).not.toHaveBeenCalled()
   })
 
@@ -40,10 +44,11 @@ describe('saveAllData', () => {
     expect(savePositionsUtil.savePositions).not.toHaveBeenCalled()
     expect(saveSnapshotUtil.saveSnapshot).not.toHaveBeenCalled()
     expect(clearExpiredUtil.clearExpiredPositions).not.toHaveBeenCalled()
+    expect(saveOptPricesUtil.saveOptPrices).not.toHaveBeenCalled()
     expect(logger.logCron).not.toHaveBeenCalled()
   })
 
-  it('Logs cron failure if something throws', async () => {
+  it('Logs cron failure if something throws in spread snapshot func', async () => {
     // @ts-ignore
     savePositionsUtil.savePositions.mockImplementation(() => {
       const err = new Error()
@@ -51,7 +56,21 @@ describe('saveAllData', () => {
     })
     await saveAllData()
     expect(tradier.isMarketOpen).toHaveBeenCalled()
+    expect(saveOptPricesUtil.saveOptPrices).toHaveBeenCalled()
     expect(logger.logCron).toHaveBeenCalledWith('Snapshot', false)
+    expect(logger.logCron).toHaveBeenCalledWith('RNS Snap', true)
+  })
+
+  it('Logs cron failure if something throws in option data func', async () => {
+    // @ts-ignore
+    saveOptPricesUtil.saveOptPrices.mockImplementation(() => {
+      const err = new Error()
+      throw err
+    })
+    await saveAllData()
+    expect(tradier.isMarketOpen).toHaveBeenCalled()
+    expect(logger.logCron).toHaveBeenCalledWith('Snapshot', true)
+    expect(logger.logCron).toHaveBeenCalledWith('RNS Snap', false)
   })
 
   it('Happy path', async () => {
@@ -60,6 +79,7 @@ describe('saveAllData', () => {
     expect(savePositionsUtil.savePositions).toHaveBeenCalled()
     expect(saveSnapshotUtil.saveSnapshot).toHaveBeenCalled()
     expect(clearExpiredUtil.clearExpiredPositions).toHaveBeenCalled()
+    expect(saveOptPricesUtil.saveOptPrices).toHaveBeenCalled()
     expect(logger.logCron).toHaveBeenCalledWith('Snapshot', true)
   })
 })
