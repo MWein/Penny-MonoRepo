@@ -1,8 +1,10 @@
 import * as tradier from '@penny/tradier'
-import { RNSModel } from '@penny/db-models'
+import { RNSModel, PriceHistoryModel } from '@penny/db-models'
 import { uniq } from 'lodash'
 
 const saveOptPricesBatch = async (limit, offset) => {
+  const start = new Date()
+
   const today = new Date()
   const currentDate = new Date().toISOString().split('T')[0]
 
@@ -29,20 +31,24 @@ const saveOptPricesBatch = async (limit, offset) => {
     date: today,
   }))
 
-  //await PriceHistoryModel.insertMany(currentPrices)
+  await PriceHistoryModel.insertMany(currentPrices)
 
-  for (let x = 0; x < currentPrices.length; x++) {
-    // Update main table
-    const priceListing = currentPrices[x]
-    await RNSModel.updateMany({ symbol: priceListing.symbol }, {
-      $push: {
-        history: {
-          price: priceListing.price,
-          date: priceListing.date,
-        }
-      }
-    })
-  }
+  // Takes far too long
+  // for (let x = 0; x < currentPrices.length; x++) {
+  //   // Update main table
+  //   const priceListing = currentPrices[x]
+  //   await RNSModel.updateMany({ symbol: priceListing.symbol }, {
+  //     $push: {
+  //       history: {
+  //         price: priceListing.price,
+  //         date: priceListing.date,
+  //       }
+  //     }
+  //   })
+  // }
+
+  const end = new Date()
+  console.log('This took:', end.valueOf() - start.valueOf())
 
   return true
 }
