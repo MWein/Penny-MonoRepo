@@ -3,6 +3,7 @@ import * as logger from '@penny/logger'
 import { savePositions } from "./savePositions"
 import { saveSnapshot } from "./saveSnapshot"
 import { clearExpiredPositions } from "./clearExpiredPositions"
+import { saveOptPrices } from './rns/saveOptPrices'
 
 
 export const saveAllData = async () => {
@@ -24,5 +25,13 @@ export const saveAllData = async () => {
   } catch (e) {
     console.log(e)
     await logger.logCron('Snapshot', false)
+  }
+
+  try {
+    await saveOptPrices()
+    await logger.logCron('RNS Snap', true)
+  } catch (e) {
+    console.log(e)
+    await logger.logCron('RNS Snap', false)
   }
 }
