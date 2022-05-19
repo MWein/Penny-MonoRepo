@@ -59,6 +59,7 @@ const symbols = require('./weeklyTickers.json')
 export const saveAllSelections = async () => {
   for (let x = 0; x < symbols.length; x++) {
     const symbol = symbols[x]
+    console.log(symbol)
     const prices = await tradier.getPrices([symbol])
     const atmOpts = await getATMOptions(symbol, prices)
     if (atmOpts) {
