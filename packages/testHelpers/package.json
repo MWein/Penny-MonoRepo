@@ -1,9 +1,0 @@
-{
-  "name": "@penny/test-helpers",
-  "version": "1.0.0",
-  "description": "Package with test helpers for mocks",
-  "scripts": {
-    "build": "tsc index.ts",
-    "test": "jest --coverage"
-  }
-}
