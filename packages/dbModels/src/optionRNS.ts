@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose'
 
+const getCurrentDate = () => new Date().toISOString().split('T')[0]
+
 const RNSSchema = new Schema({
   symbol: String,
   underlying: String,
@@ -13,7 +15,7 @@ const RNSSchema = new Schema({
   diff: Number,
   date: {
     type: String,
-    default: new Date().toISOString().split('T')[0]
+    default: getCurrentDate
   },
 })
 
