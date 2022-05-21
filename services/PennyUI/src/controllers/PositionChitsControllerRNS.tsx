@@ -30,34 +30,24 @@ const PositionChitsController = ({
     )
   }
 
-  // Sorts alphabetically
-  //const alphabeticallySorted = positions.sort((a, b) => a.symbol.localeCompare(b.symbol))
-
   const nonOptionPositions = positions.filter(pos => !isOption(pos.symbol))
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
     .sort((a, b) => new Date(a.date_acquired).valueOf() - new Date(b.date_acquired).valueOf())
 
-  // const datesWithPositions = uniq(optionPositions.map(pos => pos.date_acquired))
-  //   .sort((a, b) => new Date(a).valueOf() - new Date(b).valueOf())
   const dates = []
   let currentDate = new Date()
-  while (dates.length < 5) {
+  while (dates.length < 6) {
     // Only push weekdays
-    if (currentDate.getDay() < 6) {
+    if (currentDate.getDay() < 6 && currentDate.getDay() > 0) {
       dates.unshift(currentDate.toISOString().split('T')[0])
     }
     currentDate.setDate(currentDate.getDate() - 1)
   }
 
-  const positionsGroupedByDate = dates
-    .map(date => {
-      const positionsAcquiredOnDate = optionPositions.filter(pos => pos.date_acquired === date)
-
-      return {
-        date: new Date(date),
-        positions: positionsAcquiredOnDate
-      }
-    })
+  const positionsGroupedByDate = dates.map(date => ({
+    date: new Date(date),
+    positions: optionPositions.filter(pos => pos.date_acquired === date)
+  }))
 
 
   return (

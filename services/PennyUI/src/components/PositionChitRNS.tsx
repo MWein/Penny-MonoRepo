@@ -20,12 +20,6 @@ const PositionChit = ({
   date_acquired,
   gainLoss,
 }: PositionChitProps) => {
-  // const callPutText = (active: boolean, text: string) => (
-  //   <Typography style={{ color: active ? 'black' : 'lightGray' }} variant='subtitle2' className='call-put'>
-  //     {text}
-  //   </Typography>
-  // )
-
   const typeMap = {
     put: 'Put',
     call: 'Call',
