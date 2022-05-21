@@ -9,6 +9,8 @@ import { showcaseController } from './controllers/showcase'
 import { showcaseRNSController } from './controllers/showcaseRNS'
 import { getCronTimesController } from './controllers/getCronTimes'
 import { nukeController } from './controllers/nukeController'
+import { sellPositionsController } from './controllers/sellPositionsController'
+
 
 const app = express()
 
@@ -37,6 +39,9 @@ app.put('/settings', setSettingsController)
 
 // Nuke
 app.post('/nuke', nukeController)
+
+// Sell positions
+app.post('/sell-positions', sellPositionsController)
 
 
 // Income target endpoints
