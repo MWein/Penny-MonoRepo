@@ -7,6 +7,7 @@ import { Position } from '../common/types'
 import Typography from '@mui/material/Typography'
 import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import CircularProgress from '@mui/material/CircularProgress'
 
 export type SellPositionsModalProps = {
   positionsToClose: Position[]
@@ -17,12 +18,18 @@ const SellPositionsModal = ({
   positionsToClose = [],
   onClose = () => {}
 }: SellPositionsModalProps) => {
+  const [ loading, setLoading ] = useState<boolean>(false)
   const [ chickenTest, setChickenTest ] = useState<boolean>(false)
 
   const positionsToCloseTotalGL = positionsToClose.reduce((acc, pos) => acc + pos.gainLoss, 0)
 
+  const handleSell = async () => {
+    setLoading(true)
+  }
+
   const handleClose = () => {
     setChickenTest(false)
+    setLoading(false)
     onClose()
   }
 
@@ -33,7 +40,7 @@ const SellPositionsModal = ({
   return (
     <Modal
       open={positionsToClose.length > 0}
-      onClose={handleClose}
+      disableEnforceFocus
     >
       <Paper style={{
         position: 'absolute',
@@ -43,6 +50,19 @@ const SellPositionsModal = ({
         width: '400px',
         padding: '10px'
       }}>
+        {/* Hacky, I know. I don't care */}
+        {
+          loading ? (
+            <CircularProgress
+              style = {{
+                position: 'absolute',
+                top: '40%',
+                left: '47%',
+              }}
+            />
+          ) : null
+        }
+
         <div style={{ display: 'flex' }}>
           <Typography style={{ flex: 1 }} variant='h6'>
             Sell the Following Positions?
@@ -76,20 +96,22 @@ const SellPositionsModal = ({
         <div style={{ display: 'flex' }}>
           <FormControlLabel
             style={{ flex: 1 }}
-            control={<Switch checked={chickenTest} onChange={handleChickenSwitch} />}
+            control={<Switch disabled={loading} checked={chickenTest} onChange={handleChickenSwitch} />}
             label="I'm Sure"
           />
           <Button
             onClick={handleClose}
             variant='outlined'
             color='secondary'
+            disabled={loading}
           >
             Cancel
           </Button>
           <Button
-            disabled={!chickenTest}
+            disabled={!chickenTest || loading}
             style={{ marginLeft: '10px' }}
             variant='outlined'
+            onClick={handleSell}
           >
             Sell
           </Button>
