@@ -68,14 +68,15 @@ const randomMockPosition = (ticker: string, index: number) => {
     quantity = Number(((Math.random() * 200) + 1).toFixed(0))
   }
 
-  let dayAcquired = Number(((Math.random() * 5) + 16).toFixed(0))
+  let dayAcquired = Number(((Math.random() * 4) + 16).toFixed(0))
 
   const gainLoss = Number(((Math.random() * 2000) - 1000).toFixed(2))
+  const costBasis = Number((Math.random() * 500).toFixed(0))
 
   //const type = Math.random().toFixed(0) === '1' ? 'call' : 'put'
   const symbol = generateSymbol(ticker, type, '2022-05-20', 69)
 
-  return generateMockPosition(index, symbol, quantity, 100, `2022-05-${dayAcquired}`, gainLoss)
+  return generateMockPosition(index, symbol, quantity, costBasis, `2022-05-${dayAcquired}`, gainLoss)
 }
 
 const symbols = [
