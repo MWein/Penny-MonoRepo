@@ -48,6 +48,25 @@ export const buy = async (symbol: string, quantity: number) => {
 }
 
 
+export const buyToOpen = async (symbol: string, option_symbol: string, quantity: number) => {
+  const body = {
+    class: 'option',
+    symbol,
+    option_symbol,
+    side: 'buy_to_open',
+    quantity,
+    type: 'market',
+    duration: 'day',
+  }
+  const result = await _sendOrder(
+    body,
+    `Buy-to-open ${quantity} ${symbol}`,
+    `Buy-to-open ${quantity} ${symbol} Failed`
+  )
+  return result
+}
+
+
 export const sellToOpen = async (symbol: string, option_symbol: string, quantity: number) => {
   const body = {
     class: 'option',
