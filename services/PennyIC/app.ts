@@ -62,7 +62,7 @@ const launchCrons = async () => {
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
 
-// Run every day at 4:10 NY time
+  // Run every day at 4:10 NY time
   // 10 mins after market close
   new CronJob('0 10 16 * * *', () => cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
 
