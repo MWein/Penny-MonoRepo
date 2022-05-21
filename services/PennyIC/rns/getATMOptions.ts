@@ -73,7 +73,7 @@ const evalAndPurchase = async (option) => {
 
   if (shouldPurchase) {
     const underlying = getUnderlying(option.symbol)
-    tradier.buyToOpen(underlying, option.symbol, 1)
+    await tradier.buyToOpen(underlying, option.symbol, 1)
   }
 }
 
