@@ -1,5 +1,5 @@
 import { Routes, Route, useSearchParams } from 'react-router-dom'
-import ShowcaseController from './controllers/ShowcaseController'
+import ShowcaseControllerRNS from './controllers/ShowcaseControllerRNS'
 import EnvironmentRibbon from './components/EnvironmentRibbon'
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
     <>
       {isNonProd && <EnvironmentRibbon />}
       <Routes>
-        <Route path='/' element={<ShowcaseController />} />
+        <Route path='/' element={<ShowcaseControllerRNS />} />
       </Routes>
     </>
   )

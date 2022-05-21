@@ -6,11 +6,11 @@ import { moneyFormat, moneyColor, months } from '../common/formatting'
 export type AccountInfoPanelProps = {
   equity: number,
   weekEarnings: number,
-  weekPercReturn: number,
+  weekPercReturn?: number | null,
   monthEarnings: number,
-  monthPercReturn: number,
+  monthPercReturn?: number | null,
   yearEarnings: number,
-  yearPercReturn: number,
+  yearPercReturn?: number | null,
   theft: number,
   lastYearTheft: number,
 }
@@ -18,11 +18,11 @@ export type AccountInfoPanelProps = {
 const AccountInfoPanel = ({
   equity,
   weekEarnings,
-  weekPercReturn,
+  weekPercReturn = null,
   monthEarnings,
-  monthPercReturn,
+  monthPercReturn = null,
   yearEarnings,
-  yearPercReturn,
+  yearPercReturn = null,
   theft,
   lastYearTheft,
 }: AccountInfoPanelProps) => {
