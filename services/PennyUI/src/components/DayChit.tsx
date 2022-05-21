@@ -37,7 +37,7 @@ const DayChit = ({
           {date.toISOString().split('T')[0]}
         </Typography>
       </div>
-      <div style={{ textAlign: 'right' }}>
+      <div style={{ textAlign: 'right', paddingRight: '10px' }}>
         <Typography variant='h6' style={{ color: totalGainLoss > 0 ? 'green' : 'red' }}>
           {gainLossText}
         </Typography>
