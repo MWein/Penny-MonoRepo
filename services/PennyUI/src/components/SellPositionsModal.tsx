@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import CircularProgress from '@mui/material/CircularProgress'
+import { closePositions } from '../network/closePositions'
 
 export type SellPositionsModalProps = {
   positionsToClose: Position[]
@@ -25,6 +26,8 @@ const SellPositionsModal = ({
 
   const handleSell = async () => {
     setLoading(true)
+    await closePositions(positionsToClose)
+    handleClose()
   }
 
   const handleClose = () => {
