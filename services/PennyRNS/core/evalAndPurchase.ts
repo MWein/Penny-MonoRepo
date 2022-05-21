@@ -5,7 +5,7 @@ export const evalAndPurchase = async (option) => {
   let shouldPurchase = false
 
   // Extremely low volatility options
-  if (option.perc <= 0.3 && option.price >= 10 && option.premium >= 30 && option.premium < 1000) {
+  if (option.perc <= 1 && option.price >= 10 && option.premium >= 30 && option.premium < 1000) {
     shouldPurchase = true
   }
 
