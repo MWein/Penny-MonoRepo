@@ -41,8 +41,33 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 //   //await cronFunc(closeOldShortPositions, 'CloseShort')
 // }
 
+import { saveAndPurchase } from './rns/getATMOptions'
 
 const launchCrons = async () => {
+  // Code for PennyRNS but I'm too lazy to bother making a new one yet
+
+  log('StartingCrons')
+
+  new CronJob('0 0 * * * *', () => {
+    log({
+      type: 'ping',
+      message: 'Checking In'
+    })
+  }, null, true, 'America/New_York')
+
+  new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
+
+  new CronJob('0 50 9 * * 1-5', () => cronFunc(saveAndPurchase, 'RNS Init'), null, true, 'America/New_York')
+
+  // One hour before Tradier does it
+  new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
+
+  // For deploy script checking
+  console.log('Deployment successful')
+  console.log(packageJson.version)
+
+  return
+  // Code for PennyIC
   log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
@@ -54,7 +79,7 @@ const launchCrons = async () => {
 
   new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
 
-  new CronJob('0 31 9 * * 1-5', () => cronFunc(saveAllSelections, 'RNS Init'), null, true, 'America/New_York')
+  new CronJob('0 50 9 * * 1-5', () => cronFunc(saveAllSelections, 'RNS Init'), null, true, 'America/New_York')
   new CronJob('0 0 11 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
   new CronJob('0 0 13 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
 
