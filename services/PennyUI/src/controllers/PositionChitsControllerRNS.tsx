@@ -2,7 +2,6 @@ import Typography from '@mui/material/Typography'
 import { isOption } from '../common/optionSymbolParser'
 import PositionChitRNS, { PositionChitProps } from '../components/PositionChitRNS'
 import DayChit from '../components/DayChit'
-import { uniq } from 'lodash'
 
 
 export type PositionChitsControllerProps = {
@@ -38,7 +37,19 @@ const PositionChitsController = ({
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
     .sort((a, b) => new Date(a.date_acquired).valueOf() - new Date(b.date_acquired).valueOf())
 
-  const positionsGroupedByDate = uniq(optionPositions.map(pos => pos.date_acquired))
+  // const datesWithPositions = uniq(optionPositions.map(pos => pos.date_acquired))
+  //   .sort((a, b) => new Date(a).valueOf() - new Date(b).valueOf())
+  const dates = []
+  let currentDate = new Date()
+  while (dates.length < 5) {
+    // Only push weekdays
+    if (currentDate.getDay() < 6) {
+      dates.unshift(currentDate.toISOString().split('T')[0])
+    }
+    currentDate.setDate(currentDate.getDate() - 1)
+  }
+
+  const positionsGroupedByDate = dates
     .map(date => {
       const positionsAcquiredOnDate = optionPositions.filter(pos => pos.date_acquired === date)
 
@@ -50,7 +61,7 @@ const PositionChitsController = ({
 
 
   return (
-    <div style={{ display: 'inline-block', marginTop: '7px' }}>
+    <div style={{ display: 'inline-block', marginTop: '7px', width: '100%' }}>
       <div style={{ display: 'inline-flex', width: '100%' }}>
         {
           positionsGroupedByDate.map(group => (

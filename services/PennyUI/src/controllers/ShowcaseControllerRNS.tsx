@@ -68,7 +68,7 @@ const randomMockPosition = (ticker: string, index: number) => {
     quantity = Number(((Math.random() * 200) + 1).toFixed(0))
   }
 
-  let dayAcquired = Number(((Math.random() * 4) + 16).toFixed(0))
+  let dayAcquired = Number(((Math.random() * 3) + 17).toFixed(0))
 
   const gainLoss = Number(((Math.random() * 2000) - 1000).toFixed(2))
   const costBasis = Number((Math.random() * 500).toFixed(0))

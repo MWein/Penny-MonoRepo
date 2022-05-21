@@ -1,6 +1,6 @@
 import getPennyDataUrl from "./getPennyDataUrl"
 import { AccountInfoPanelProps } from '../components/AccountInfoPanel'
-import { PositionChitsControllerProps } from '../controllers/PositionChitsController'
+import { PositionChitsControllerProps } from '../controllers/PositionChitsControllerRNS'
 const superagent = require('superagent')
 
 export type ShowcaseProps = AccountInfoPanelProps & PositionChitsControllerProps
