@@ -2,13 +2,13 @@ import * as network from './network'
 import * as logUtil from '@penny/logger'
 import {
   buy,
+  buyToOpen,
   sellToOpen,
   buyToClose,
   sellToClose,
   buyToCloseMarket,
   multilegOptionOrder,
   cancelOrders,
-  MultilegOptionLeg,
 } from './sendOrder'
 
 
@@ -99,6 +99,19 @@ describe('sendOrder common functions', () => {
       class: 'equity',
       symbol,
       side: 'buy',
+      quantity,
+      type: 'market',
+      duration: 'day',
+    })
+  })
+
+  it('buyToOpen', async () => {
+    await runTests(buyToOpen, [ symbol, optionSymbol, quantity ], `Buy-to-open ${quantity} ${symbol}`, `Buy-to-open ${quantity} ${symbol} Failed`, {
+      account_id: 'thisisanaccountnumber',
+      class: 'option',
+      symbol,
+      option_symbol: optionSymbol,
+      side: 'buy_to_open',
       quantity,
       type: 'market',
       duration: 'day',
