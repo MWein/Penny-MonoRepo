@@ -48,7 +48,7 @@ const SellPositionsModal = ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '400px',
-        padding: '10px'
+        padding: '15px'
       }}>
         {/* Hacky, I know. I don't care */}
         {
