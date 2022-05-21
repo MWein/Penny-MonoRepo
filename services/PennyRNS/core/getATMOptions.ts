@@ -1,6 +1,4 @@
 import * as tradier from '@penny/tradier'
-import { RNSModel } from '@penny/db-models'
-import { getUnderlying } from '@penny/option-symbol-parser'
 
 export const getATMOptions = async (symbol: string, prices: tradier.TradierPrice[]) => {
   try {
@@ -51,50 +49,5 @@ export const getATMOptions = async (symbol: string, prices: tradier.TradierPrice
     }
   } catch (e) {
     return null
-  }
-}
-
-const symbols = require('../core/weeklyTickers.json')
-
-
-const evalAndPurchase = async (option) => {
-  let shouldPurchase = false
-
-  // Extremely low volatility options
-  if (option.perc <= 0.3 && option.price >= 10 && option.premium >= 30 && option.premium < 1000) {
-    shouldPurchase = true
-  }
-
-  // Extremely high volatility put options
-  if (option.type === 'put' && option.perc >= 5 && option.price >= 5 && option.premium <= 1000) {
-    shouldPurchase = true
-  }
-
-  if (shouldPurchase) {
-    const underlying = getUnderlying(option.symbol)
-    await tradier.buyToOpen(underlying, option.symbol, 1)
-  }
-}
-
-
-export const saveAndPurchase = async () => {
-  for (let x = 0; x < symbols.length; x++) {
-    const symbol = symbols[x]
-    console.log(symbol)
-    const prices = await tradier.getPrices([symbol])
-    const atmOpts = await getATMOptions(symbol, prices)
-    if (atmOpts) {
-      // Evaluation and purchase if pass
-      await evalAndPurchase(atmOpts.put)
-      await evalAndPurchase(atmOpts.call)
-
-      // Save to DB
-      const putModel = new RNSModel(atmOpts.put)
-      const callModel = new RNSModel(atmOpts.call)
-      await Promise.all([
-        putModel.save(),
-        callModel.save(),
-      ])
-    }
   }
 }

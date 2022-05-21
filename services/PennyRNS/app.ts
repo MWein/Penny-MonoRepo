@@ -6,7 +6,7 @@ import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
 import { saveAllData } from '@penny/scribe'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
-import { saveAndPurchase } from './core/getATMOptions'
+import { saveAndPurchase } from './core/saveAndPurchase'
 
 
 const cronFunc = async (func: Function, cronName: CronType) => {
