@@ -40,7 +40,7 @@ const launchCrons = async () => {
   new CronJob('0 10 16 * * *', () => cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
 
   // For deploy script checking
-  console.log('Deployment successful')
+  console.log('Deployment successful RNS')
   console.log(packageJson.version)
 }
 
