@@ -2,8 +2,12 @@ import { sellPositions } from '../services/sellPositions'
 
 const sellPositionsController = async (req, res): Promise<void> => {
   const positions = req.body
-  await sellPositions(positions)
-  res.send('Done')
+  try {
+    await sellPositions(positions)
+    res.send('Done')
+  } catch (e) {
+    res.status(500).send('Error')
+  }
 }
 
 export {
