@@ -1,5 +1,7 @@
 import * as tradier from '@penny/tradier'
 import { RNSModel } from '@penny/db-models'
+import { uniq } from 'lodash'
+import { getUnderlying } from '@penny/option-symbol-parser'
 
 export const getATMOptions = async (symbol: string, prices: tradier.TradierPrice[]) => {
   try {
@@ -55,52 +57,82 @@ export const getATMOptions = async (symbol: string, prices: tradier.TradierPrice
 
 const symbols = require('../core/weeklyTickers.json')
 
-export const selectThemTest = async () => {
-  const start = new Date()
 
-  const selectedOptions = []
+const evalAndPurchase = async (option) => {
+  let shouldPurchase = false
+
+  // Extremely low volatility options
+  if (option.perc <= 0.3 && option.price >= 10 && option.premium >= 30 && option.premium < 1000) {
+    shouldPurchase = true
+  }
+
+  // Extremely high volatility put options
+  if (option.type === 'put' && option.perc >= 5 && option.price >= 5 && option.premium <= 1000) {
+    shouldPurchase = true
+  }
+
+  if (shouldPurchase) {
+    const underlying = getUnderlying(option.symbol)
+    tradier.buyToOpen(underlying, option.symbol, 1)
+  }
+}
+
+
+export const saveAndPurchase = async () => {
   for (let x = 0; x < symbols.length; x++) {
     const symbol = symbols[x]
     console.log(symbol)
     const prices = await tradier.getPrices([symbol])
     const atmOpts = await getATMOptions(symbol, prices)
     if (atmOpts) {
-      selectedOptions.push(atmOpts.put)
-      selectedOptions.push(atmOpts.call)
+      // Evaluation and purchase if pass
+      await evalAndPurchase(atmOpts.put)
+      await evalAndPurchase(atmOpts.call)
 
+      // Save to DB
       const putModel = new RNSModel(atmOpts.put)
       const callModel = new RNSModel(atmOpts.call)
-
       await Promise.all([
         putModel.save(),
         callModel.save(),
       ])
     }
   }
-
-  const sortedOpts = selectedOptions.sort((a, b) => b.perc - a.perc).filter(x => x.perc > 5).reverse()
-  console.log(sortedOpts)
-
-  const end = new Date()
-  console.log(end.valueOf() - start.valueOf())
 }
 
 
 export const checkThemTest = async () => {
-  const filter = {
-    perc: { $gte: 5 },
-    price: { $gte: 10 },
-    type: 'put',
-    premium: { $lte: 1000 },
-    date: '2022-05-17'
-  }
+  const date = '2022-05-17'
 
-  const matchingOptions = await RNSModel.find(filter).sort({ perc: -1 }).lean()
+  // const filter = {
+  //   perc: { $gte: 5 },
+  //   price: { $gte: 10 },
+  //   type: 'put',
+  //   premium: { $lte: 1000 },
+  //   date,
+  // }
+  // const matchingOptions1 = await RNSModel.find(filter).sort({ perc: -1 }).lean()
+
+  const filter2 = {
+    perc: { $lte: 0.3 },
+    price: { $gte: 10 },
+    //type: 'call',
+    premium: { $lte: 1000, $gte: 30 },
+    date,
+  }
+  const matchingOptions2 = await RNSModel.find(filter2).sort({ perc: 1 }).lean()
+
+  const matchingOptions = [ ...matchingOptions2, /*...matchingOptions2 */]
+
+
   const tradierPrices = await tradier.getPrices(matchingOptions.map(x => x.symbol))
+
+  console.log(tradierPrices)
+
   const currentPrices = tradierPrices.map(x => ({ ...x, price: Number((x.price * 100).toFixed(0)) }))
 
   const optionsWithProfit = matchingOptions.map(opt => {
-    const currentPrice = currentPrices.find(x => x.symbol === opt.symbol).price
+    const currentPrice = currentPrices.find(x => x.symbol === opt.symbol)?.price || opt.premium
     const profit = currentPrice - opt.premium
 
     return {
@@ -111,31 +143,6 @@ export const checkThemTest = async () => {
   })
 
   console.log(optionsWithProfit)
-
-  // [X]  "Bought" on Monday. $5755 spent on premium
-    // Sold on Monday: $2110
-    // Sold on Tuesday: $-932
-    // Sold on Wednesday:
-    // Sold on Thursday:
-    // Sold on Friday:
-
-  // [X] "Bought" on Tuesday. $2593 spent on premium
-    // Sold on Tuesday: $-5 (was around $400 midday)
-    // Sold on Wednesday:
-    // Sold on Thursday:
-    // Sold on Friday:
-
-  // [ ] "Bought" on Wednesday
-    // Sold on Wednesday:
-    // Sold on Thursday:
-    // Sold on Friday:
-
-  // [ ] "Bought" on Thursday
-    // Sold on Thursday:
-    // Sold on Friday:
-
-  // [ ]  "Bought" on Friday
-    // Sold on Friday:
 
   console.log(`Premium $${optionsWithProfit.reduce((acc, x) => acc + x.premium, 0)}`)
   console.log(`Profit: $${optionsWithProfit.reduce((acc, x) => acc + x.profit, 0)}`)
