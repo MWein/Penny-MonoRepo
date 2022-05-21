@@ -31,10 +31,10 @@ const closePositions = async positions => {
   }
 
 
-  const underlyingSymbols = uniq(optionPositions.map(pos => getUnderlying(pos.symbol)))
+  const underlyingSymbols: string[] = uniq(optionPositions.map(pos => getUnderlying(pos.symbol)))
 
   for (let x = 0; x < underlyingSymbols.length; x++) {
-    const underlying = underlyingSymbols[x]
+    const underlying: string = underlyingSymbols[x]
     const positionsWithUnderlying = optionPositions.filter(pos => getUnderlying(pos.symbol) === underlying)
 
     const legs: MultilegOptionLeg[] = positionsWithUnderlying.map(pos => {

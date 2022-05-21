@@ -18,10 +18,12 @@ export const getPrices = async (symbols: string[]) : Promise<TradierPrice[]> => 
     const batch = batches[x]
 
     const response = await callTradierHelper(`markets/quotes?symbols=${batch.join(',')}`, 'quotes', 'quote', true)
-    const batchResults = response.map(quote => ({
-      symbol: quote.symbol,
-      price: quote.ask,
-    }))
+    const batchResults = response.map(quote => {
+      return {
+        symbol: quote.symbol,
+        price: quote.last,
+      }
+    })
 
     results.push(...batchResults)
   }

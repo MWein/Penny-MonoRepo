@@ -3,16 +3,9 @@ const mongoose = require('mongoose')
 const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
-
-
-// Possible removal
-//import { buyIronCondors } from './core/buyIronCondor'
-//import { createGTCShortOrders } from './core/createGTCShortOrders'
-//import { closeOldShortPositions } from './core/closeOldShortPositions'
-
-
-import { sellIronCondors } from './core/sellIronCondor'
+import { saveAllData } from '@penny/scribe'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
+import { saveAndPurchase } from './core/saveAndPurchase'
 
 
 const cronFunc = async (func: Function, cronName: CronType) => {
@@ -25,23 +18,8 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 }
 
 
-// const openICs = async () => {
-//   // Only buy on mon,tues,wed
-//   if ([ 1, 2, 3, 4 ].includes(new Date().getDay())) {
-//     await cronFunc(buyIronCondors, 'LongIC')
-//   }
-//   //await cronFunc(sellIronCondors, 'ShortIC')
-//   //await cronFunc(createGTCShortOrders, 'ShortGTC')
-// }
-
-// const closeICs = async () => {
-//   await cronFunc(closeExpiringPositions, 'CloseExp')
-//   //await cronFunc(closeOldShortPositions, 'CloseShort')
-// }
-
 const launchCrons = async () => {
-  // Code for PennyIC
-  log('Starting Crons')
+  log('StartingCrons')
 
   new CronJob('0 0 * * * *', () => {
     log({
@@ -50,8 +28,9 @@ const launchCrons = async () => {
     })
   }, null, true, 'America/New_York')
 
-  new CronJob('0 0 11 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
-  new CronJob('0 0 13 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
+  new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
+
+  new CronJob('0 50 9 * * 1-5', () => cronFunc(saveAndPurchase, 'RNS Init'), null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
@@ -61,7 +40,7 @@ const launchCrons = async () => {
   new CronJob('0 10 16 * * *', () => cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
 
   // For deploy script checking
-  console.log('Deployment successful')
+  console.log('Deployment successful RNS')
   console.log(packageJson.version)
 }
 

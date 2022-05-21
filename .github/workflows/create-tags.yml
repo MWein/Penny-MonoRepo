@@ -74,6 +74,7 @@ jobs:
       run: |
           rm -rf services/PennyUI
           rm -rf services/Penny-Data
+          rm -rf services/PennyRNS
 
     - name: Compile typescript
       run: |
@@ -87,7 +88,7 @@ jobs:
 
     - name: Remove unneeded files
       run: |
-          rm -rf node_modules .github .gitignore Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
+          rm -rf node_modules .github .gitignore Dockerfile-rns Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
           rm -rf $(find . -type f | grep "babel\.config\.js")
           rm -rf $(find . -type f | grep "\.ts")
           rm -rf scripts
@@ -126,6 +127,7 @@ jobs:
       run: |
           rm -rf services/PennyUI
           rm -rf services/PennyIC
+          rm -rf services/PennyRNS
 
     - name: Compile typescript
       run: |
@@ -139,7 +141,7 @@ jobs:
 
     - name: Remove unneeded files
       run: |
-          rm -rf node_modules .github .gitignore Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
+          rm -rf node_modules .github .gitignore Dockerfile-rns Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
           rm -rf $(find . -type f | grep "babel\.config\.js")
           rm -rf $(find . -type f | grep "\.ts")
           rm -rf scripts
@@ -158,3 +160,111 @@ jobs:
           git checkout master
           git branch -D data-release
           git push origin --delete data-release
+
+
+  create-penny-ic-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set Git config
+      run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+
+    # Have to create a new branch so JS files don't end up in master
+    - name: Create release branch
+      run: |
+          git checkout -b ic-release
+          git push --set-upstream origin ic-release
+
+    - name: Remove other services
+      run: |
+          rm -rf services/PennyUI
+          rm -rf services/Penny-Data
+          rm -rf services/PennyRNS
+
+    - name: Compile typescript
+      run: |
+          npm i typescript
+          rm -rf package-lock.json
+          tsc
+          mv Dockerfile-ic Dockerfile
+          git add .
+          git commit -m 'Auto: Compile Typescript'
+          git push
+
+    - name: Remove unneeded files
+      run: |
+          rm -rf node_modules .github .gitignore Dockerfile-rns Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
+          rm -rf $(find . -type f | grep "babel\.config\.js")
+          rm -rf $(find . -type f | grep "\.ts")
+          rm -rf scripts
+          git add .
+          git commit -m 'Auto: Unneeded Typescript'
+          git push
+
+    - name: Create Tag
+      run: |
+          VERSION=$(grep version package.json | awk -F \" '{print $4}')
+          git tag -a v$VERSION-ic -m 'IC Build'
+          git push origin --tags
+
+    - name: Delete release branch
+      run: |
+          git checkout master
+          git branch -D ic-release
+          git push origin --delete ic-release
+
+
+  create-penny-rns-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set Git config
+      run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+
+    # Have to create a new branch so JS files don't end up in master
+    - name: Create release branch
+      run: |
+          git checkout -b rns-release
+          git push --set-upstream origin rns-release
+
+    - name: Remove other services
+      run: |
+          rm -rf services/PennyUI
+          rm -rf services/PennyIC
+          rm -rf services/Penny-Data
+
+    - name: Compile typescript
+      run: |
+          npm i typescript
+          rm -rf package-lock.json
+          tsc
+          mv Dockerfile-rns Dockerfile
+          git add .
+          git commit -m 'Auto: Compile Typescript'
+          git push
+
+    - name: Remove unneeded files
+      run: |
+          rm -rf node_modules .github .gitignore Dockerfile-ic Dockerfile-ui Dockerfile-data tsconfig.json lerna.json README.md
+          rm -rf $(find . -type f | grep "babel\.config\.js")
+          rm -rf $(find . -type f | grep "\.ts")
+          rm -rf scripts
+          git add .
+          git commit -m 'Auto: Unneeded Typescript'
+          git push
+
+    - name: Create Tag
+      run: |
+          VERSION=$(grep version package.json | awk -F \" '{print $4}')
+          git tag -a v$VERSION-rns -m 'RNS Build'
+          git push origin --tags
+
+    - name: Delete release branch
+      run: |
+          git checkout master
+          git branch -D rns-release
+          git push origin --delete rns-release
