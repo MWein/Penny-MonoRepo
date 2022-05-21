@@ -1,16 +1,20 @@
+import { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import { isOption } from '../common/optionSymbolParser'
-import PositionChitRNS, { PositionChitProps } from '../components/PositionChitRNS'
+import PositionChitRNS from '../components/PositionChitRNS'
+import { Position } from '../common/types'
 import DayChit from '../components/DayChit'
-
+import SellPositionsModal from '../components/SellPositionsModal'
 
 export type PositionChitsControllerProps = {
-  positions: PositionChitProps[],
+  positions: Position[],
 }
 
 const PositionChitsController = ({
   positions,
 }: PositionChitsControllerProps) => {
+  const [ positionsToClose, setPositionsToClose ] = useState<Position[]>([])
+
   if (!positions.length) {
     return (
       <Typography
@@ -29,6 +33,7 @@ const PositionChitsController = ({
       </Typography>
     )
   }
+
 
   const nonOptionPositions = positions.filter(pos => !isOption(pos.symbol))
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
@@ -49,50 +54,59 @@ const PositionChitsController = ({
     positions: optionPositions.filter(pos => pos.date_acquired === date)
   }))
 
-
   return (
-    <div style={{ display: 'inline-block', marginTop: '7px', width: '100%' }}>
-      <div style={{ display: 'inline-flex', width: '100%' }}>
-        {
-          positionsGroupedByDate.map(group => (
-              <DayChit
-                date={group.date}
-                positions={group.positions}
-              />
+    <>
+      <SellPositionsModal
+        positionsToClose={positionsToClose}
+        onClose={() => setPositionsToClose([])}
+      />
+
+      <div style={{ display: 'inline-block', marginTop: '7px', width: '100%' }}>
+        <div style={{ display: 'inline-flex', width: '100%' }}>
+          {
+            positionsGroupedByDate.map(group => (
+                <DayChit
+                  date={group.date}
+                  positions={group.positions}
+                  onClick={() => setPositionsToClose(group.positions)}
+                />
+              )
             )
+          }
+        </div>
+
+        <div style={{ height: '15px' }} />
+        {
+          optionPositions.map(pos =>
+            <PositionChitRNS
+              key={pos.id}
+              id={pos.id}
+              symbol={pos.symbol}
+              quantity={pos.quantity}
+              cost_basis={pos.cost_basis}
+              date_acquired={pos.date_acquired}
+              gainLoss={pos.gainLoss}
+              onClick={() => setPositionsToClose([ pos ])}
+              clickable
+            />
+          )
+        }
+        <div style={{ height: '20px' }} />
+        {
+          nonOptionPositions.map(pos =>
+            <PositionChitRNS
+              key={pos.id}
+              id={pos.id}
+              symbol={pos.symbol}
+              quantity={pos.quantity}
+              cost_basis={pos.cost_basis}
+              date_acquired={pos.date_acquired}
+              gainLoss={pos.gainLoss}
+            />
           )
         }
       </div>
-
-      <div style={{ height: '15px' }} />
-      {
-        optionPositions.map(pos =>
-          <PositionChitRNS
-            key={pos.id}
-            id={pos.id}
-            symbol={pos.symbol}
-            quantity={pos.quantity}
-            cost_basis={pos.cost_basis}
-            date_acquired={pos.date_acquired}
-            gainLoss={pos.gainLoss}
-          />
-        )
-      }
-      <div style={{ height: '20px' }} />
-      {
-        nonOptionPositions.map(pos =>
-          <PositionChitRNS
-            key={pos.id}
-            id={pos.id}
-            symbol={pos.symbol}
-            quantity={pos.quantity}
-            cost_basis={pos.cost_basis}
-            date_acquired={pos.date_acquired}
-            gainLoss={pos.gainLoss}
-          />
-        )
-      }
-    </div>
+    </>
   )
 }
 

@@ -2,14 +2,11 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { getType, getUnderlying } from '../common/optionSymbolParser'
 import { moneyFormat } from '../common/formatting'
+import { Position } from '../common/types'
 
-export type PositionChitProps = {
-  id: number,
-  symbol: string
-  quantity: number,
-  cost_basis: number,
-  date_acquired: string,
-  gainLoss: number,
+export type PositionChitProps = Position & {
+  onClick?: () => void,
+  clickable?: boolean,
 }
 
 const PositionChit = ({
@@ -19,6 +16,8 @@ const PositionChit = ({
   cost_basis,
   date_acquired,
   gainLoss,
+  onClick = () => {},
+  clickable = false,
 }: PositionChitProps) => {
   const typeMap = {
     put: 'Put',
@@ -54,7 +53,8 @@ const PositionChit = ({
         marginLeft: '5px',
         padding: '10px',
         width: '150px',
-      }}>
+        cursor: clickable ? 'pointer' : 'auto'
+      }} onClick={onClick}>
         <div style={{ display: 'inline-flex', width: '100%' }}>
           <Typography style={{ flex: 1 }}>
             {getUnderlying(symbol)}
