@@ -18,7 +18,7 @@ describe('getPrices', () => {
       quotes: {
         quote: {
           symbol: 'AAPL',
-          ask: 175,
+          last: 175,
         }
       }
     })
@@ -32,7 +32,7 @@ describe('getPrices', () => {
       quotes: {
         quote: {
           symbol: 'AAPL',
-          ask: 175,
+          last: 175,
         }
       }
     })
@@ -52,11 +52,11 @@ describe('getPrices', () => {
         quote: [
           {
             symbol: 'AAPL',
-            ask: 175,
+            last: 175,
           },
           {
             symbol: 'TSLA',
-            ask: 178,
+            last: 178,
           },
         ]
       }

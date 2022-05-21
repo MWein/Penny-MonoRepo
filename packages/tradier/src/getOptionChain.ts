@@ -5,6 +5,8 @@ type TradierChainLink = {
   root_symbol: string,
   strike: number,
   bid: number,
+  ask: number,
+  last: number,
   option_type: 'put' | 'call',
   expiration_date: string,
   greeks: {
@@ -29,7 +31,7 @@ export const formatChain = (chain: TradierChainLink[]) : OptionChainLink[] => ch
     underlying: option.root_symbol,
     type: option.option_type,
     strike: option.strike,
-    premium: Number((option.bid * 100).toFixed()),
+    premium: Number(((option.last) * 100).toFixed()),
     expiration: option.expiration_date,
     delta: Math.abs(option.greeks.delta)
   }))

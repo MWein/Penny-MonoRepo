@@ -34,7 +34,7 @@ describe('getOptionChain', () => {
           symbol: 'AAPL123C321',
           root_symbol: 'AAPL',
           strike: 120,
-          bid: 0.5,
+          last: 0.5,
           option_type: 'call',
           expiration_date: '2021-01-01',
         }
@@ -54,7 +54,7 @@ describe('getOptionChain', () => {
           symbol: 'AAPL123C321',
           root_symbol: 'AAPL',
           strike: 120,
-          bid: 0.5,
+          last: 0.5,
           option_type: 'call',
           expiration_date: '2021-01-01',
           greeks: {
@@ -88,7 +88,7 @@ describe('getOptionChain', () => {
             symbol: 'AAPL123C321',
             root_symbol: 'AAPL',
             strike: 120,
-            bid: 0.5,
+            last: 0.5,
             option_type: 'call',
             expiration_date: '2021-01-01',
             greeks: {
@@ -99,7 +99,7 @@ describe('getOptionChain', () => {
             symbol: 'AAPL321C321',
             root_symbol: 'AAPL',
             strike: 121,
-            bid: 0.7,
+            last: 0.7,
             option_type: 'put',
             expiration_date: '2021-02-01',
             greeks: {

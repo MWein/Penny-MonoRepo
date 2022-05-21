@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
-
 import { saveAllData } from '@penny/scribe'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
 import { saveAndPurchase } from './core/saveAndPurchase'
