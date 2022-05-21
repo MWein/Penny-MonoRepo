@@ -6,6 +6,7 @@ import { pennyStatusController } from './controllers/pennyStatus'
 import { getLogsController } from './controllers/getLogs'
 import { getSettingsController, setSettingsController } from './controllers/settings'
 import { showcaseController } from './controllers/showcase'
+import { showcaseRNSController } from './controllers/showcaseRNS'
 import { getCronTimesController } from './controllers/getCronTimes'
 import { nukeController } from './controllers/nukeController'
 
@@ -20,6 +21,9 @@ app.get('/penny-status', pennyStatusController)
 
 // Endpoint for the UI showcase page
 app.get('/showcase', showcaseController)
+
+// Endpoint for the new UI showcase page
+app.get('/showcase-rns', showcaseRNSController)
 
 // Dump all logs from the database
 app.get('/logs', getLogsController)
