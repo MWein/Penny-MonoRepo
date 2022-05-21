@@ -4,8 +4,6 @@ const packageJson = require('../../package.json')
 
 import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
 
-import { saveAllData/*, saveAllSelections*/ } from '../../packages/scribe'
-
 
 // Possible removal
 //import { buyIronCondors } from './core/buyIronCondor'
@@ -13,7 +11,7 @@ import { saveAllData/*, saveAllSelections*/ } from '../../packages/scribe'
 //import { closeOldShortPositions } from './core/closeOldShortPositions'
 
 
-//import { sellIronCondors } from './core/sellIronCondor'
+import { sellIronCondors } from './core/sellIronCondor'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
 
 
@@ -41,12 +39,9 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 //   //await cronFunc(closeOldShortPositions, 'CloseShort')
 // }
 
-import { saveAndPurchase } from './rns/getATMOptions'
-
 const launchCrons = async () => {
-  // Code for PennyRNS but I'm too lazy to bother making a new one yet
-
-  log('StartingCrons')
+  // Code for PennyIC
+  log('Starting Crons')
 
   new CronJob('0 0 * * * *', () => {
     log({
@@ -55,9 +50,8 @@ const launchCrons = async () => {
     })
   }, null, true, 'America/New_York')
 
-  new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
-
-  new CronJob('0 50 9 * * 1-5', () => cronFunc(saveAndPurchase, 'RNS Init'), null, true, 'America/New_York')
+  new CronJob('0 0 11 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
+  new CronJob('0 0 13 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
 
   // One hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
@@ -69,35 +63,6 @@ const launchCrons = async () => {
   // For deploy script checking
   console.log('Deployment successful')
   console.log(packageJson.version)
-
-  
-
-  // Code for PennyIC
-  // log('Starting Crons')
-
-  // new CronJob('0 0 * * * *', () => {
-  //   log({
-  //     type: 'ping',
-  //     message: 'Checking In'
-  //   })
-  // }, null, true, 'America/New_York')
-
-  // new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
-
-  // new CronJob('0 50 9 * * 1-5', () => cronFunc(saveAllSelections, 'RNS Init'), null, true, 'America/New_York')
-  // new CronJob('0 0 11 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
-  // new CronJob('0 0 13 * * 1-4', () => cronFunc(sellIronCondors, 'ShortIC'), null, true, 'America/New_York')
-
-  // // One hour before Tradier does it
-  // new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
-
-  // // Run every day at 4:10 NY time
-  // // 10 mins after market close
-  // new CronJob('0 10 16 * * *', () => cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
-
-  // // For deploy script checking
-  // console.log('Deployment successful')
-  // console.log(packageJson.version)
 }
 
 

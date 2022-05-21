@@ -33,20 +33,6 @@ const saveOptPricesBatch = async (limit, offset) => {
 
   await PriceHistoryModel.insertMany(currentPrices)
 
-  // Takes far too long
-  // for (let x = 0; x < currentPrices.length; x++) {
-  //   // Update main table
-  //   const priceListing = currentPrices[x]
-  //   await RNSModel.updateMany({ symbol: priceListing.symbol }, {
-  //     $push: {
-  //       history: {
-  //         price: priceListing.price,
-  //         date: priceListing.date,
-  //       }
-  //     }
-  //   })
-  // }
-
   const end = new Date()
   console.log('This took:', end.valueOf() - start.valueOf())
 
