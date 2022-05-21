@@ -1,8 +1,0 @@
-{
-  "name": "@penny/db-models",
-  "version": "1.0.0",
-  "description": "Package containing database models",
-  "scripts": {
-    "build": "tsc index.ts"
-  }
-}
