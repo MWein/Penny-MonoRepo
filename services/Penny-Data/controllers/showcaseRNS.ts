@@ -37,6 +37,7 @@ const getPositionsWithGainLoss = async (): Promise<(tradier.Position & { gainLos
 
     return {
       ...pos,
+      date_acquired: pos.date_acquired.split('T')[0],
       gainLoss,
     }
   })
