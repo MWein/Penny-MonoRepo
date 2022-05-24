@@ -16,7 +16,9 @@ export const evalAndPurchase = async (option) => {
   // }
 
   if (shouldPurchase) {
+    const limitPrice = Number(((option.premium + 2) / 100).toFixed(2))
+
     const underlying = getUnderlying(option.symbol)
-    await tradier.buyToOpen(underlying, option.symbol, 1, option.premium + 2)
+    await tradier.buyToOpen(underlying, option.symbol, 1, limitPrice)
   }
 }
