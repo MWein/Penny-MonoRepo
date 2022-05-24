@@ -48,14 +48,15 @@ export const buy = async (symbol: string, quantity: number) => {
 }
 
 
-export const buyToOpen = async (symbol: string, option_symbol: string, quantity: number) => {
+export const buyToOpen = async (symbol: string, option_symbol: string, quantity: number, limitPrice: number) => {
   const body = {
     class: 'option',
     symbol,
     option_symbol,
     side: 'buy_to_open',
     quantity,
-    type: 'market',
+    type: 'limit',
+    price: limitPrice,
     duration: 'day',
   }
   const result = await _sendOrder(
