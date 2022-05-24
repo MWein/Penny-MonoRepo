@@ -10,9 +10,10 @@ export const evalAndPurchase = async (option) => {
   }
 
   // Extremely high volatility put options
-  if (option.type === 'put' && option.perc >= 5 && option.price >= 5 && option.premium <= 1000) {
-    shouldPurchase = true
-  }
+  // Commenting out for now, not really doing it today
+  // if (option.type === 'put' && option.perc >= 5 && option.price >= 5 && option.premium <= 1000) {
+  //   shouldPurchase = true
+  // }
 
   if (shouldPurchase) {
     const underlying = getUnderlying(option.symbol)
