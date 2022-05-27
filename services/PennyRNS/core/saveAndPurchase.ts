@@ -6,6 +6,11 @@ const symbols = require('../core/weeklyTickers.json')
 
 
 export const saveAndPurchase = async () => {
+  const open = await tradier.isMarketOpen()
+  if (!open) {
+    return
+  }
+
   for (let x = 0; x < symbols.length; x++) {
     const symbol = symbols[x]
     console.log(symbol)
