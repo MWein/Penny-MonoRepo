@@ -1,7 +1,10 @@
 import * as getOrdersUtil from './getOrders'
 import * as sendOrderUtil from './sendOrder'
 import * as sleepUtil from '@penny/sleep'
-import { closePositions } from './closePositions'
+import {
+  closePositions,
+  closePositionsIndividual,
+} from './closePositions'
 import { generatePositionObject } from '@penny/test-helpers'
 
 describe('closePositions', () => {
@@ -169,5 +172,56 @@ describe('closePositions', () => {
         quantity: 1
       },
     ])
+  })
+})
+
+
+describe('closePositionsIndividual', () => {
+  beforeEach(() => {
+    // @ts-ignore
+    sendOrderUtil.sellToClose = jest.fn()
+    // @ts-ignore
+    sendOrderUtil.buyToCloseMarket = jest.fn()
+    // @ts-ignore
+    sleepUtil.sleep = jest.fn()
+  })
+
+  it('Does nothing if there arent any positions given', async () => {
+    await closePositionsIndividual([])
+    expect(sendOrderUtil.sellToClose).not.toHaveBeenCalled()
+    expect(sendOrderUtil.buyToCloseMarket).not.toHaveBeenCalled()
+    expect(sleepUtil.sleep).not.toHaveBeenCalled()
+  })
+
+  it('Does nothing if there are only stock positions', async () => {
+    await closePositionsIndividual([
+      generatePositionObject('AAPL', 34, 'stock', 200),
+      generatePositionObject('MSFT', 34, 'stock', 200),
+    ])
+    expect(sendOrderUtil.sellToClose).not.toHaveBeenCalled()
+    expect(sendOrderUtil.buyToCloseMarket).not.toHaveBeenCalled()
+    expect(sleepUtil.sleep).not.toHaveBeenCalled()
+  })
+
+  it('Sells to close long positions', async () => {
+    const positions = [
+      generatePositionObject('AAPL', 2, 'call', 200, '2022-05-29', 1234, '2022-05-30', 180),
+      generatePositionObject('MSFT', 1, 'put', 200, '2022-05-29', 1234, '2022-05-30', 70),
+    ]
+    await closePositionsIndividual(positions)
+    expect(sendOrderUtil.sellToClose).toHaveBeenCalledTimes(2)
+    expect(sendOrderUtil.sellToClose).toHaveBeenCalledWith('AAPL', positions[0].symbol, 2)
+    expect(sendOrderUtil.sellToClose).toHaveBeenCalledWith('MSFT', positions[1].symbol, 1)
+  })
+
+  it('Buys to close short positions', async () => {
+    const positions = [
+      generatePositionObject('AAPL', -2, 'call', 200, '2022-05-29', 1234, '2022-05-30', 180),
+      generatePositionObject('MSFT', -1, 'put', 200, '2022-05-29', 1234, '2022-05-30', 70),
+    ]
+    await closePositionsIndividual(positions)
+    expect(sendOrderUtil.buyToCloseMarket).toHaveBeenCalledTimes(2)
+    expect(sendOrderUtil.buyToCloseMarket).toHaveBeenCalledWith('AAPL', positions[0].symbol, 2)
+    expect(sendOrderUtil.buyToCloseMarket).toHaveBeenCalledWith('MSFT', positions[1].symbol, 1)
   })
 })
