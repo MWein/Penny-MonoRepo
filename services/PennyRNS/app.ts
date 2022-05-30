@@ -7,7 +7,7 @@ import { saveAllData } from '@penny/scribe'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
 import { closeLongPositions } from './core/closeLongPositions'
 
-import { cronFunc, masterCron } from './core/master'
+import { cronFunc, masterCron } from './core/masterCron'
 
 
 const launchCrons = async () => {
