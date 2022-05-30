@@ -1,5 +1,7 @@
 import { saveAndPurchase } from './saveAndPurchase'
+import { closeOldOrders } from './closeOldOrders'
 import { logCron, CronType } from '@penny/logger'
+import { sleep } from '@penny/sleep'
 
 const cronFunc = async (func: Function, cronName: CronType) => {
   try {
@@ -12,11 +14,17 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 
 
 const masterCron = async () => {
+  // Open long options
   await cronFunc(saveAndPurchase, 'RNS Init')
 
   // TODO Purchase Stock
   // TODO Sell Covered Calls
 
+  // 30 minutes
+  sleep(1800)
+
+  // Close open buy-to-open orders
+  await cronFunc(closeOldOrders, 'CloseOrds')
 }
 
 
