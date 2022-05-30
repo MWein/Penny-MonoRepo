@@ -2,21 +2,12 @@ const CronJob = require('cron').CronJob
 const mongoose = require('mongoose')
 const packageJson = require('../../package.json')
 
-import { log, logCron, clearOldLogs, CronType } from '@penny/logger'
+import { log, clearOldLogs } from '@penny/logger'
 import { saveAllData } from '@penny/scribe'
 import { closeExpiringPositions } from './core/closeExpiringPositions'
 import { closeLongPositions } from './core/closeLongPositions'
-import { saveAndPurchase } from './core/saveAndPurchase'
 
-
-const cronFunc = async (func: Function, cronName: CronType) => {
-    try {
-      await func()
-      logCron(cronName, true)
-    } catch (e) {
-      logCron(cronName, false, e.toString())
-    }
-}
+import { cronFunc, masterCron } from './core/master'
 
 
 const launchCrons = async () => {
@@ -29,9 +20,11 @@ const launchCrons = async () => {
     })
   }, null, true, 'America/New_York')
 
+  // Save price information for long options
   new CronJob('0 */15 * * * 1-5', saveAllData, null, true, 'America/New_York')
 
-  new CronJob('0 50 9 * * 1-5', () => cronFunc(saveAndPurchase, 'RNS Init'), null, true, 'America/New_York')
+  // Launch master cron (purchase long options, purchase stock, sell covered calls)
+  new CronJob('0 50 9 * * 1-5', masterCron, null, true, 'America/New_York')
 
   // Close expiring options one hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
