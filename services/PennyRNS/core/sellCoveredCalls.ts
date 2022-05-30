@@ -28,7 +28,7 @@ const sellCoveredCalls = async () => {
     const position = positionsWithNumOptions[x]
     const expirations = await tradier.getExpirations(position.symbol, 1)
     if (expirations.length === 0) {
-      return
+      continue
     }
     const optionChain = await tradier.getOptionChain(position.symbol, expirations[0])
     const callOptions = optionChain.filter(opt => opt.type === 'call')
@@ -41,7 +41,7 @@ const sellCoveredCalls = async () => {
     )
 
     if (closestDeltaOpt.symbol === '') {
-      return
+      continue
     }
 
     await tradier.sellToOpen(position.symbol, closestDeltaOpt.symbol, position.numOptionsToSell)
