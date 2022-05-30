@@ -1,9 +1,9 @@
-import { sellPositions } from '../services/sellPositions'
+import * as tradier from '@penny/tradier'
 
 const sellPositionsController = async (req, res): Promise<void> => {
   const positions = req.body
   try {
-    await sellPositions(positions)
+    await tradier.closePositionsIndividual(positions)
     res.send('Done')
   } catch (e) {
     res.status(500).send('Error')
