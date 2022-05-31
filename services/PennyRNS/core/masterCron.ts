@@ -30,7 +30,7 @@ const masterCron = async () => {
   sleep(1800)
 
   // Close open buy-to-open orders
-  await cronFunc(closeOldOrders, 'CloseOrds')
+  //await cronFunc(closeOldOrders, 'CloseOrds')
 }
 
 
