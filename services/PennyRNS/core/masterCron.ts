@@ -1,6 +1,7 @@
 import { saveAndPurchase } from './saveAndPurchase'
 import { closeOldOrders } from './closeOldOrders'
 import { logCron, CronType } from '@penny/logger'
+import * as tradier from '@penny/tradier'
 import { sleep } from '@penny/sleep'
 
 const cronFunc = async (func: Function, cronName: CronType) => {
@@ -14,6 +15,11 @@ const cronFunc = async (func: Function, cronName: CronType) => {
 
 
 const masterCron = async () => {
+  const marketOpen = await tradier.isMarketOpen()
+  if (!marketOpen) {
+    return
+  }
+
   // Open long options
   await cronFunc(saveAndPurchase, 'RNS Init')
 

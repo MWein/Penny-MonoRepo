@@ -230,14 +230,12 @@ describe('cancelOrders', () => {
   it('If an order fails, logs the failure and continues', async () => {
     process.env.ACCOUNTNUM = 'thisisanaccountnumber'
     // @ts-ignore
-    network.deleteReq.mockImplementationOnce(() => {})
-    // @ts-ignore
-    network.deleteReq.mockImplementationOnce(() => {
-      const error = new Error('OH NO!!!')
-      throw error
+    network.deleteReq.mockImplementation((url) => {
+      if (url === 'accounts/thisisanaccountnumber/orders/4321') {
+        const error = new Error('OH NO!!!')
+        throw error
+      }
     })
-    // @ts-ignore
-    network.deleteReq.mockImplementationOnce(() => {})
     await cancelOrders([1234, 4321, 147])
     expect(network.deleteReq).toHaveBeenCalledTimes(3)
     expect(network.deleteReq).toHaveBeenCalledWith('accounts/thisisanaccountnumber/orders/1234')

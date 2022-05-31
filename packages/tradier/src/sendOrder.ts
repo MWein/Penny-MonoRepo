@@ -1,5 +1,6 @@
 import * as network from './network'
 import * as logUtil from '@penny/logger'
+import { chunk } from 'lodash'
 
 
 export const _sendOrder = async (body: object, successLog: string, failureLog: string) => {
@@ -199,15 +200,21 @@ export const multilegOptionOrder = async (
 
 
 export const cancelOrders = async (orderIDs: number[]) => {
-  for (let x = 0; x < orderIDs.length; x++) {
-    const url = `accounts/${process.env.ACCOUNTNUM}/orders/${orderIDs[x]}`
-    try {
-      await network.deleteReq(url)
-    } catch (e) {
-      logUtil.log({
-        type: 'error',
-        message: `Could not cancel ${orderIDs[x]}`,
-      })
-    }
+  const chunks = chunk(orderIDs, 50)
+
+  for (let x = 0; x < chunks.length; x++) {
+    const chunk = chunks[x]
+
+    await Promise.all(chunk.map(async orderId => {
+      const url = `accounts/${process.env.ACCOUNTNUM}/orders/${orderId}`
+      try {
+        await network.deleteReq(url)
+      } catch (e) {
+        logUtil.log({
+          type: 'error',
+          message: `Could not cancel ${orderId}`,
+        })
+      }
+    }))
   }
 }
