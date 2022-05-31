@@ -71,6 +71,7 @@ describe('sendOrder common functions', () => {
   let optionSymbol
   let optionSymbol2
   let quantity
+  let limitPrice
   let legs
 
   beforeEach(() => {
@@ -78,6 +79,7 @@ describe('sendOrder common functions', () => {
     optionSymbol = symbol + '1234P3214'
     optionSymbol2 = symbol + '1234C3214'
     quantity = Math.floor(Math.random() * 100) + 1
+    limitPrice = (Math.random() * 100) + 1
 
     legs = [
       {
@@ -106,14 +108,15 @@ describe('sendOrder common functions', () => {
   })
 
   it('buyToOpen', async () => {
-    await runTests(buyToOpen, [ symbol, optionSymbol, quantity ], `Buy-to-open ${quantity} ${symbol}`, `Buy-to-open ${quantity} ${symbol} Failed`, {
+    await runTests(buyToOpen, [ symbol, optionSymbol, quantity, limitPrice ], `Buy-to-open ${quantity} ${symbol}`, `Buy-to-open ${quantity} ${symbol} Failed`, {
       account_id: 'thisisanaccountnumber',
       class: 'option',
       symbol,
       option_symbol: optionSymbol,
       side: 'buy_to_open',
       quantity,
-      type: 'market',
+      type: 'limit',
+      price: limitPrice,
       duration: 'day',
     })
   })
@@ -227,14 +230,12 @@ describe('cancelOrders', () => {
   it('If an order fails, logs the failure and continues', async () => {
     process.env.ACCOUNTNUM = 'thisisanaccountnumber'
     // @ts-ignore
-    network.deleteReq.mockImplementationOnce(() => {})
-    // @ts-ignore
-    network.deleteReq.mockImplementationOnce(() => {
-      const error = new Error('OH NO!!!')
-      throw error
+    network.deleteReq.mockImplementation((url) => {
+      if (url === 'accounts/thisisanaccountnumber/orders/4321') {
+        const error = new Error('OH NO!!!')
+        throw error
+      }
     })
-    // @ts-ignore
-    network.deleteReq.mockImplementationOnce(() => {})
     await cancelOrders([1234, 4321, 147])
     expect(network.deleteReq).toHaveBeenCalledTimes(3)
     expect(network.deleteReq).toHaveBeenCalledWith('accounts/thisisanaccountnumber/orders/1234')

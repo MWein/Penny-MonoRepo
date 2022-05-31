@@ -1,7 +1,7 @@
 // These functions generate mock orders and position objects for use in automated tests
 
 type EquityType = 'stock' | 'call' | 'put'
-type OrderSide = 'sell_to_open' | 'sell_to_close' | 'buy_to_open' | 'buy_to_close'
+type OrderSide = 'sell_to_open' | 'sell_to_close' | 'buy_to_open' | 'buy_to_close' | 'buy' | 'sell'
 type OrderClass = 'option' | 'equity'
 
 type MockOrderObject = {
@@ -73,7 +73,7 @@ export const generateOrderObject = (
     quantity: number = 1,
     type: EquityType = 'stock',
     side: OrderSide = 'sell_to_open',
-    status: string ='pending',
+    status: string = 'pending',
     id: number = 123456
   ) : MockOrderObject => {
   const ordClass: OrderClass = type === 'call' || type === 'put' ? 'option' : 'equity'

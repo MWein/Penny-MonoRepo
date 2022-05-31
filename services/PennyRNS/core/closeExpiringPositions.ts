@@ -13,5 +13,5 @@ export const closeExpiringPositions = async () => {
     return
   }
 
-  await tradier.closePositions(expiringToday)
+  await tradier.closePositionsIndividual(expiringToday)
 }

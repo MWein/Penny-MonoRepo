@@ -1,6 +1,7 @@
-import * as sellPositionsService from '../services/sellPositions'
+import * as tradier from '@penny/tradier'
 import { sellPositionsController } from './sellPositionsController'
 import { getMockReq, getMockRes } from '@jest-mock/express'
+jest.mock('@penny/tradier')
 
 describe('sellPositionsController', () => {
   let req
@@ -8,7 +9,7 @@ describe('sellPositionsController', () => {
   
   beforeEach(async () => {
     // @ts-ignore
-    sellPositionsService.sellPositions = jest.fn()
+    tradier.closePositionsIndividual = jest.fn()
     const mockRes = getMockRes()
     req = getMockReq()
     res = mockRes.res
@@ -16,7 +17,7 @@ describe('sellPositionsController', () => {
 
   it('Returns 500 if something fails', async () => {
     // @ts-ignore
-    sellPositionsService.sellPositions.mockImplementation(() => {
+    tradier.closePositionsIndividual.mockImplementation(() => {
       throw new Error('OH NOOOOO!!!')
     })
     await sellPositionsController(req, res)
@@ -32,7 +33,7 @@ describe('sellPositionsController', () => {
     ]
     req = getMockReq({ body })
     await sellPositionsController(req, res)
-    expect(sellPositionsService.sellPositions).toHaveBeenCalledWith(body)
+    expect(tradier.closePositionsIndividual).toHaveBeenCalledWith(body)
     expect(res.send).toHaveBeenCalledWith('Done')
   })
 })

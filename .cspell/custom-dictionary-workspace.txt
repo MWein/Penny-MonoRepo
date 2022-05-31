@@ -14,6 +14,8 @@ LCID
 MRNA
 Multileg
 NUGT
+optionable
+Ords
 Perc
 PLTR
 PTON

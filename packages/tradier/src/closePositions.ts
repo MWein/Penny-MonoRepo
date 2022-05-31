@@ -1,13 +1,13 @@
 import { getOrders } from './getOrders'
-import { cancelOrders, multilegOptionOrder } from './sendOrder'
+import { cancelOrders, multilegOptionOrder, sellToClose, buyToCloseMarket } from './sendOrder'
 
 import { getUnderlying, isOption } from '@penny/option-symbol-parser'
-import { uniq } from 'lodash'
-import { MultilegOptionLeg } from '@penny/tradier'
+import { uniq, chunk } from 'lodash'
+import { MultilegOptionLeg, Position } from '@penny/tradier'
 import * as sleepUtil from '@penny/sleep'
 
 
-const closePositions = async positions => {
+const closePositions = async (positions: Position[]) => {
   if (positions.length === 0) {
     return
   }
@@ -50,6 +50,32 @@ const closePositions = async positions => {
   }
 }
 
+
+const closePositionsIndividual = async (positions: Position[]) => {
+  const optionPositions = positions.filter(pos => isOption(pos.symbol))
+  if (optionPositions.length === 0) {
+    return
+  }
+
+  // TODO Cancel any open orders
+
+  const chunks = chunk(optionPositions, 10)
+
+  for (let x = 0; x < chunks.length; x++) {
+    const chunk = chunks[x]
+    await Promise.all(chunk.map(async pos => {
+      // Long
+      if (pos.quantity > 0) {
+        await sellToClose(getUnderlying(pos.symbol), pos.symbol, pos.quantity)
+      } else {
+        await buyToCloseMarket(getUnderlying(pos.symbol), pos.symbol, pos.quantity * -1)
+      }
+    }))
+  }
+}
+
+
 export {
-  closePositions
+  closePositions,
+  closePositionsIndividual,
 }

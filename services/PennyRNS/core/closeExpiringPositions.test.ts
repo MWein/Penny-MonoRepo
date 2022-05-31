@@ -8,7 +8,7 @@ describe('closeExpiringPositions', () => {
     // @ts-ignore
     tradier.getPositions = jest.fn()
     // @ts-ignore
-    tradier.closePositions = jest.fn()
+    tradier.closePositionsIndividual = jest.fn()
   })
 
   afterEach(() => {
@@ -19,7 +19,7 @@ describe('closeExpiringPositions', () => {
     // @ts-ignore
     tradier.getPositions.mockReturnValue([])
     await closeExpiringPositions()
-    expect(tradier.closePositions).not.toHaveBeenCalled()
+    expect(tradier.closePositionsIndividual).not.toHaveBeenCalled()
   })
 
   it('Does nothing if there are no expiring positions', async () => {
@@ -30,7 +30,7 @@ describe('closeExpiringPositions', () => {
       generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-14', 172.5),
     ])
     await closeExpiringPositions()
-    expect(tradier.closePositions).not.toHaveBeenCalled()
+    expect(tradier.closePositionsIndividual).not.toHaveBeenCalled()
   })
 
   it('Closes expiring positions', async () => {
@@ -43,7 +43,7 @@ describe('closeExpiringPositions', () => {
       generatePositionObject('AAPL', -1, 'call', -20, '2021-01-01', 1234, '2022-10-14', 172.5),
     ])
     await closeExpiringPositions()
-    expect(tradier.closePositions).toHaveBeenCalledWith([
+    expect(tradier.closePositionsIndividual).toHaveBeenCalledWith([
       {
         cost_basis: 52,
         date_acquired: '2021-01-01',
