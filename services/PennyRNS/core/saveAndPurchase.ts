@@ -17,9 +17,14 @@ export const saveAndPurchase = async () => {
     const prices = await tradier.getPrices([symbol])
     const atmOpts = await getATMOptions(symbol, prices)
     if (atmOpts) {
-      // Evaluation and purchase if pass
-      await evalAndPurchase(atmOpts.put)
-      await evalAndPurchase(atmOpts.call)
+      const diff = atmOpts.put.diff ?? atmOpts.call.diff
+
+      // If the diff is negative, buy the put
+      if (diff < 0) {
+        await evalAndPurchase(atmOpts.put)
+      } else {
+        await evalAndPurchase(atmOpts.call)
+      }
 
       // Save to DB
       const putModel = new RNSModel(atmOpts.put)

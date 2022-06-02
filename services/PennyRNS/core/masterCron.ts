@@ -27,7 +27,7 @@ const masterCron = async () => {
   // TODO Sell Covered Calls
 
   // 30 minutes
-  sleep(1800)
+  //sleep(1800)
 
   // Close open buy-to-open orders
   //await cronFunc(closeOldOrders, 'CloseOrds')
