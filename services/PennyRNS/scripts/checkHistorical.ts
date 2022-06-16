@@ -4,29 +4,29 @@ import { uniq } from 'lodash'
 
 
 export const checkThemTest = async () => {
-  const date = '2022-05-25'
+  const date = '2022-06-06'
 
   const strategy: 'long' | 'short' | 'both' = 'long'
 
   const matchingOptions = []
 
   if ([ 'both', 'short' ].includes(strategy)) {
-        const filter = {
-        perc: { $gte: 5 },
-        price: { $gte: 10 },
-        type: 'put',
-        premium: { $lte: 1000 },
-        date,
-      }
-      const matching = await RNSModel.find(filter).sort({ perc: -1 }).lean()
-      matchingOptions.push(...matching)
+    const filter = {
+      perc: { $gte: 5 },
+      price: { $gte: 10 },
+      type: 'put',
+      premium: { $lte: 1000 },
+      date,
+    }
+    const matching = await RNSModel.find(filter).sort({ perc: -1 }).lean()
+    matchingOptions.push(...matching)
   }
 
   if ([ 'both', 'long' ].includes(strategy)) {
     const filter = {
       perc: { $lte: 1 },
       price: { $gte: 10 },
-      //type: 'call',
+      type: 'put',
       premium: { $lte: 1000, $gte: 20 },
       date,
     }
@@ -59,13 +59,48 @@ export const checkThemTest = async () => {
 
 
 export const checkDayTrading = async () => {
-  const dates = [ '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26' ]
+  const dates = [ '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26', '2022-05-27', '2022-05-31', '2022-06-01', '2022-06-02', '2022-06-03', '2022-06-06', '2022-06-07', '2022-06-08' ]
 
   for (let x = 0; x < dates.length; x++) {
     let todayGainLoss = 0
+    let todayPremium = 0
     const date = dates[x]
     const filter = {
       perc: { $lte: 1 },
+      price: { $gte: 10 },
+      type: 'call',
+      premium: { $lte: 100, $gte: 20 },
+      date,
+    }
+    const matching = await RNSModel.find(filter).sort({ perc: 1 }).lean()
+
+    // Get EOD prices and entry prices
+    for (let y = 0; y < matching.length; y++) {
+      const current = matching[y]
+      const priceHistory = await PriceHistoryModel.find({ symbol: current.symbol }).lean()
+      const currentDatePriceHistory = priceHistory.filter(x => x.date.toISOString().split('T')[0] === date)
+      const lastEntry = currentDatePriceHistory[currentDatePriceHistory.length - 1]
+      const gainLoss = lastEntry.price - current.premium
+      todayPremium += current.premium
+      todayGainLoss += gainLoss
+    }
+
+    console.log(date, todayPremium, todayGainLoss)
+  }
+
+
+}
+
+
+export const checkDiffs = async () => {
+  const dates = [ '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26', '2022-05-27', '2022-05-31', '2022-06-01' ]
+
+  for (let x = 0; x < dates.length; x++) {
+    let todayGainLoss = 0
+    let todayPremium = 0
+    const date = dates[x]
+    const filter = {
+      perc: { $lte: 0.6 },
       price: { $gte: 10 },
       //type: 'call',
       premium: { $lte: 1000, $gte: 20 },
@@ -73,18 +108,9 @@ export const checkDayTrading = async () => {
     }
     const matching = await RNSModel.find(filter).sort({ perc: 1 }).lean()
 
-    // Get EOD prices
-    for (let y = 0; y < matching.length; y++) {
-      const current = matching[y]
-      const priceHistory = await PriceHistoryModel.find({ symbol: current.symbol }).lean()
-      const currentDatePriceHistory = priceHistory.filter(x => x.date.toISOString().split('T')[0] === date)
-      const lastEntry = currentDatePriceHistory[currentDatePriceHistory.length - 1]
-      const gainLoss = lastEntry.price - current.premium
-      todayGainLoss += gainLoss
-    }
-
-    console.log(date, todayGainLoss)
+    // Get EOD prices and entry prices
+    console.log(date)
+    matching.map(match => console.log(match.underlying, match.diff))
+    console.log('\n')
   }
-
-
 }
