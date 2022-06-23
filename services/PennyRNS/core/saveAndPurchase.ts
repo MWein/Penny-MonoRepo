@@ -9,22 +9,6 @@ const evaluateOption = (option) =>
   option.perc <= 1 && option.price >= 10 && option.premium >= 30 && option.premium < 1000
 
 
-
-// TODO MOVE TO TRADIER PACKAGE
-type TimeSeries = {
-  date: string,
-  open: number,
-  high: number,
-  low: number,
-  close: number,
-  volume: number,
-}
-const getHistoricalData = async (ticker, start, end): Promise<TimeSeries[]> => {
-  const url = `markets/history?symbol=${ticker}&interval=daily&start=${start}&end=${end}`
-  const timeSeries = await tradier.callTradierHelper(url, 'history', 'day', true)
-  return timeSeries
-}
-
 // TODO Refactor
 const determineTrend = (prices: number[]) => {
   const isUptrend = prices.reduce((acc, num, index) => {
@@ -69,7 +53,7 @@ export const saveAndPurchase = async () => {
       if (evaluateOption(atmOpts.put) || evaluateOption(atmOpts.call)) {
         // Get price history
         // TODO Come up with date that doesnt go back several months
-        const history = await getHistoricalData(symbol, '2022-06-10', date)
+        const history = await tradier.getHistory(symbol, '2022-06-10', date)
         const previous2Days = history.slice(-3).slice(0, 2)
         const priceHistory = previous2Days.reduce((acc, timeSeries) => [ ...acc, timeSeries.open, timeSeries.close ], [])
 
