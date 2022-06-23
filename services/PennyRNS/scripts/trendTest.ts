@@ -3,22 +3,6 @@ import { RNSModel, PriceHistoryModel } from "@penny/db-models"
 import { uniq } from 'lodash'
 
 
-type TimeSeries = {
-  date: string,
-  open: number,
-  high: number,
-  low: number,
-  close: number,
-  volume: number,
-}
-
-const getHistoricalData = async (ticker, start, end): Promise<TimeSeries[]> => {
-  const url = `markets/history?symbol=${ticker}&interval=daily&start=${start}&end=${end}`
-  const timeSeries = await tradier.callTradierHelper(url, 'history', 'day', true)
-  return timeSeries
-}
-
-
 const testForDate = async (date: string) => {
   const filter = {
     perc: { $lte: 1 },
@@ -35,7 +19,7 @@ const testForDate = async (date: string) => {
   for (let x = 0; x < calls.length; x++) {
     const call = calls[x]
 
-    const history = await getHistoricalData(call.underlying, '2022-02-01', call.date)
+    const history = await tradier.getHistory(call.underlying, '2022-02-01', call.date)
     const previous2Days = history.slice(-3).slice(0, 2)
 
     const priceHistory = previous2Days.reduce((acc, timeSeries) => [ ...acc, timeSeries.open, timeSeries.close ], [])
