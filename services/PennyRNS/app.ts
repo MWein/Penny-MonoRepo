@@ -29,8 +29,8 @@ const launchCrons = async () => {
   // Close expiring options one hour before Tradier does it
   new CronJob('0 15 14 * * 1-5', () => cronFunc(closeExpiringPositions, 'CloseExp'), null, true, 'America/New_York')
 
-  // Close long positions at market close
-  new CronJob('0 45 15 * * 1-5', () => cronFunc(closeLongPositions, 'CloseLong'), null, true, 'America/New_York')
+  // Close long positions at 5am
+  new CronJob('0 0 5 * * 1-5', () => cronFunc(closeLongPositions, 'CloseLong'), null, true, 'America/New_York')
 
   // Run every day at 4:10 NY time
   // 10 mins after market close
