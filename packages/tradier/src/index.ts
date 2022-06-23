@@ -9,5 +9,6 @@ export * from './getGainLoss'
 export * from './getBalances'
 export * from './evaluateTicker'
 export * from './closePositions'
+export * from './getHistory'
 
 export * from './callTradierHelper'

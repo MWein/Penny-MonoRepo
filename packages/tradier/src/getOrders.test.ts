@@ -22,6 +22,7 @@ describe('Order filter functions', () => {
   ]
 
   it('filterForCoveredCallOrders', () => {
+    // @ts-ignore
     const actual = filterForCoveredCallOrders(orders)
     expect(actual).toEqual([
       generateOrderObject('AXON', 7, 'call', 'sell_to_open', 'pending'),
@@ -30,6 +31,7 @@ describe('Order filter functions', () => {
   })
 
   it('filterForCashSecuredPutOrders', () => {
+    // @ts-ignore
     const actual = filterForCashSecuredPutOrders(orders)
     expect(actual).toEqual([
       generateOrderObject('SFIX', 50, 'put', 'sell_to_open', 'pending'),
@@ -38,6 +40,7 @@ describe('Order filter functions', () => {
   })
 
   it('filterForOptionBuyToCloseOrders', () => {
+    // @ts-ignore
     const actual = filterForOptionBuyToCloseOrders(orders)
     expect(actual).toEqual([
       generateOrderObject('TSLA', 50, 'call', 'buy_to_close', 'open'),
