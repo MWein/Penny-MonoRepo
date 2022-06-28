@@ -1,5 +1,6 @@
 import { getOrders } from './getOrders'
-import { cancelOrders, multilegOptionOrder, sellToClose, buyToCloseMarket } from './sendOrder'
+import { cancelOrders, multilegOptionOrder, sellToCloseLimit, buyToCloseMarket } from './sendOrder'
+import { getPrices } from './getPrices'
 
 import { getUnderlying, isOption } from '@penny/option-symbol-parser'
 import { uniq, chunk } from 'lodash'
@@ -59,14 +60,20 @@ const closePositionsIndividual = async (positions: Position[]) => {
 
   // TODO Cancel any open orders
 
-  const chunks = chunk(optionPositions, 10)
+  const prices = await getPrices(optionPositions.map(pos => pos.symbol))
+  const positionsWithPrices = optionPositions.map(pos => ({
+    ...pos,
+    sellPrice: Number(((prices.find(price => price.symbol === pos.symbol) ?? { price: 0 }).price * 0.90).toFixed(2)), // Go for 90% of current price
+  }))
+
+  const chunks = chunk(positionsWithPrices, 10)
 
   for (let x = 0; x < chunks.length; x++) {
     const chunk = chunks[x]
     await Promise.all(chunk.map(async pos => {
       // Long
       if (pos.quantity > 0) {
-        await sellToClose(getUnderlying(pos.symbol), pos.symbol, pos.quantity)
+        await sellToCloseLimit(getUnderlying(pos.symbol), pos.symbol, pos.quantity, pos.sellPrice)
       } else {
         await buyToCloseMarket(getUnderlying(pos.symbol), pos.symbol, pos.quantity * -1)
       }

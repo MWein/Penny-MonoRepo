@@ -109,6 +109,27 @@ export const sellToClose = async (symbol: string, option_symbol: string, quantit
 }
 
 
+export const sellToCloseLimit = async (symbol: string, option_symbol: string, quantity: number, price: number) => {
+  const body = {
+    class: 'option',
+    symbol,
+    option_symbol,
+    side: 'sell_to_close',
+    quantity,
+    type: 'limit',
+    price,
+    duration: 'gtc',
+  }
+
+  const result = await _sendOrder(
+    body,
+    `Sell-to-close ${quantity} ${option_symbol}`,
+    `Sell-to-close ${quantity} ${option_symbol} Failed`
+  )
+  return result
+}
+
+
 export const buyToClose = async (
   symbol: string,
   option_symbol: string,
