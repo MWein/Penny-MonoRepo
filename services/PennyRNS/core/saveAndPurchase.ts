@@ -54,7 +54,7 @@ export const saveAndPurchase = async () => {
         // Get price history
         // TODO Come up with date that doesnt go back several months
         const history = await tradier.getHistory(symbol, '2022-06-10', date)
-        const previous2Days = history.slice(-3).slice(0, 2)
+        const previous2Days = history.slice(-2).slice(0, 2)
         const priceHistory = previous2Days.reduce((acc, timeSeries) => [ ...acc, timeSeries.open, timeSeries.close ], [])
 
         const trend = determineTrend(priceHistory)
