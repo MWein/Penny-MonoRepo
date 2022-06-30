@@ -1,5 +1,5 @@
 import { getOrders } from './getOrders'
-import { cancelOrders, multilegOptionOrder, sellToCloseLimit, buyToCloseMarket } from './sendOrder'
+import { cancelOrders, multilegOptionOrder, sellToClose, buyToCloseMarket } from './sendOrder'
 import { getPrices } from './getPrices'
 
 import { getUnderlying, isOption } from '@penny/option-symbol-parser'
@@ -73,7 +73,7 @@ const closePositionsIndividual = async (positions: Position[]) => {
     await Promise.all(chunk.map(async pos => {
       // Long
       if (pos.quantity > 0) {
-        await sellToCloseLimit(getUnderlying(pos.symbol), pos.symbol, pos.quantity, pos.sellPrice)
+        await sellToClose(getUnderlying(pos.symbol), pos.symbol, pos.quantity)
       } else {
         await buyToCloseMarket(getUnderlying(pos.symbol), pos.symbol, pos.quantity * -1)
       }
