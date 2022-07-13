@@ -61,7 +61,7 @@ const launchCrons = async () => {
   new CronJob('0 10 16 * * *', () => cronFunc(clearOldLogs, 'Housekeeping'), null, true, 'America/New_York')
 
   // For deploy script checking
-  console.log('Deployment successful')
+  console.log('Deployment successful IC')
   console.log(packageJson.version)
 }
 
