@@ -5,5 +5,8 @@
   "scripts": {
     "build": "tsc index.ts",
     "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@penny/test-helpers": "1.0.0"
   }
 }
