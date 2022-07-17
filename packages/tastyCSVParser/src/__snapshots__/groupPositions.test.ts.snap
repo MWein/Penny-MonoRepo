@@ -1,0 +1,411 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`groupPositions Groups date-overlapping history objects as a single positions 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 120,
+        "symbol": "AAPL220101P00120000",
+      },
+      Object {
+        "closeDate": 2022-01-05T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 20,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-05T00:00:00.000Z,
+        "premium": 35,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 150,
+        "symbol": "AAPL220101C00150000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 20,
+    "state": "Open",
+    "totalFees": 3,
+    "totalPremium": 125,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Groups multiple positions (different underlyings) 1`] = `
+Array [
+  Object {
+    "closeDate": 2022-01-02T00:00:00.000Z,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-02T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 33,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 33,
+    "state": "Closed",
+    "totalFees": 1,
+    "totalPremium": 45,
+    "underlying": "AAPL",
+  },
+  Object {
+    "closeDate": 2022-01-02T00:00:00.000Z,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-02T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 33,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "TSLA220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 33,
+    "state": "Closed",
+    "totalFees": 1,
+    "totalPremium": 45,
+    "underlying": "TSLA",
+  },
+]
+`;
+
+exports[`groupPositions Groups non-date-overlapping history objects as separate positions 1`] = `
+Array [
+  Object {
+    "closeDate": 2022-01-05T00:00:00.000Z,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-05T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 30,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 120,
+        "symbol": "AAPL220101P00120000",
+      },
+      Object {
+        "closeDate": 2022-01-05T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 20,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 50,
+    "state": "Closed",
+    "totalFees": 2,
+    "totalPremium": 90,
+    "underlying": "AAPL",
+  },
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-07T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 120,
+        "symbol": "AAPL220101P00120000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-07T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-07T00:00:00.000Z,
+    "realizedProfitLoss": 0,
+    "state": "Open",
+    "totalFees": 2,
+    "totalPremium": 90,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Groups single position (all transactions on the same date) 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 170,
+        "symbol": "AAPL220101P00170000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 0,
+    "state": "Open",
+    "totalFees": 2,
+    "totalPremium": 90,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Groups single position with 1 bought and sold leg 1`] = `
+Array [
+  Object {
+    "closeDate": 2022-01-02T00:00:00.000Z,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-02T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 33,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 33,
+    "state": "Closed",
+    "totalFees": 1,
+    "totalPremium": 45,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Leg shows as long if bought to open 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": -45,
+        "realizedProfitLoss": 0,
+        "side": "Long",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 0,
+    "state": "Open",
+    "totalFees": 1,
+    "totalPremium": -45,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Leg shows as short if sold to open 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 0,
+    "state": "Open",
+    "totalFees": 1,
+    "totalPremium": 45,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Shows a position as closed if all legs were closed out 1`] = `
+Array [
+  Object {
+    "closeDate": 2022-01-02T00:00:00.000Z,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-02T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 33,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+      Object {
+        "closeDate": 2022-01-02T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 33,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 66,
+    "state": "Closed",
+    "totalFees": 2,
+    "totalPremium": 90,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Shows a position as open if legs are open 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 0,
+    "state": "Open",
+    "totalFees": 1,
+    "totalPremium": 45,
+    "underlying": "AAPL",
+  },
+]
+`;
+
+exports[`groupPositions Shows a position as open if legs are open but some legs have been closed 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-02T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 33,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 33,
+    "state": "Open",
+    "totalFees": 2,
+    "totalPremium": 90,
+    "underlying": "AAPL",
+  },
+]
+`;
