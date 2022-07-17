@@ -1,4 +1,4 @@
-import { verify } from "./verify"
+import { verify } from './verify'
 
 export type TastyHistory = {
   date: Date,
@@ -37,13 +37,13 @@ export const historyCSVToJson = (csvData: string): TastyHistory[] => {
     return []
   }
 
-  const csvHeader = csvData.slice(0, csvData.indexOf("\n")).split(",")
-  return csvData.slice(csvData.indexOf("\n") + 1).split("\n")
+  const csvHeader = csvData.slice(0, csvData.indexOf('\n')).split(',')
+  return csvData.slice(csvData.indexOf('\n') + 1).split('\n')
     .map(row => row.split(','))
     .map(row => {
       const obj = csvHeader.reduce((object, header, index) => {
-        object[header] = row[index];
-        return object;
+        object[header] = row[index]
+        return object
       }, {})
       return obj
     })
