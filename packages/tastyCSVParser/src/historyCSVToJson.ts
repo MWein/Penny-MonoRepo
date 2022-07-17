@@ -22,7 +22,7 @@ const reducer = (row): TastyHistory => {
     side: row['Buy/Sell'],
     action: row['Open/Close'],
     quantity: Number(row.Quantity),
-    expiration: row['Expiration Date'],
+    expiration: new Date(row['Expiration Date']).toISOString().split('T')[0],
     strike: Number(row.Strike),
     optionType: row['Call/Put'] === 'C' ? 'Call' : 'Put',
     price: Number(row.Price),
