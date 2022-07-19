@@ -31,16 +31,16 @@ export type TastyPosition = {
 }
 
 
-// The individual legs are spread by quantity, this combines them back together
-const combineAlikeLegs = (positions: TastyPosition[]) => {
-  const isSameLeg = (leg1: TastyLeg, leg2: TastyLeg) => {
-    return leg1.state === leg2.state
-      && leg1.openDate === leg2.openDate
-      && leg1.closeDate === leg2.closeDate
-      && leg1.symbol === leg2.symbol
-  }
+const isSameLeg = (leg1: TastyLeg, leg2: TastyLeg) =>
+  leg1.state === leg2.state
+    && leg1.openDate === leg2.openDate
+    && leg1.closeDate === leg2.closeDate
+    && leg1.symbol === leg2.symbol
 
-  return positions.map(position => {
+
+// The individual legs are spread by quantity, this combines them back together
+const combineAlikeLegs = (positions: TastyPosition[]) =>
+  positions.map(position => {
     const baseLegs = uniqWith(position.legs, isSameLeg)
     const newLegs = baseLegs.map(baseLeg => {
       const matchingLegs = position.legs.filter(leg => isSameLeg(leg, baseLeg))
@@ -58,12 +58,11 @@ const combineAlikeLegs = (positions: TastyPosition[]) => {
       legs: newLegs,
     }
   })
-}
 
 
 
-const groupLegsIntoPositions = (underlying: string, legGroups: TastyLeg[][]): TastyPosition[] => {
-  return legGroups.map(legs => {
+const groupLegsIntoPositions = (underlying: string, legGroups: TastyLeg[][]): TastyPosition[] =>
+  legGroups.map(legs => {
     const isClosed = legs.every(leg => leg.state === 'Closed')
     const openDate = legs.map(leg => leg.openDate).sort()[0]
     const closeDate = isClosed ? legs.map(leg => leg.closeDate).filter(date => date).sort().reverse()[0] : null
@@ -79,7 +78,6 @@ const groupLegsIntoPositions = (underlying: string, legGroups: TastyLeg[][]): Ta
       legs
     }
   })
-}
 
 
 const groupPositionsForUnderlying = (underlying, history: TastyHistory[]) => {
@@ -134,9 +132,8 @@ const groupPositionsForUnderlying = (underlying, history: TastyHistory[]) => {
   if (currentLegs.length > 0) {
     positions.push(currentLegs)
   }
-  return uniq(positions)
+  return positions
 }
-
 
 
 export const groupPositions = (history: TastyHistory[]) => {
