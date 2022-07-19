@@ -2,6 +2,16 @@ import { groupPositions } from './groupPositions'
 import { createHistoryObj } from './testHelpers/createHistoryObject'
 
 
+// TODO
+/*
+  There will not be a buy or sell event for options that expire. There may also be different events
+  for options that get assigned early. Thats a wee bit of a problem for me. Ideally, all positions would
+  be closed out at close to 21DTE, but assignment (or forgetfulness) will happen at some point.
+  Need to figure out how to handle that. We'll burn that bridge when it comes up. No sense in coding
+  for something that might not happen the way I think it will.
+*/
+
+
 describe('groupPositions', () => {
   it('Groups single position (all transactions on the same date)', () => {
     const history = [
