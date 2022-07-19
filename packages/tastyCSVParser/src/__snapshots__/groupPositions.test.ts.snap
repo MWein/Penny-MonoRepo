@@ -178,6 +178,82 @@ Array [
 ]
 `;
 
+exports[`groupPositions Groups positions with quantity greater than 1 1`] = `
+Array [
+  Object {
+    "closeDate": null,
+    "legs": Array [
+      Object {
+        "closeDate": 2022-01-05T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 0.5,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 22.5,
+        "realizedProfitLoss": 7.5,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 120,
+        "symbol": "AAPL220101P00120000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 0.5,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 22.5,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 120,
+        "symbol": "AAPL220101P00120000",
+      },
+      Object {
+        "closeDate": 2022-01-05T00:00:00.000Z,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-01T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 20,
+        "side": "Short",
+        "state": "Closed",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-07T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 120,
+        "symbol": "AAPL220101P00120000",
+      },
+      Object {
+        "closeDate": null,
+        "expiration": "2022-01-01",
+        "fees": 1,
+        "openDate": 2022-01-07T00:00:00.000Z,
+        "premium": 45,
+        "realizedProfitLoss": 0,
+        "side": "Short",
+        "state": "Open",
+        "strike": 180,
+        "symbol": "AAPL220101C00180000",
+      },
+    ],
+    "openDate": 2022-01-01T00:00:00.000Z,
+    "realizedProfitLoss": 27.5,
+    "state": "Open",
+    "totalFees": 4,
+    "totalPremium": 180,
+    "underlying": "AAPL",
+  },
+]
+`;
+
 exports[`groupPositions Groups single position (all transactions on the same date) 1`] = `
 Array [
   Object {

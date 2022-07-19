@@ -111,4 +111,18 @@ describe('groupPositions', () => {
     expect(result.length).toEqual(2)
     expect(result).toMatchSnapshot()
   })
+
+
+  it('Groups positions with quantity greater than 1', () => {
+    const history = [
+      createHistoryObj(new Date('2022-01-07'), 'AAPL', 'Sell', 'Open', 1, '2022-01-01', 180, 'Call', 0.45, 1.00, 45),
+      createHistoryObj(new Date('2022-01-07'), 'AAPL', 'Sell', 'Open', 1, '2022-01-01', 120, 'Put', 0.45, 1.00, 45),
+      createHistoryObj(new Date('2022-01-05'), 'AAPL', 'Buy', 'Close', 1, '2022-01-01', 180, 'Call', 0.25, 1.00, -25),
+      createHistoryObj(new Date('2022-01-05'), 'AAPL', 'Buy', 'Close', 1, '2022-01-01', 120, 'Put', 0.15, 1.00, -15),
+      createHistoryObj(new Date('2022-01-01'), 'AAPL', 'Sell', 'Open', 1, '2022-01-01', 180, 'Call', 0.45, 1.00, 45),
+      createHistoryObj(new Date('2022-01-01'), 'AAPL', 'Sell', 'Open', 2, '2022-01-01', 120, 'Put', 0.45, 1.00, 45),
+    ]
+    const result = groupPositions(history)
+    expect(result).toMatchSnapshot()
+  })
 })

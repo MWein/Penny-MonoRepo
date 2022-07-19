@@ -1,5 +1,6 @@
 import { TastyHistory } from './historyCSVToJson'
 import { uniq } from 'lodash'
+import { spreadHistoryByQuantity } from './utils/spreadByQuantity'
 import { generateSymbol } from '@penny/test-helpers'
 
 type TastyState = 'Open' | 'Closed'
@@ -29,34 +30,6 @@ export type TastyPosition = {
 }
 
 
-// If a history item has a quantity of greater than 1, it will spread them into that number of positions
-// and divide the fees, premium, etc by that number
-const spreadByQuantity = (history: TastyHistory): TastyHistory[] => {
-  const quantity = history.quantity
-  // TODO Verify that price is multiplied by quantity from data source
-  // For now, we will assume it doesn't
-  const price = history.price// / quantity
-
-  // TODO Verify that fees is multiplied by quantity from data source
-  // For now, we assume it does
-  const fees = history.fees / quantity
-
-  const amount = history.amount / quantity
-
-  const spreadHistory = []
-  for (let x = 0; x < quantity; x++) {
-    spreadHistory.push({
-      ...history,
-      // @ts-ignore
-      price, fees, amount
-    })
-  }
-
-  return spreadHistory
-}
-
-
-
 const groupLegsIntoPositions = (underlying: string, legGroups: TastyLeg[][]): TastyPosition[] => {
   return legGroups.map(legs => {
     const isClosed = legs.every(leg => leg.state === 'Closed')
@@ -78,10 +51,11 @@ const groupLegsIntoPositions = (underlying: string, legGroups: TastyLeg[][]): Ta
 
 
 const groupPositionsForUnderlying = (underlying, history: TastyHistory[]) => {
-  const underlyingHistory = history
+  const underlyingHistory = spreadHistoryByQuantity(
+    history
     .filter(history => history.underlying === underlying)
     .reverse()
-    .flatMap(history => spreadByQuantity(history))
+  )
 
   const positions: TastyLeg[][] = []
   let currentLegs: TastyLeg[] = []
