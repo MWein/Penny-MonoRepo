@@ -1,6 +1,6 @@
 import { TastyHistory } from './historyCSVToJson'
 import { uniq, uniqWith } from 'lodash'
-import { spreadHistoryByQuantity } from './utils/spreadByQuantity'
+import { spreadHistoryByQuantity } from './utils/spreadHistoryByQuantity'
 import { generateSymbol } from '@penny/test-helpers'
 
 type TastyState = 'Open' | 'Closed'
@@ -40,12 +40,10 @@ const combineAlikeLegs = (positions: TastyPosition[]) => {
       && leg1.symbol === leg2.symbol
   }
 
-  const newPositions = positions.map(position => {
+  return positions.map(position => {
     const baseLegs = uniqWith(position.legs, isSameLeg)
-
     const newLegs = baseLegs.map(baseLeg => {
       const matchingLegs = position.legs.filter(leg => isSameLeg(leg, baseLeg))
-
       return {
         ...baseLeg,
         quantity: matchingLegs.length,
@@ -60,8 +58,6 @@ const combineAlikeLegs = (positions: TastyPosition[]) => {
       legs: newLegs,
     }
   })
-
-  return newPositions
 }
 
 

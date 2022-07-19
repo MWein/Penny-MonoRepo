@@ -1,4 +1,4 @@
-import { spreadHistoryByQuantity } from './spreadByQuantity'
+import { spreadHistoryByQuantity } from './spreadHistoryByQuantity'
 import { createHistoryObj } from '../testHelpers/createHistoryObject'
 
 describe('createHistoryObj', () => {
