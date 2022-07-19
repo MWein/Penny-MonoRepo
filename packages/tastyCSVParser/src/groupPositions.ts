@@ -1,5 +1,5 @@
 import { TastyHistory } from './historyCSVToJson'
-import { uniq } from 'lodash'
+import { uniq, uniqWith } from 'lodash'
 import { spreadHistoryByQuantity } from './utils/spreadByQuantity'
 import { generateSymbol } from '@penny/test-helpers'
 
@@ -10,6 +10,7 @@ export type TastyLeg = {
   openDate: Date,
   closeDate: Date | null,
   symbol: string,
+  quantity: number,
   side: 'Long' | 'Short',
   expiration: string,
   strike: number,
@@ -28,6 +29,41 @@ export type TastyPosition = {
   realizedProfitLoss: number,
   legs: TastyLeg[]
 }
+
+
+// The individual legs are spread by quantity, this combines them back together
+const combineAlikeLegs = (positions: TastyPosition[]) => {
+  const isSameLeg = (leg1: TastyLeg, leg2: TastyLeg) => {
+    return leg1.state === leg2.state
+      && leg1.openDate === leg2.openDate
+      && leg1.closeDate === leg2.closeDate
+      && leg1.symbol === leg2.symbol
+  }
+
+  const newPositions = positions.map(position => {
+    const baseLegs = uniqWith(position.legs, isSameLeg)
+
+    const newLegs = baseLegs.map(baseLeg => {
+      const matchingLegs = position.legs.filter(leg => isSameLeg(leg, baseLeg))
+
+      return {
+        ...baseLeg,
+        quantity: matchingLegs.length,
+        premium: matchingLegs.reduce((acc, leg) => acc + leg.premium, 0),
+        fees: matchingLegs.reduce((acc, leg) => acc + leg.fees, 0),
+        realizedProfitLoss: matchingLegs.reduce((acc, leg) => acc + leg.realizedProfitLoss, 0),
+      }
+    })
+
+    return {
+      ...position,
+      legs: newLegs,
+    }
+  })
+
+  return newPositions
+}
+
 
 
 const groupLegsIntoPositions = (underlying: string, legGroups: TastyLeg[][]): TastyPosition[] => {
@@ -69,6 +105,7 @@ const groupPositionsForUnderlying = (underlying, history: TastyHistory[]) => {
       currentLegs.push({
         state: 'Open',
         symbol,
+        quantity: history.quantity,
         openDate: history.date,
         closeDate: null,
         side: history.side === 'Buy' ? 'Long' : 'Short',
@@ -101,13 +138,13 @@ const groupPositionsForUnderlying = (underlying, history: TastyHistory[]) => {
   if (currentLegs.length > 0) {
     positions.push(currentLegs)
   }
-  return positions
+  return uniq(positions)
 }
 
 
 
-export const groupPositions = (history: TastyHistory[]) => uniq(
-  history
-    .map(hist => hist.underlying))
-    .flatMap(symbol => groupLegsIntoPositions(symbol, groupPositionsForUnderlying(symbol, history))
-)
+export const groupPositions = (history: TastyHistory[]) => {
+  const symbols = uniq(history.map(hist => hist.underlying))
+  const result = symbols.flatMap(symbol => groupLegsIntoPositions(symbol, groupPositionsForUnderlying(symbol, history)))
+  return combineAlikeLegs(result)
+}
