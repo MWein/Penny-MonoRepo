@@ -43,7 +43,7 @@ const getPositionsWithGainLoss = async (): Promise<(tradier.Position & { gainLos
   })
 }
 
-const showcaseRNSController = async (req, res) => {
+export const showcaseRNSController = async (req, res) => {
   const positions = await useCache('positions', getPositionsWithGainLoss, [], 840)
   const equity = await useCache('equity', retrieveEquity, 0)
 
@@ -74,8 +74,4 @@ const showcaseRNSController = async (req, res) => {
     lastYearTheft: 0,
     positions
   })
-}
-
-export {
-  showcaseRNSController
 }

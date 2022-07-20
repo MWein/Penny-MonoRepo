@@ -31,7 +31,7 @@ const retrieveEquity = async () => {
   return balances.total_equity
 }
 
-const showcaseController = async (req, res) => {
+export const showcaseController = async (req, res) => {
   const positions = await useCache('positions', getICPositions, [], 840)
   const equity = await useCache('equity', retrieveEquity, 0)
 
@@ -80,8 +80,4 @@ const showcaseController = async (req, res) => {
     lastYearTheft: 0,
     positions
   })
-}
-
-export {
-  showcaseController
 }

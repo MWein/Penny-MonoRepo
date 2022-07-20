@@ -1,7 +1,7 @@
 import * as logService from '@penny/logger'
 import { uniq } from 'lodash'
 
-const getCronTimesController = async (req, res) : Promise<void> => {
+export const getCronTimesController = async (req, res) : Promise<void> => {
   try {
     const cronLogs = await logService.getCronLogs()
 
@@ -15,8 +15,4 @@ const getCronTimesController = async (req, res) : Promise<void> => {
   } catch (e) {
     res.status(500).send('Error')
   }
-}
-
-export {
-  getCronTimesController
 }

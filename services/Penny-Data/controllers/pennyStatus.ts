@@ -1,7 +1,7 @@
 import * as pennyStatusUtil from '../services/pennyStatus'
 
 
-const pennyStatusController = async (req, res) : Promise<void> => {
+export const pennyStatusController = async (req, res) : Promise<void> => {
   try {
     const lastLogDate: string = await pennyStatusUtil.getLastLogDate()
     const timeSince = new Date().valueOf() - new Date(lastLogDate).valueOf()
@@ -13,8 +13,4 @@ const pennyStatusController = async (req, res) : Promise<void> => {
   } catch (e) {
     res.status(500).send('Error')
   }
-}
-
-export {
-  pennyStatusController
 }

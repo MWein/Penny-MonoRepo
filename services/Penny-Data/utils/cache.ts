@@ -2,7 +2,7 @@ const NodeCache = require('node-cache')
 const cache = new NodeCache()
 
 
-const useCache = async (
+export const useCache = async (
   key: string,
   func: Function,
   returnOnFailure: any,
@@ -18,8 +18,4 @@ const useCache = async (
   } catch (e) {
     return returnOnFailure
   }
-}
-
-export {
-  useCache
 }

@@ -1,6 +1,6 @@
 import { nuke } from '../services/nuke'
 
-const nukeController = async (req, res) : Promise<void> => {
+export const nukeController = async (req, res) : Promise<void> => {
   if (![ 'all', 'short', 'long' ].includes(req.query.type)) {
     res.status(500).send('Error')
     return
@@ -12,8 +12,4 @@ const nukeController = async (req, res) : Promise<void> => {
   } catch (e) {
     res.status(500).send('Error')
   }
-}
-
-export {
-  nukeController
 }

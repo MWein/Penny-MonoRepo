@@ -1,6 +1,6 @@
 import * as tradier from '@penny/tradier'
 
-const sellPositionsController = async (req, res): Promise<void> => {
+export const sellPositionsController = async (req, res): Promise<void> => {
   const positions = req.body
   try {
     await tradier.closePositionsIndividual(positions)
@@ -8,8 +8,4 @@ const sellPositionsController = async (req, res): Promise<void> => {
   } catch (e) {
     res.status(500).send('Error')
   }
-}
-
-export {
-  sellPositionsController,
 }

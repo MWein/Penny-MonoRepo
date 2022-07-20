@@ -14,7 +14,7 @@ type ICPosition = {
 
 const roundedNumber = (num: number) => Number(num.toFixed(0))
 
-const getICPositions = async (): Promise<ICPosition[]> => {
+export const getICPositions = async (): Promise<ICPosition[]> => {
   const positions = await tradier.getPositions()
   const optionPositions = positions.filter(pos => isOption(pos.symbol))
 
@@ -64,9 +64,4 @@ const getICPositions = async (): Promise<ICPosition[]> => {
       hasCall,
     }
   })
-}
-
-
-export {
-  getICPositions
 }
