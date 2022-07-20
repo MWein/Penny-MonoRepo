@@ -5,6 +5,7 @@ BASEPATH
 CHPT
 CLOV
 DKNG
+fileupload
 FUBO
 GPRO
 JNUG
