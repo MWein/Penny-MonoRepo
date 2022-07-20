@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
+import * as fileUpload from 'express-fileupload'
 
 import { pennyStatusController } from './controllers/pennyStatus'
 import { getLogsController } from './controllers/getLogs'
@@ -10,12 +11,16 @@ import { showcaseRNSController } from './controllers/showcaseRNS'
 import { getCronTimesController } from './controllers/getCronTimes'
 import { nukeController } from './controllers/nukeController'
 import { sellPositionsController } from './controllers/sellPositionsController'
+import { uploadCSVController } from './controllers/uploadCSV'
 
 
 const app = express()
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use(fileUpload({
+  createParentPath: true
+}))
 
 
 // Status endpoint that checks the last action by Penny via the logs database
@@ -42,6 +47,11 @@ app.post('/nuke', nukeController)
 
 // Sell positions
 app.post('/sell-positions', sellPositionsController)
+
+
+
+// Upload CSV
+app.post('/upload-csv', uploadCSVController)
 
 
 // Income target endpoints
